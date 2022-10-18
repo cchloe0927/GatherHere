@@ -1,8 +1,16 @@
 import requests
 from bs4 import BeautifulSoup
+from pymongo import MongoClient
+
+
+mongourl = 'mongodb+srv://faulty:qwer1234@cluster0.qnaw7kn.mongodb.net/?retryWrites=true&w=majority'
+mongoclient = MongoClient(url)
+db = mongoclient.dbGatherHere
+
 
 headers = {'User-Agent' : 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36'}
 data = requests.get('https://movie.naver.com/movie/bi/mi/basic.naver?code=187821', headers=headers)
+
 
 soup = BeautifulSoup(data.text, 'html.parser')
 
