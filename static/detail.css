@@ -1,0 +1,60 @@
+.header {
+    margin-bottom: 30px;
+    background-color:black !important;
+    color:white !important;
+}
+.header_link {
+    margin-left: 20px;
+    color: white;
+    font-size: 25px;
+    text-decoration: none;
+}
+.header_link:hover {
+    color: white;
+}
+
+/*detail_container*/
+.detail_container {
+    margin: auto;
+    width: 1000px;
+    height: 400px;
+    display: flex;
+    justify-content: space-between;
+}
+.detail_img {
+    width: 200px;
+    height: 300px;
+}
+.detail_info {
+    width: 700px;
+    height: 300px;
+}
+.detail_info-title{
+    margin: 0;
+}
+
+/*reviewUpload_container*/
+.reviewUpload_container {
+    margin: auto;
+    margin-top: 30px;
+    width: 950px;
+}
+.reviewUpload_btn{
+    width: 150px;
+    height: 40px;
+    margin: 0 0px 20px 0px;
+}
+.reviewUpload_card-star {
+    margin-bottom: 10px;
+}
+
+/*reviewCard_container*/
+.reviewCard_container {
+    margin: auto;
+    margin-top: 50px;
+    width: 950px;
+}
+.reviewCard_btn {
+    margin-top: 10px;
+    float: right;
+}
