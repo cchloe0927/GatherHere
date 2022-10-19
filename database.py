@@ -62,4 +62,4 @@ user = {
     'bookmark' : [{'type':'movie', 'content':'인생은 아름다워'}, {'type':'book', 'content':'트렌드 코리아 2023'}]
 }
 
-db.testuser.insert_one(user)
+# db.testuser.insert_one(user)
