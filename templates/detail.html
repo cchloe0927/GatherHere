@@ -31,7 +31,7 @@
         <div id="reviewUpload_card" class="reviewUpload_card">
             <div class="form-group">
                 <label for="exampleFormControlSelect1">평점</label>
-                <select class="form-control" id="exampleFormControlSelect1">
+                <select id="myStar" class="form-control" id="exampleFormControlSelect1">
                     <option value="">-- Please choose an star --</option>
                     <option value="⭐️">⭐️</option>
                     <option value="⭐️⭐️">⭐️⭐️</option>
@@ -42,10 +42,10 @@
             </div>
             <div class="form-group">
                 <label for="exampleFormControlTextarea1">감상평</label>
-                <textarea class="form-control" rows="3"></textarea>
+                <textarea id="text" class="form-control" rows="3"></textarea>
             </div>
             <div class="reviewUpload_card-btn">
-                <button type="button" class="btn btn-secondary" style="margin-right: 15px">등록</button>
+                <button onclick="commentPosing()" type="button" class="btn btn-secondary" style="margin-right: 15px">등록</button>
                 <button type="button" class="btn btn-outline-secondary" onclick="close_box()">닫기</button>
             </div>
         </div>

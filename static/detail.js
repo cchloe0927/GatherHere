@@ -5,22 +5,21 @@ $(document).ready(function () {
 function open_box() {
     $('#reviewUpload_card').show()
 }
-
 function close_box() {
     $('#reviewUpload_card').hide()
 }
 
-function show_detail_id() {
-    let url = window.location.href;
-    let param = window.location.search;
-    let paramData = new URLSearchParams(param)
-    let type = paramData.get('type')
-    let id = paramData.get('id')
-    //console.log(url, param, type, id)
+// 전역변수
+const param = window.location.search;
+const paramData = new URLSearchParams(param)
+const type = paramData.get('type')
+const id = paramData.get('id')
+//console.log(param, type, id)
 
+function show_detail_id() {
     $.ajax({
     type: "GET",
-    url: "/detail/review?type="+type+"&id="+id,
+    url: "/detail/info?type="+type+"&id="+id,
     data: {},
     success: function(response){
         let rows = response['detailID']
@@ -53,5 +52,33 @@ function show_detail_id() {
         $('#detail_box').append(temp_html)
     }
   })
+}
+
+function commentPosing() {
+    let myStar = $('#myStar').val()
+    let text = $('#text').val()
+
+    let dateList = new Date();
+    let year = dateList.getFullYear();
+    let month = dateList.getMonth() + 1;
+    let day = dateList.getDate();
+    let date = year + '.' + month + '.' + day
+    //console.log(date)
+
+    $.ajax({
+        type: 'POST',
+        url: '/detail/comment',
+        data: {
+            'type': type,
+            'id': id,
+            'myStar': myStar,
+            'text': text,
+            'date': date,
+        },
+        success: function (response) {
+            alert(response['msg'])
+            window.location.reload()
+        }
+    })
 }
 

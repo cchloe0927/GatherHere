@@ -61,4 +61,15 @@ user = {
     'password' : 'qwer1234',
     'bookmark' : [{'type':'movie', 'content':'인생은 아름다워'}, {'type':'book', 'content':'트렌드 코리아 2023'}]
 }
+
+# doc = {
+#         'id': 'userId',
+#         'username': '이현정',
+#         'type': 'movie',
+#         'title': '인생은 아름다워',
+#         'myStar': myStar,
+#         'text': text,
+#         'date': date,
+#     }
+db.testcomment.insert_one(doc)
 db.testuser.insert_one(user)
