@@ -1,5 +1,5 @@
 .header {
-    margin-bottom: 30px;
+    margin-bottom: 50px;
     background-color:black !important;
     color:white !important;
 }
@@ -17,13 +17,13 @@
 .detail_container {
     margin: auto;
     width: 1000px;
-    height: 400px;
+    height: 380px;
     display: flex;
     justify-content: space-between;
 }
 .detail_img {
-    width: 200px;
-    height: 300px;
+    width: 230px;
+    height: 330px;
 }
 .detail_info {
     width: 700px;
@@ -36,16 +36,22 @@
 /*reviewUpload_container*/
 .reviewUpload_container {
     margin: auto;
-    margin-top: 30px;
     width: 950px;
 }
 .reviewUpload_btn{
     width: 150px;
     height: 40px;
-    margin: 0 0px 20px 0px;
+    margin: 0 0 20px 0;
+}
+.reviewUpload_card {
+    display: none;
 }
 .reviewUpload_card-star {
     margin-bottom: 10px;
+}
+.reviewUpload_card-btn {
+    margin-top: 20px;
+    text-align: center;
 }
 
 /*reviewCard_container*/
@@ -53,10 +59,18 @@
     margin: auto;
     margin-top: 50px;
     width: 950px;
+    position: relative;
 }
 .reviewCard_btn {
-    margin-top: 10px;
-    float: right;
+    position: absolute;
+    top: 10px;
+    right: -10px;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    border: none;
+    background-color: black;
+    color: white;
 }
 
 /*test*/
