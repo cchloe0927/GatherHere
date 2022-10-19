@@ -36,15 +36,16 @@ def comment_post():
     myStar = request.form['myStar']
     text = request.form['text']
     date = request.form['date']
-
+    title = request.form['title']
     doc = {
         'id': '임시테스트UserID',  #이후에 db find이후 데이터 입력
         'username': '이현정', #이후에 db find이후 데이터 입력
         'type': type,
         'contentId': int(contentId),
-        'myStar': myStar,
+        'myStar': len(myStar)//2, #//연산자 -> 몫 구하기
         'text': text,
         'date': date,
+        'title': title
     }
     db.testcomment.insert_one(doc)
     return jsonify({'msg':'감상평이 등록되었습니다.'})

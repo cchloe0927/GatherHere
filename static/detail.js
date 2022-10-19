@@ -39,7 +39,7 @@ function show_detail_id() {
                             <div class="detail_info">
                                 <div class="detail_info-special">
                                     <div class="detail_info-special--rank">${rank}</div>
-                                    <h3 class="detail_info-speacial--title">${title}</h3>
+                                    <h3 id="title" class="detail_info-speacial--title">${title}</h3>
                                     <h5 class="detail_info-special--star">★${star}</h5>
                                 </div>
                                 <p><span style="font-weight: bold">개봉일</span> &nbsp;&nbsp;${release}</p>
@@ -55,7 +55,10 @@ function show_detail_id() {
   })
 }
 
+console.log()
 function commentPosting() {
+    let title= $('#title').text()
+
     let myStar = $('#myStar').val()
     let text = $('#text').val()
 
@@ -72,6 +75,7 @@ function commentPosting() {
         data: {
             'type': type,
             'id': id,
+            'title':title, //mypage용 타이틀 데이터
             'myStar': myStar,
             'text': text,
             'date': date,
@@ -91,20 +95,20 @@ function commentGeting() {
         success: function (response) {
             let rows = response['comments']
             for (let i=0; i<rows.length; i++) {
-                console.log(rows[i])
+                //console.log(rows[i])
                 let username = rows[i]['username']
                 let myStar = rows[i]['myStar']
+                let star_img = "⭐️".repeat(myStar)
                 let text = rows[i]['text']
 
                 let temp_html = `<div class="reviewCard_card">
                                     <div>
-                                        <div>${username}님 <span>평점 : ${myStar}</span>
+                                        <div>${username}님 <span>평점 : ${star_img}</span>
                                             <button type="button" class="reviewCard_card-btn">X</button>
                                         </div>
                                     </div>
                                     <div class="reviewCard_card-text">${text}</div>
                                 </div>`
-
                 $('#comment-list').append(temp_html)
             }
         }
