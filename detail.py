@@ -47,7 +47,7 @@ def comment_post():
         'username': '이현정', #이후에 db find이후 데이터 입력
         'type': type,
         'contentId': int(contentId),
-        'myStar': len(myStar)//2, #//연산자 -> 몫 구하기
+        'myStar': int(myStar), 
         'text': text,
         'date': date,
         'title': title,
