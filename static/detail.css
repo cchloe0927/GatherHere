@@ -12,6 +12,13 @@
 .header_link:hover {
     color: white;
 }
+.header_login {
+    background-color: transparent;
+    border: 1px solid white;
+    border-radius: 5px;
+    color: white;
+    margin-right: 20px;
+}
 
 /*detail_container*/
 .detail_container {
@@ -45,11 +52,11 @@
     font-weight: bold;
     font-size: 20px;
 }
-.detail_info-speacial--title{
+.detail_info-special--title{
     margin: 0 20px 0 0;
 }
 .detail_info-special--star{
-    margin: 0;
+    margin: 2.5px 0 0 0;
 }
 
 /*reviewUpload_container*/
@@ -71,6 +78,25 @@
 .reviewUpload_card-btn {
     margin-top: 20px;
     text-align: center;
+}
+.upload_btn {
+    background-color: black;
+    border: none;
+    color: white;
+}
+.upload_btn:hover {
+    background-color: rgb(255, 5, 88);
+    color: white;
+}
+.close_btn {
+    background-color: white;
+    border: 1px solid black;
+    color: black;
+}
+.close_btn:hover {
+    background-color: white;
+    border: 1px solid rgb(255, 5, 88);
+    color: black;
 }
 
 /*reviewCard_container*/

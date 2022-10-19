@@ -13,17 +13,19 @@ db = client.dbGatherHere
 def detail():
     return render_template('detail.html')
 
-#http://localhost:5000/detail?type=movie&id=187831
-#http://localhost:5000/detail?type=book&id=187831
-#http://localhost:5000/detail?type=album&id=187831
-
 @app.route('/detail/info', methods=["GET"])
 def show_detail_get():
-    type = request.args.get('type') #if나중에
+    type = request.args.get('type') #type으로 조건 예외처리
     id = request.args.get('id')
-    print(type, id)
-    detail_id = db.testmovie.find_one({'id': int(id)}, {'_id': False})
-    print(detail_id)
+    #print(type, id)
+
+    if type == "movie":
+        detail_id = db.testmovie.find_one({'id': int(id)}, {'_id': False})
+    elif type == "book":
+        detail_id = db.testbook.find_one({'id': int(id)}, {'_id': False})
+    else:
+        detail_id = db.testalbum.find_one({'id': int(id)}, {'_id': False})
+
     return jsonify({'detailID': detail_id})
 
 @app.route("/detail/comment", methods=["POST"])
@@ -58,7 +60,9 @@ def comment_post():
 
 @app.route("/detail/comment", methods=["GET"])
 def comment_get():
-    comment_list = list(db.testcomment.find({}, {'_id': False}))
+    id = request.args.get('id')
+    print(id)
+    comment_list = list(db.testcomment.find({'contentId': int(id)}, {'_id': False}))
     return jsonify({'comments': comment_list})
 
 @app.route("/detail/comment/delete", methods=["POST"])

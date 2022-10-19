@@ -1,3 +1,5 @@
+'use strict'
+
 $(document).ready(function () {
     show_detail_id();
     commentGeting();
@@ -24,7 +26,7 @@ function show_detail_id() {
     data: {},
     success: function(response){
         let rows = response['detailID']
-
+        //movie
         let image = rows['image']
         let rank = rows['rank']
         let title = rows['title']
@@ -34,12 +36,21 @@ function show_detail_id() {
         let actor = rows['actor']
         let ageLimit = rows['ageLimit']
         let summary = rows['summary']
+        //book
+        let author = rows['author']
+        //album
+        let url = rows['url']
+        let artist = rows['artist']
+        let company = rows['company']
 
-        let temp_html = `<img class="detail_img" src="${image}" />
+
+        let temp_html = ``
+        if (type=="movie") {
+            temp_html = `<img class="detail_img" src="${image}" />
                             <div class="detail_info">
                                 <div class="detail_info-special">
                                     <div class="detail_info-special--rank">${rank}</div>
-                                    <h3 id="title" class="detail_info-speacial--title">${title}</h3>
+                                    <h3 id="title" class="detail_info-special--title">${title}</h3>
                                     <h5 class="detail_info-special--star">★${star}</h5>
                                 </div>
                                 <p><span style="font-weight: bold">개봉일</span> &nbsp;&nbsp;${release}</p>
@@ -50,12 +61,39 @@ function show_detail_id() {
                                     <p>${summary}</p>
                                 </div>
                             </div>`
+        } else if (type=="book") {
+            temp_html = `<img class="detail_img" src="${image}" />
+                            <div class="detail_info">
+                                <div class="detail_info-special">
+                                    <div class="detail_info-special--rank">${rank}</div>
+                                    <h3 id="title" class="detail_info-special--title">${title}</h3>
+                                    <h5 class="detail_info-special--star">★ ${star}</h5>
+                                </div>
+                                <p><span style="font-weight: bold">개봉일</span> &nbsp;&nbsp;${release}</p>
+                                <p><span style="font-weight: bold">저자</span> &nbsp;&nbsp;${author}</p>
+                                <div><span style="font-weight: bold">줄거리</span>
+                                    <p>${summary}</p>
+                                </div>
+                            </div>`
+        } else {
+            temp_html = `<img class="detail_img" src="${url}" />
+                            <div class="detail_info">
+                                <div class="detail_info-special">
+                                    <div class="detail_info-special--rank">${rank}</div>
+                                    <h3 id="title" class="detail_info-special--title">${title}</h3>
+                                    <h5 class="detail_info-special--star">★ ${star}</h5>
+                                </div>
+                                <p><span style="font-weight: bold">개봉일</span> &nbsp;&nbsp;${release}</p>
+                                <p><span style="font-weight: bold">아티스트</span> &nbsp;&nbsp;${artist}</p>
+                                <p><span style="font-weight: bold">제작사</span> &nbsp;&nbsp;${company}</p>
+                            </div>`
+        }
+
         $('#detail_box').append(temp_html)
     }
   })
 }
 
-console.log()
 function commentPosting() {
     let title= $('#title').text()
 
@@ -90,7 +128,7 @@ function commentPosting() {
 function commentGeting() {
     $.ajax({
         type: "GET",
-        url: "/detail/comment",
+        url: "/detail/comment?type="+type+"&id="+id,
         data: {},
         success: function (response) {
             let rows = response['comments']
