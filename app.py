@@ -2,26 +2,29 @@ import requests
 from bs4 import BeautifulSoup
 from pymongo import MongoClient
 
+import myPage
+
+from flask import Flask, render_template, request, jsonify
+app = Flask(__name__)
 
 mongourl = 'mongodb+srv://faulty:qwer1234@cluster0.qnaw7kn.mongodb.net/?retryWrites=true&w=majority'
-mongoclient = MongoClient(url)
+mongoclient = MongoClient(mongourl)
 db = mongoclient.dbGatherHere
 
-
-headers = {'User-Agent' : 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36'}
+headers = {
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36'}
 data = requests.get('https://movie.naver.com/movie/bi/mi/basic.naver?code=187821', headers=headers)
-
 
 soup = BeautifulSoup(data.text, 'html.parser')
 
-#content > div.article > div.mv_info_area
-#content > div.article > div.mv_info_area > div.poster > a > img
-#content > div.article > div.mv_info_area > div.mv_info > h3 > a:nth-child(1)
-#content > div.article > div.mv_info_area > div.mv_info > dl > dd:nth-child(2)
-#content > div.article > div.mv_info_area > div.mv_info > dl > dd:nth-child(2) > p > span:nth-child(4)
-#content > div.article > div.mv_info_area > div.mv_info > dl > dd:nth-child(4) > p > a
-#content > div.article > div.mv_info_area > div.mv_info > dl > dd:nth-child(6) > p
-#content > div.article > div.mv_info_area > div.mv_info > dl > dd:nth-child(8) > p > a
+# content > div.article > div.mv_info_area
+# content > div.article > div.mv_info_area > div.poster > a > img
+# content > div.article > div.mv_info_area > div.mv_info > h3 > a:nth-child(1)
+# content > div.article > div.mv_info_area > div.mv_info > dl > dd:nth-child(2)
+# content > div.article > div.mv_info_area > div.mv_info > dl > dd:nth-child(2) > p > span:nth-child(4)
+# content > div.article > div.mv_info_area > div.mv_info > dl > dd:nth-child(4) > p > a
+# content > div.article > div.mv_info_area > div.mv_info > dl > dd:nth-child(6) > p
+# content > div.article > div.mv_info_area > div.mv_info > dl > dd:nth-child(8) > p > a
 
 details = soup.select('#content > div.article > div.mv_info_area')
 for detail in details:
@@ -33,5 +36,23 @@ for detail in details:
     ageLimit = detail.select_one('dl > dd:nth-child(8) > p > a').text
     print(poster, title, release, director, actor, ageLimit)
 
-summary = soup.select_one('#content > div.article > div.section_group.section_group_frst > div:nth-child(1) > div > div.story_area > p').text
-#print(summary)
+summary = soup.select_one(
+    '#content > div.article > div.section_group.section_group_frst > div:nth-child(1) > div > div.story_area > p').text
+
+
+# print(summary)
+
+@app.route('/')
+def home():
+    return render_template('myPage.html')
+
+
+@app.route("/bookmark", methods=["GET"])
+def bookmark_get():
+    user_id = 'test1234'
+    datas = myPage.bookmark_list_get(user_id)
+    return jsonify({'bookmarks': datas})
+
+
+if __name__ == '__main__':
+    app.run('0.0.0.0', port=5000, debug=True)
