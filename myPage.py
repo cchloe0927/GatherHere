@@ -24,16 +24,23 @@ def bookmark_list_get(user_id):
     for bm in bookmarks:
         if bm['type'] == 'movie':
             data = db.testmovie.find_one({'title': bm['content']}, {'_id': False})
+            data['type'] = 'movie'
+            print(data['type'])
             datas.append(data)
         elif bm['type'] == 'book':
             data = db.testbook.find_one({'title': bm['content']}, {'_id': False})
+            data['type'] = 'book'
+            print(data['type'])
             datas.append(data)
         elif bm['type'] == 'album':
             data = db.testalbum.find_one({'title': bm['content']}, {'_id': False})
+            data['type'] = 'album'
             datas.append(data)
     return datas
 
-# comment = list(db.testcomment.find({'id': user_id}, {'_id': False}))
+def comment_list_get(user_id):
+    comment = list(db.testcomment.find({'id': user_id}, {'_id': False}))
+    return comment
 
 
 # detailMovie = list(db.testmovie.find({'title':list_movie['content']},{'_id':False, 'title':1}))

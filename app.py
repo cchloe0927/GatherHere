@@ -53,6 +53,11 @@ def bookmark_get():
     datas = myPage.bookmark_list_get(user_id)
     return jsonify({'bookmarks': datas})
 
+@app.route("/comment", methods=["GET"])
+def comment_get():
+    user_id = 'test1234'
+    comments = myPage.comment_list_get(user_id)
+    return jsonify({'comments':comments})
 
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)
