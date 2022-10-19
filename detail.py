@@ -18,7 +18,7 @@ def detail():
 #http://localhost:5000/detail?type=album&id=187831
 
 @app.route('/detail/review', methods=["GET"])
-def detail_movie_get():
+def show_detail_get():
     type = request.args.get('type') #if나중에
     id = request.args.get('id')
     print(type, id)
