@@ -1,5 +1,6 @@
 $(document).ready(function () {
     show_detail_id();
+    commentGeting();
 });
 
 function open_box() {
@@ -54,7 +55,7 @@ function show_detail_id() {
   })
 }
 
-function commentPosing() {
+function commentPosting() {
     let myStar = $('#myStar').val()
     let text = $('#text').val()
 
@@ -78,6 +79,34 @@ function commentPosing() {
         success: function (response) {
             alert(response['msg'])
             window.location.reload()
+        }
+    })
+}
+
+function commentGeting() {
+    $.ajax({
+        type: "GET",
+        url: "/detail/comment",
+        data: {},
+        success: function (response) {
+            let rows = response['comments']
+            for (let i=0; i<rows.length; i++) {
+                console.log(rows[i])
+                let username = rows[i]['username']
+                let myStar = rows[i]['myStar']
+                let text = rows[i]['text']
+
+                let temp_html = `<div class="reviewCard_card">
+                                    <div>
+                                        <div>${username}님 <span>평점 : ${myStar}</span>
+                                            <button type="button" class="reviewCard_card-btn">X</button>
+                                        </div>
+                                    </div>
+                                    <div class="reviewCard_card-text">${text}</div>
+                                </div>`
+
+                $('#comment-list').append(temp_html)
+            }
         }
     })
 }
