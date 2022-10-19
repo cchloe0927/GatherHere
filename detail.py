@@ -1,34 +1,30 @@
-import requests
-from bs4 import BeautifulSoup
+from flask import Flask, render_template, jsonify, request
+app = Flask(__name__)
+
 from pymongo import MongoClient
+import certifi
+ca = certifi.where()
 
-mongoUrl = 'mongodb+srv://faulty:qwer1234@cluster0.qnaw7kn.mongodb.net/?retryWrites=true&w=majority'
-mongoClient = MongoClient(mongoUrl)
-db = mongoClient.dbGatherHere
+url = 'mongodb+srv://faulty:qwer1234@cluster0.qnaw7kn.mongodb.net/?retryWrites=true&w=majority'
+client = MongoClient(url, tlsCAFile=ca)
+db = client.dbGatherHere
 
-headers = {'User-Agent' : 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36'}
-data = requests.get('https://movie.naver.com/movie/bi/mi/basic.naver?code=187821', headers=headers)
+@app.route('/detail')
+def detail():
+    return render_template('detail.html')
 
-soup = BeautifulSoup(data.text, 'html.parser')
+#http://localhost:5000/detail?type=movie&id=187831
+#http://localhost:5000/detail?type=book&id=187831
+#http://localhost:5000/detail?type=album&id=187831
 
-#content > div.article > div.mv_info_area
-#content > div.article > div.mv_info_area > div.poster > a > img
-#content > div.article > div.mv_info_area > div.mv_info > h3 > a:nth-child(1)
-#content > div.article > div.mv_info_area > div.mv_info > dl > dd:nth-child(2)
-#content > div.article > div.mv_info_area > div.mv_info > dl > dd:nth-child(2) > p > span:nth-child(4)
-#content > div.article > div.mv_info_area > div.mv_info > dl > dd:nth-child(4) > p > a
-#content > div.article > div.mv_info_area > div.mv_info > dl > dd:nth-child(6) > p
-#content > div.article > div.mv_info_area > div.mv_info > dl > dd:nth-child(8) > p > a
+@app.route('/detail/review', methods=["GET"])
+def detail_movie_get():
+    type = request.args.get('type') #if나중에
+    id = request.args.get('id')
+    print(type, id)
+    detail_id = db.testmovie.find_one({'id': int(id)}, {'_id': False})
+    print(detail_id)
+    return jsonify({'detailID': detail_id})
 
-details = soup.select('#content > div.article > div.mv_info_area')
-for detail in details:
-    poster = detail.select_one('div.poster > a > img')['src']
-    title = detail.select_one('h3 > a').text
-    release = "".join(detail.select_one('dl > dd:nth-child(2) > p > span:nth-child(4)').text.strip().split('\n'))
-    director = detail.select_one('dl > dd:nth-child(4) > p > a').text
-    actor = detail.select_one('dl > dd:nth-child(6) > p').text
-    ageLimit = detail.select_one('dl > dd:nth-child(8) > p > a').text
-    print(poster, title, release, director, actor, ageLimit)
-
-summary = soup.select_one('#content > div.article > div.section_group.section_group_frst > div:nth-child(1) > div > div.story_area > p').text
-#print(summary)
+if __name__ == '__main__':
+    app.run('0.0.0.0', port=5000, debug=True)
