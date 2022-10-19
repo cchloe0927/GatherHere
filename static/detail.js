@@ -101,10 +101,12 @@ function commentGeting() {
                 let star_img = "⭐️".repeat(myStar)
                 let text = rows[i]['text']
 
+                let commentId = rows[i]['commentId'] //코멘트 삭제용
+
                 let temp_html = `<div class="reviewCard_card">
                                     <div>
                                         <div>${username}님 <span>평점 : ${star_img}</span>
-                                            <button type="button" class="reviewCard_card-btn">X</button>
+                                            <button onclick="commentDelete(${commentId})" type="button" class="reviewCard_card-btn">X</button>
                                         </div>
                                     </div>
                                     <div class="reviewCard_card-text">${text}</div>
@@ -113,5 +115,19 @@ function commentGeting() {
             }
         }
     })
+}
+
+function commentDelete(commentId) {
+    $.ajax({
+        type: "POST",
+        url: "/detail/comment/delete",
+        data: {
+            commentId: commentId
+        },
+        success: function (response) {
+            alert(response["msg"])
+            window.location.reload()
+        }
+    });
 }
 
