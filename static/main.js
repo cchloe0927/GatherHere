@@ -5,9 +5,10 @@ $(document).ready(function () {
 })
 
 function show_movie() {
+  $('#swipeMovie').empty()
   $.ajax({
     type: "GET",
-    url: "/movie",
+    url: "/main/movie",
     data: {},
     success: function (response) {
       let rows = response['show_movie']
@@ -20,9 +21,9 @@ function show_movie() {
         let temp_html = `<div class="swiper-slide" onclick="location.href='detail?type=movie&id=${id}'">
         <img src="${image}" alt="${title}">
         <div>
-        <div>
+        <div class="contentDesc">
           <h4>${title}</h4>
-          <p>${direction}<br>${star}</p>
+          <p>${direction}<br>평점: ${star}</p>
         </div>
         </div>`
         $('#swipeMovie').append(temp_html)
@@ -32,9 +33,10 @@ function show_movie() {
 }
 
 function show_book() {
+  $('#swipeBook').empty()
   $.ajax({
     type: "GET",
-    url: "/book",
+    url: "/main/book",
     data: {},
     success: function (response) {
       let rows = response['show_book']
@@ -47,9 +49,9 @@ function show_book() {
         let temp_html = `<div class="swiper-slide" onclick="location.href='detail?type=book&id=${id}'">
         <img src="${image}" alt="${title}">
         <div>
-        <div>
+        <div class="contentDesc">
           <h4>${title}</h4>
-          <p>${author}<br>${star}</p>
+          <p>${author}<br>평점: ${star}</p>
         </div>
         </div>`
         $('#swipeBook').append(temp_html)
@@ -59,9 +61,10 @@ function show_book() {
 }
 
 function show_album() {
+  $('#swipeAlbum').empty()
   $.ajax({
     type: "GET",
-    url: "/album",
+    url: "/main/album",
     data: {},
     success: function (response) {
       let rows = response['show_album']
@@ -74,9 +77,9 @@ function show_album() {
         let temp_html = `<div class="swiper-slide mine" onclick="location.href='detail?type=album&id=${id}'">
         <img src="${image}" alt="${title}">
         <div>
-        <div>
+        <div class="contentDesc">
           <h4>${title}</h4>
-          <p>${artist}<br>${star}</p>
+          <p>${artist}<br>평점: ${star}</p>
         </div>
         </div>`
         $('#swipeAlbum').append(temp_html)
