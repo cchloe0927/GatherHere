@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GatherHere</title>
+  <!-- 메인 -->
+  <link rel="stylesheet" href="../static/main.css">
+  <!-- 폰트 -->
+  <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap" rel="stylesheet">
+  <!-- Jquery -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+  <!-- Link Swiper's CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css" />
+
+</head>
+
+<body>
+  <header>
+    <h1>GatherHere</h1>
+  </header>
+  <!-- Swiper -->
+  <h2>🍿영화 인기 순위 Top 30</h2>
+  <div class="swiper mySwiper">
+    <div class="swiper-wrapper" id="swipeMovie">
+    </div>
+    <div class="swiper-button-next"></div>
+    <div class="swiper-button-prev"></div>
+    <div class="swiper-pagination"></div>
+  </div>
+
+  <h2>📖도서 인기 순위 Top 30</h2>
+  <div class="swiper mySwiper">
+    <div class="swiper-wrapper" id="swipeBook">
+    </div>
+    <div class="swiper-button-next"></div>
+    <div class="swiper-button-prev"></div>
+    <div class="swiper-pagination"></div>
+  </div>
+
+  <h2>💿음반 인기 순위 Top 30</h2>
+  <div class="swiper mySwiper">
+    <div class="swiper-wrapper" id="swipeAlbum">
+    </div>
+    <div class="swiper-button-next"></div>
+    <div class="swiper-button-prev"></div>
+    <div class="swiper-pagination"></div>
+  </div>
+
+  <!-- main JS -->
+  <script src="../static/main.js"></script>
+  <!-- Bootstrap -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.2/js/bootstrap.min.js"></script>
+  <!-- Swiper JS -->
+  <script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
+  <script>
+    // Initialize Swiper
+    let swiper = new Swiper(".mySwiper", {
+      slidesPerView: 3,
+      spaceBetween: 10,
+      // Responsive breakpoints
+      breakpoints: {
+        // when window width is >= 320px
+        180: {
+          slidesPerView: 1,
+          slidesPerGroup: 1,
+          spaceBetween: 10,
+        },
+        320: {
+          slidesPerView: 2,
+          slidesPerGroup: 2,
+          spaceBetween: 10,
+        },
+        // when window width is >= 480px
+        480: {
+          slidesPerView: 3,
+          slidesPerGroup: 3,
+          spaceBetween: 10,
+        },
+        // when window width is >= 640px
+        720: {
+          slidesPerView: 4,
+          slidesPerGroup: 4,
+          spaceBetween: 10,
+        }
+      },
+      loop: true,
+      loopAdditionalSlides: 1,
+      loopFillGroupWithBlank: true,
+      pagination: {
+        el: ".swiper-pagination",
+        clickable: true,
+      },
+      navigation: {
+        nextEl: ".swiper-button-next",
+        prevEl: ".swiper-button-prev",
+      },
+    }
+    )
+  </script>
+</body>
+
+</html>
