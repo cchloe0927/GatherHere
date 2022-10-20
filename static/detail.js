@@ -32,9 +32,9 @@ function show_detail_id() {
         let title = rows['title']
         let star = rows['star']
         let release = rows['release']
+        let genre = rows['genre']
         let direction = rows['direction']
         let actor = rows['actor']
-        let ageLimit = rows['ageLimit']
         let summary = rows['summary']
         //book
         let author = rows['author']
@@ -54,9 +54,9 @@ function show_detail_id() {
                                     <h5 class="detail_info-special--star">★${star}</h5>
                                 </div>
                                 <p><span style="font-weight: bold">개봉일</span> &nbsp;&nbsp;${release}</p>
+                                <p><span style="font-weight: bold">장르</span> &nbsp;&nbsp;${genre}</p>
                                 <p><span style="font-weight: bold">감독</span> &nbsp;&nbsp;${direction}</p>
                                 <p><span style="font-weight: bold">출연</span> &nbsp;&nbsp;${actor}</p>
-                                <p><span style="font-weight: bold">등급</span> &nbsp;&nbsp;${ageLimit}</p>
                                 <div><span style="font-weight: bold">줄거리</span>
                                     <p>${summary}</p>
                                 </div>

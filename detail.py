@@ -43,7 +43,7 @@ def comment_post():
     text = request.form['text']
     date = request.form['date']
     title = request.form['title']
-
+    print(type, contentId, myStar, myStar, text, date, title)
     doc = {
         'id': '임시테스트UserID',  #이후에 db find이후 데이터 입력
         'username': '이현정', #이후에 db find이후 데이터 입력
@@ -55,13 +55,14 @@ def comment_post():
         'title': title,
         'commentId': commentId,
     }
+
     db.testcomment.insert_one(doc)
     return jsonify({'msg':'감상평이 등록되었습니다.'})
 
 @app.route("/detail/comment", methods=["GET"])
 def comment_get():
     id = request.args.get('id')
-    print(id)
+    #print(id)
     comment_list = list(db.testcomment.find({'contentId': int(id)}, {'_id': False}))
     return jsonify({'comments': comment_list})
 
