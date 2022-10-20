@@ -1,5 +1,4 @@
 from pymongo import MongoClient
-
 from flask import Flask, render_template, request, jsonify
 app = Flask(__name__)
 
@@ -38,7 +37,7 @@ def bookmark_get():
 
 @app.route("/comment", methods=["GET"])
 def comment_get():
-    user_id = 'test1234'
+    user_id = '임시테스트UserID'
     comments = list(db.testcomment.find({'id': user_id}, {'_id': False}))
     return jsonify({'comments':comments})
 

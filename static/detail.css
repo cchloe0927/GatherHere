@@ -12,7 +12,7 @@
 .header_link:hover {
     color: white;
 }
-.header_login {
+.header_rightBtn {
     background-color: transparent;
     border: 1px solid white;
     border-radius: 5px;

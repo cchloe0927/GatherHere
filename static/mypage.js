@@ -1,3 +1,8 @@
+const param = window.location.search;
+const paramData = new URLSearchParams(param)
+const type = paramData.get('type')
+const id = paramData.get('id')
+
 $(document).ready(function () {
     listing_bookmark();
     listing_comment();
@@ -10,8 +15,6 @@ function listing_bookmark() {
         data: {},
         success: function (response) {
             let rows = response['bookmarks']
-            console.log(rows)
-
             for (let i = 0; i < rows.length; i++) {
                 let title = rows[i]['title']
                 let image = rows[i]['image']
@@ -54,27 +57,40 @@ function listing_comment() {
             console.log(response['comments'])
             let rows = response['comments']
             for (i = 0; i < rows.length; i++) {
-                let nickname = rows[i]['username']
-                let comment = rows[i]['text']
-                let contents = rows[i]['title']
-                let mystar = rows[i]['myStar']
-                let date = rows[i]['date']
-                let temp_html = `
-                            <div class="card">
+                let username = rows[i]['username']
+                let text = rows[i]['text']
+                let myStar = rows[i]['myStar']
+                let star_img = "⭐️".repeat(myStar)
 
-                                <div class="card-body">
-                                    <blockquote class="blockquote mb-0">
-                                        <p>${comment}</p>
-                                        <footer class="blockquote-footer">${nickname}</footer>
-                                        <p>${contents}</p>
-                                        <p>평점 : ${mystar}</p>
-                                        <p>${date}</p>
-                                    </blockquote>
-                                </div>
-                            </div>
-                        `
+                let commentId = rows[i]['commentId'] //코멘트 삭제용
+                let title = rows[i]['title']
+                // let mystar = rows[i]['myStar']
+                // let date = rows[i]['date']
+
+                // let temp_html = `
+                //             <div class="card">
+                //
+                //                 <div class="card-body">
+                //                     <blockquote class="blockquote mb-0">
+                //                         <p>${comment}</p>
+                //                         <footer class="blockquote-footer">${nickname}</footer>
+                //                         <p>${contents}</p>
+                //                         <p>평점 : ${mystar}</p>
+                //                         <p>${date}</p>
+                //                     </blockquote>
+                //                 </div>
+                //             </div>`
+                let temp_html = `<div class="reviewCard_card">
+                                    <div>
+                                        <div>${username}님 <span>평점 : ${star_img}</span>
+                                            <button onclick="commentDelete(${commentId})" type="button" class="reviewCard_card-btn">X</button>
+                                        </div>
+                                    </div>
+                                    <div class="reviewCard_card-text">${text}</div>
+                                </div>`
                 $('#comment-list').append(temp_html)
             }
         }
     })
 }
+
