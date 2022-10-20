@@ -19,7 +19,7 @@ ranks = soup.select('#Myform > div > table > tr > td:nth-child(1) > table > tr:n
 artists = soup.select(
     '#Myform > div > table > tr > td:nth-child(3) > table > tr:nth-child(1) > td:nth-child(1) > div:nth-child(1) > ul > li > a:nth-child(1)')
 
-for i in range(10):
+for i in range(50):
     title = titles[i].text.split('[버')[0]
     rank = int(ranks[i].text.strip('.'))
     artist = artists[i].text
@@ -41,16 +41,12 @@ for i in range(10):
     datas.append(
         {'id': content_id,
          'title': title,
-         'image' : image,
-         'artist' : artist,
-         'release' : release,
-         'star' : star,
-         'genre' : genre,
+         'image': image,
+         'artist': artist,
+         'release': release,
+         'star': star,
+         'genre': genre,
          'rank': rank}
     )
-
-print(datas)
-
-# titles = soup.select("a.bo3")
-# for i in titles:
-#     title = i.text.split('[')[0]
+db.crawlingalbum.delete_many({})
+db.crawlingalbum.insert_many(datas)
