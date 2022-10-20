@@ -40,6 +40,7 @@ h4 {
   width: 100%;
   height: 0;
   padding-top: 150%;
+  cursor: pointer;
 }
 
 .posterAlbum {
@@ -49,6 +50,7 @@ h4 {
   width: 100%;
   height: 0;
   padding-top: 100%;
+  cursor: pointer;
 }
 
 /* 글자 수 자르기 */
@@ -64,8 +66,8 @@ p.sumContent {
 /* 즐겨찾기 버튼 */
 .heart {
   font-size: 30px;
-  cursor: pointer;
   margin: auto 0 0 auto;
+  cursor: pointer;
 }
 
 a {

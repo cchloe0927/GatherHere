@@ -22,11 +22,12 @@ function show_movie() {
         <div class="poster" alt="${title}" style="background-image:url(${image})" onclick="location.href='detail?type=movie&id=${id}'"></div>
         <div>
         <div class="contentDesc">
-          <h4 onclick="location.href='detail?type=movie&id=${id}'">${title}</h4>
-          <p class="sumContent">${direction}<br>평점: ${star}</p>
+          <h4>${title}</h4>
+          <p class="sumContent">감독: ${direction}<br>평점: ${star}</p>
         </div>
         </div>
         <a class="heart" href="#">💖</a>`
+
         $('#swipeMovie').append(temp_html)
       }
     }
