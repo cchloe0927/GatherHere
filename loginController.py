@@ -1,14 +1,22 @@
+import datetime
+import hashlib
+
 from werkzeug.security import generate_password_hash
 
-from config import CLIENT_ID, REDIRECT_URI
+from config import CLIENT_ID, REDIRECT_URI, SECRET_KEY
 from Oauth import Oauth
-from flask import Flask, redirect,render_template, request, session
+from flask import Flask, redirect, render_template, request, session, flash, jsonify, url_for
 from models.User import User
+from pymongo import MongoClient
+import jwt
+url = 'mongodb+srv://faulty:qwer1234@cluster0.qnaw7kn.mongodb.net/?retryWrites=true&w=majority'
+client = MongoClient(url)
+pymongodb = client.dbGatherHere
 
 app = Flask(__name__)
 
 @app.route('/')
-def login():
+def loginpage():
     return render_template('loginPage.html')
 
 @app.route('/kakao/login')
@@ -29,7 +37,6 @@ def kakao_login():
 def kakao_callback():
     code = request.args.get("code")
     print(code)
-    # 전달받은 authorization code를 통해서 access_token을 발급
     oauth = Oauth()
     auth_info = oauth.auth(code)
 
@@ -67,29 +74,56 @@ def kakao_callback():
 
     return redirect("/")
 
-@app.route('/signin', methods=['GET', 'POST'])  # GET(정보보기), POST(정보수정) 메서드 허용
-def register():
-    if request.method == 'GET':
-        return render_template("signin.html")
-    else:
+@app.route('/signup', methods=['GET', 'POST'])  # GET(정보보기), POST(정보수정) 메서드 허용
+def signup():
+    if request.method == 'POST':
         userid = request.form.get('userid')
         username = request.form.get('username')
         password = request.form.get('password')
-        password_2 = request.form.get('password')
-
+        password_2 = request.form.get('repassword')
+        print(userid, username, password, password_2)
         if not (userid and username and password and password_2):
-            return "입력되지 않은 정보가 있습니다"
+            return jsonify({'result' : 'fail', 'msg' : '입력하지 않은 정보가 있습니다.'})
         elif password != password_2:
-            return "비밀번호가 일치하지 않습니다"
+            return jsonify({'result' : 'fail', 'msg' : '입력한 비밀번호가 틀렸습니다.'})
+        elif pymongodb.testuser.find_one({'userid' : userid}) is not None:
+            return jsonify({'result': 'fail', 'msg': '동일한 id를 가진 계정이 존재합니다.'})
         else:
-            usertable = User(username)  # user_table 클래스
-            usertable.userid = userid
-            usertable.username = username
-            usertable.password = password
+            usertable = User(userid, username, password)
+            pymongodb.testuser.insert_one(usertable.get_dic())
+            return jsonify({'status' : 'success', 'msg' : '회원가입'})
+    return render_template('signup.html')
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        userid = request.form['userid']
+        print(userid)
+        print(pymongodb.testuser.find_one({'userid': userid}))
+        password = hashlib.sha256(request.form['password'].encode('utf-8')).hexdigest()
+        print(userid, password)
+        if  pymongodb.testuser.find_one({'userid':userid, 'password':password}) is not None:
+            payload = {
+                'userid' : userid,
+                'exp' : datetime.datetime.utcnow() + datetime.timedelta(seconds=5) #유효시간
+            }
 
-            return redirect("/")
+            token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
+            return jsonify({'result': 'success', 'token': token})
+        else:
+            return jsonify({'result': 'fail', 'msg': '아이디/비밀번호가 일치하지 않습니다.'})
+    return render_template('loginPage.html')
 
 
 if __name__ == '__main__':
 
     app.run('0.0.0.0', port=5000, debug=True)
+
+def check_token():
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        user_info = pymongodb.testuser.find_one({"userid": payload['userid']})
+        return render_template('index.html', nickname=user_info["nick"])
+    except jwt.ExpiredSignatureError:
+        return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
+    except jwt.exceptions.DecodeError:
+        return redirect(url_for("login", msg="로그인 정보가 존재하지 않습니다."))
