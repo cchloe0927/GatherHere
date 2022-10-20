@@ -22,6 +22,7 @@ h1 {
   margin: 0;
 }
 
+/* 작품 제목 */
 h4 {
   display: inline-block;
   text-overflow: ellipsis;
@@ -31,19 +32,42 @@ h4 {
   cursor: pointer;
 }
 
+/* 대표 이미지 */
+.poster {
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+  width: 100%;
+  height: 0;
+  padding-top: 150%;
+  cursor: pointer;
+}
+
+.posterAlbum {
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+  width: 100%;
+  height: 0;
+  padding-top: 100%;
+  cursor: pointer;
+}
+
+/* 글자 수 자르기 */
 p.sumContent {
   display: block;
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
-  max-width: 23ch;
+  max-width: 22ch;
   margin: auto;
 }
 
+/* 즐겨찾기 버튼 */
 .heart {
   font-size: 30px;
-  cursor: pointer;
   margin: auto 0 0 auto;
+  cursor: pointer;
 }
 
 a {
@@ -102,3 +126,5 @@ a {
 .swiper-button-next {
   color: #fff;
 } */
+
+/* 슬라이더 끝 */
