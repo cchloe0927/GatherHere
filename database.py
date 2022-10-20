@@ -45,19 +45,21 @@ album = {
 }
 # db.testalbum.insert_one(album)
 
-# comment = {
-#     'id':'test1234',
-#     'type' : 'movie',
-#     'title' : '인생은 아름다워',
-#     'text' : '재밌어용',
-#     'username': '밤준',
-#     'myStar':7,
-#     'date':'2022.10.18'
-# }
+comment = {
+    'id':'test1234',
+    'type' : 'movie',
+    'title' : '인생은 아름다워',
+    'text' : '재밌어용',
+    'username': '밤준',
+    'myStar':7,
+    'date':'2022.10.18'
+}
+# db.testcomment.insert_one(comment)
+user = {
+    'id' : 'test1234',
+    'username' : '밤준',
+    'password' : 'qwer1234',
+    'bookmark' : [{'type':'movie', 'content':'인생은 아름다워'}, {'type':'book', 'content':'트렌드 코리아 2023'}]
+}
 
-# user = {
-#     'id' : 'test1234',
-#     'username' : '밤준',
-#     'password' : 'qwer1234',
-#     'bookmark' : {'type':'movie', 'content':'인생은 아름다워'}
-# }
+# db.testuser.insert_one(user)

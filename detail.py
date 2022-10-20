@@ -1,34 +1,76 @@
-import requests
-from bs4 import BeautifulSoup
+from flask import Flask, render_template, jsonify, request
+app = Flask(__name__)
+
 from pymongo import MongoClient
+import certifi
+ca = certifi.where()
 
-mongoUrl = 'mongodb+srv://faulty:qwer1234@cluster0.qnaw7kn.mongodb.net/?retryWrites=true&w=majority'
-mongoClient = MongoClient(mongoUrl)
-db = mongoClient.dbGatherHere
+url = 'mongodb+srv://faulty:qwer1234@cluster0.qnaw7kn.mongodb.net/?retryWrites=true&w=majority'
+client = MongoClient(url, tlsCAFile=ca)
+db = client.dbGatherHere
 
-headers = {'User-Agent' : 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36'}
-data = requests.get('https://movie.naver.com/movie/bi/mi/basic.naver?code=187821', headers=headers)
+@app.route('/detail')
+def detail():
+    return render_template('detail.html')
 
-soup = BeautifulSoup(data.text, 'html.parser')
+@app.route('/detail/info', methods=["GET"])
+def show_detail_get():
+    type = request.args.get('type') #type으로 조건 예외처리
+    id = request.args.get('id')
+    #print(type, id)
 
-#content > div.article > div.mv_info_area
-#content > div.article > div.mv_info_area > div.poster > a > img
-#content > div.article > div.mv_info_area > div.mv_info > h3 > a:nth-child(1)
-#content > div.article > div.mv_info_area > div.mv_info > dl > dd:nth-child(2)
-#content > div.article > div.mv_info_area > div.mv_info > dl > dd:nth-child(2) > p > span:nth-child(4)
-#content > div.article > div.mv_info_area > div.mv_info > dl > dd:nth-child(4) > p > a
-#content > div.article > div.mv_info_area > div.mv_info > dl > dd:nth-child(6) > p
-#content > div.article > div.mv_info_area > div.mv_info > dl > dd:nth-child(8) > p > a
+    if type == "movie":
+        detail_id = db.testmovie.find_one({'id': int(id)}, {'_id': False})
+    elif type == "book":
+        detail_id = db.testbook.find_one({'id': int(id)}, {'_id': False})
+    else:
+        detail_id = db.testalbum.find_one({'id': int(id)}, {'_id': False})
 
-details = soup.select('#content > div.article > div.mv_info_area')
-for detail in details:
-    poster = detail.select_one('div.poster > a > img')['src']
-    title = detail.select_one('h3 > a').text
-    release = "".join(detail.select_one('dl > dd:nth-child(2) > p > span:nth-child(4)').text.strip().split('\n'))
-    director = detail.select_one('dl > dd:nth-child(4) > p > a').text
-    actor = detail.select_one('dl > dd:nth-child(6) > p').text
-    ageLimit = detail.select_one('dl > dd:nth-child(8) > p > a').text
-    print(poster, title, release, director, actor, ageLimit)
+    return jsonify({'detailID': detail_id})
 
-summary = soup.select_one('#content > div.article > div.section_group.section_group_frst > div:nth-child(1) > div > div.story_area > p').text
-#print(summary)
+@app.route("/detail/comment", methods=["POST"])
+def comment_post():
+    # comment 리스트에 고유 id 넣어주기 #comment 삭제 기능 구현
+    comment_list = list(db.testcomment.find({}, {'_id': False}))
+    commentId = len(comment_list) + 1
+
+    # id = request.form['id']
+    # username = request.form['username']
+
+    type = request.form['type']
+    contentId = request.form['id']
+    myStar = request.form['myStar']
+    text = request.form['text']
+    date = request.form['date']
+    title = request.form['title']
+    print(type, contentId, myStar, myStar, text, date, title)
+    doc = {
+        'id': '임시테스트UserID',  #이후에 db find이후 데이터 입력
+        'username': '이현정', #이후에 db find이후 데이터 입력
+        'type': type,
+        'contentId': int(contentId),
+        'myStar': int(myStar), 
+        'text': text,
+        'date': date,
+        'title': title,
+        'commentId': commentId,
+    }
+
+    db.testcomment.insert_one(doc)
+    return jsonify({'msg':'감상평이 등록되었습니다.'})
+
+@app.route("/detail/comment", methods=["GET"])
+def comment_get():
+    id = request.args.get('id')
+    #print(id)
+    comment_list = list(db.testcomment.find({'contentId': int(id)}, {'_id': False}))
+    return jsonify({'comments': comment_list})
+
+@app.route("/detail/comment/delete", methods=["POST"])
+def delete_card():
+    commentId = request.form['commentId']
+    db.testcomment.delete_one({'commentId': int(commentId)})
+    return jsonify({'msg': '감상평이 삭제되었습니다.'})
+
+if __name__ == '__main__':
+    app.run('0.0.0.0', port=5000, debug=True)
