@@ -19,7 +19,7 @@ function show_movie() {
         let id = rows[i].id
         let image = rows[i].image
         let temp_html = `<div class="swiper-slide">
-        <img src="${image}" alt="${title}" onclick="location.href='detail?type=movie&id=${id}'">
+        <div class="poster" alt="${title}" style="background-image:url(${image})" onclick="location.href='detail?type=movie&id=${id}'"></div>
         <div>
         <div class="contentDesc">
           <h4 onclick="location.href='detail?type=movie&id=${id}'">${title}</h4>
@@ -47,14 +47,15 @@ function show_book() {
         let star = rows[i].star
         let id = rows[i].id
         let image = rows[i].image
-        let temp_html = `<div class="swiper-slide" onclick="location.href='detail?type=book&id=${id}'">
-        <img src="${image}" alt="${title}">
+        let temp_html = `<div class="swiper-slide">
+        <div class="poster" alt="${title}" style="background-image:url(${image})" onclick="location.href='detail?type=book&id=${id}'"></div>
         <div>
         <div class="contentDesc">
           <h4>${title}</h4>
           <p class="sumContent">${author}<br>평점: ${star}</p>
         </div>
-        </div>`
+        </div>
+        <a class="heart" href="#">💖</a>`
         $('#swipeBook').append(temp_html)
       }
     }
@@ -75,14 +76,15 @@ function show_album() {
         let star = rows[i].star
         let id = rows[i].id
         let image = rows[i].image
-        let temp_html = `<div class="swiper-slide" onclick="location.href='detail?type=album&id=${id}'">
-        <img src="${image}" alt="${title}">
+        let temp_html = `<div class="swiper-slide">
+        <div class="posterAlbum" alt="${title}" style="background-image:url(${image})" onclick="location.href='detail?type=album&id=${id}'"></div>
         <div>
         <div class="contentDesc">
           <h4>${title}</h4>
           <p class="sumContent">${artist}<br>평점: ${star}</p>
         </div>
-        </div>`
+        </div>
+        <a class="heart" href="#">💖</a>`
         $('#swipeAlbum').append(temp_html)
       }
     }
