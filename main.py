@@ -8,13 +8,13 @@ client = MongoClient(
 db = client.dbGatherHere
 # db = client.testdb
 
-@app.route('/main')
+@app.route('/')
 def main():
     return render_template('main.html')
 
 @app.route('/main/movie', methods=['GET'])
 def show_movie():
-    show_movie = list(db.testmovie.find({}, {'_id': False}))
+    show_movie = list(db.crawlingMovie.find({}, {'_id': False}))
     return jsonify({'result':'success', 'show_movie': show_movie})
 
 @app.route('/main/book', methods=['GET'])
