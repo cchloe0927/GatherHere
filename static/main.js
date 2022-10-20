@@ -18,14 +18,15 @@ function show_movie() {
         let star = rows[i].star
         let id = rows[i].id
         let image = rows[i].image
-        let temp_html = `<div class="swiper-slide" onclick="location.href='detail?type=movie&id=${id}'">
-        <img src="${image}" alt="${title}">
+        let temp_html = `<div class="swiper-slide">
+        <img src="${image}" alt="${title}" onclick="location.href='detail?type=movie&id=${id}'">
         <div>
         <div class="contentDesc">
-          <h4>${title}</h4>
-          <p>${direction}<br>평점: ${star}</p>
+          <h4 onclick="location.href='detail?type=movie&id=${id}'">${title}</h4>
+          <p class="sumContent">${direction}<br>평점: ${star}</p>
         </div>
-        </div>`
+        </div>
+        <a class="heart" href="#">💖</a>`
         $('#swipeMovie').append(temp_html)
       }
     }
@@ -51,7 +52,7 @@ function show_book() {
         <div>
         <div class="contentDesc">
           <h4>${title}</h4>
-          <p>${author}<br>평점: ${star}</p>
+          <p class="sumContent">${author}<br>평점: ${star}</p>
         </div>
         </div>`
         $('#swipeBook').append(temp_html)
@@ -74,12 +75,12 @@ function show_album() {
         let star = rows[i].star
         let id = rows[i].id
         let image = rows[i].image
-        let temp_html = `<div class="swiper-slide mine" onclick="location.href='detail?type=album&id=${id}'">
+        let temp_html = `<div class="swiper-slide" onclick="location.href='detail?type=album&id=${id}'">
         <img src="${image}" alt="${title}">
         <div>
         <div class="contentDesc">
           <h4>${title}</h4>
-          <p>${artist}<br>평점: ${star}</p>
+          <p class="sumContent">${artist}<br>평점: ${star}</p>
         </div>
         </div>`
         $('#swipeAlbum').append(temp_html)

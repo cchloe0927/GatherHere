@@ -14,7 +14,6 @@ body {
 }
 
 header {
-  height: 50px;
   background-color: #000;
   color: #fff;
 }
@@ -23,21 +22,48 @@ h1 {
   margin: 0;
 }
 
-.contentDesc {
-  padding: 0 10px 0;
+h4 {
+  display: inline-block;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  max-width: 23ch;
+  cursor: pointer;
+}
+
+p.sumContent {
+  display: block;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  max-width: 23ch;
+  margin: auto;
+}
+
+.heart {
+  font-size: 30px;
+  cursor: pointer;
+  margin: auto 0 0 auto;
+}
+
+a {
+  text-decoration: none;
 }
 
 /* 슬라이더 */
 .swiper {
   width: 96vw;
+  /* because swiper bullets are not v isible and covering contents info*/
+  padding-bottom: 25px;
 }
 
 .swiper-slide {
+  height: unset;
   text-align: center;
   font-size: 14px;
   background: #000;
   color: #fff;
-  border: 1px solid rgb(50, 50, 50);
+  margin-bottom: auto;
   padding: 10px;
   border-radius: 10px;
 
@@ -49,7 +75,7 @@ h1 {
   -webkit-box-pack: center;
   -ms-flex-pack: center;
   -webkit-justify-content: center;
-  justify-content: center;
+  justify-content: flex-start;
   -webkit-box-align: center;
   -ms-flex-align: center;
   -webkit-align-items: center;
@@ -61,4 +87,18 @@ h1 {
   display: block;
   width: 100%;
   object-fit: cover;
+  cursor: pointer;
 }
+
+.swiper-slide .album {
+  height: 100%;
+}
+
+/* swiper arrow buttons (css available)*/
+/* .swiper-button-prev {
+  color: red;
+}
+
+.swiper-button-next {
+  color: #fff;
+} */
