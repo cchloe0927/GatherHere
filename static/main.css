@@ -14,12 +14,14 @@ body {
 /* 슬라이더 */
 .swiper {
   width: 96vw;
-  height: 260px;
+  height: 30vh;
 }
 
 .swiper-slide {
+  width: 80%;
+  height: 100%;
   text-align: center;
-  font-size: 18px;
+  font-size: 14px;
   background: #fff;
   border: 1px solid #000;
 
@@ -36,6 +38,7 @@ body {
   -ms-flex-align: center;
   -webkit-align-items: center;
   align-items: center;
+  flex-direction: column;
 }
 
 .swiper-slide img {
