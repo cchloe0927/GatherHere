@@ -1,0 +1,145 @@
+@import url(http://fonts.googleapis.com/earlyaccess/nanumgothic.css);
+
+body {
+    font-family: 'nanumgothic';
+    font-size: 13px;
+    color: gray;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+}
+
+/* Layout css */
+.container {
+    background-color: #fff;
+    width: 450px;
+    height: 530px;
+    border: 1px solid lightgray;
+    border-radius: 6px;
+    /* Center Layout */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.header {
+    padding: 17px;
+    font-size: 15px;
+    color: black;
+    text-align: center;
+    border-bottom: 1px solid lightgray;
+}
+
+.close {
+    float: right;
+}
+
+.login {
+    width: 400px;
+    margin: auto;
+}
+    
+.login h1 {
+    color: black;
+    font-size: 18px;
+    font-weight: normal;
+    margin: 20px 0px 20px 0px;
+}
+
+.keep img{
+    vertical-align: -5px;
+    width: 20px;
+    height: 20px;
+    margin-right: 3px;
+}
+
+
+.sgin_up {
+    text-align: center;
+    padding: 5px;
+}
+
+.or_txt {
+    display: block;
+    font-size: 11px;
+    text-align: center;
+    margin: 15px 0;
+    position: relative;
+}
+.or_txt:before {
+    content: '';
+    position: absolute;
+    top: 7px;
+    left: 0;
+    background-color: rgb(200, 198, 198);
+    width: 44%;
+    height: 1px;
+}
+.or_txt:after {
+    content: '';
+    position: absolute;
+    top: 7px;
+    right: 0;
+    background-color: rgb(200, 198, 198);
+    width: 44%;
+    height: 1px;
+}
+
+.login-type {
+    text-align: center;
+}
+
+/* Button CSS */
+p.btn-login {
+    margin-top:50px;
+    border: 1px solid #1E82FF;
+    background-color: #1E82FF;
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+    opacity: 1;
+}
+
+.btn {
+    display: block;
+    text-decoration: none;
+    border: 1.5px solid;
+    text-align: center;
+
+    border-radius: 6px;
+    padding: 15px;
+    opacity: 0.8;
+    margin-bottom: 10px;
+    position: relative;
+}
+
+a.btn:hover {
+    opacity: 1;
+}
+a.btn:before {
+    position: absolute;
+    left: 15px;
+    top: 12px;
+}
+a.btn1:before {
+    content: url(image/icon_google.png);
+}
+a.btn2:before {
+    content: url(image/icon_facebook.png);
+    left: 18px;
+}
+a.btn3:before {
+    content: url(image/icon_naver.png);
+}
+a.btn4:before {
+    content: url(image/icon_kakao.png);
+}
+
+#submitBtn{
+    margin-top:30px
+}
+
+/*.form-floating{*/
+/*    height: 30px;*/
+/*}*/

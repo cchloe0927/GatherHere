@@ -17,7 +17,7 @@ app = Flask(__name__)
 app.secret_key = SECRET_KEY
 @app.route('/')
 def loginpage():
-    return render_template('loginPage.html')
+    return render_template('detail.html')
 
 @app.route('/kakao/login')
 def kakao_sign_in():
@@ -91,19 +91,9 @@ def signup():
             usertable = User(userid, username, email, password)
             pymongodb.testuser.insert_one(usertable.get_dic())
             return redirect('/login')
-    else:
-        session.pop('_flashes', None)
+
     return render_template('signup.html')
 
-@app.route('/signup/check', methods=['GET'])  # GET(정보보기), POST(정보수정) 메서드 허용
-def check_id():
-    userid = request.args.get('userid')
-    print(userid)
-    if pymongodb.testuser.find_one({'userid':userid}) == None:
-        result = {'result': 'success', 'msg': '햅격'}
-    else:
-        result = {'result': 'fail', 'msg': '동일한 id를 가진 계정이 존재합니다.'}
-    return jsonify(result)
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -122,7 +112,7 @@ def login():
             return jsonify({'result': 'success', 'token': token})
         else:
             return jsonify({'result': 'fail', 'msg': '아이디/비밀번호가 일치하지 않습니다.'})
-    return render_template('loginPage.html')
+    return render_template('login.html')
 
 
 if __name__ == '__main__':
