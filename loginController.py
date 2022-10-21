@@ -109,7 +109,7 @@ def login():
             }
 
             token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
-            return jsonify({'result': 'success', 'token': token})
+            return jsonify({'result': 'success', 'token': token, 'username':pymongodb.testuser.find_one({'userid':userid})['username']})
         else:
             return jsonify({'result': 'fail', 'msg': '아이디/비밀번호가 일치하지 않습니다.'})
     return render_template('login.html')
