@@ -14,7 +14,7 @@ client = MongoClient(url)
 pymongodb = client.dbGatherHere
 
 app = Flask(__name__)
-
+app.secret_key = SECRET_KEY
 @app.route('/')
 def loginpage():
     return render_template('loginPage.html')
@@ -79,20 +79,31 @@ def signup():
     if request.method == 'POST':
         userid = request.form.get('userid')
         username = request.form.get('username')
+        email = request.form.get('email')
         password = request.form.get('password')
         password_2 = request.form.get('repassword')
         print(userid, username, password, password_2)
-        if not (userid and username and password and password_2):
-            return jsonify({'result' : 'fail', 'msg' : '입력하지 않은 정보가 있습니다.'})
-        elif password != password_2:
-            return jsonify({'result' : 'fail', 'msg' : '입력한 비밀번호가 틀렸습니다.'})
+        if password != password_2:
+            flash("입력한 비밀번호가 다릅니다.")
         elif pymongodb.testuser.find_one({'userid' : userid}) is not None:
-            return jsonify({'result': 'fail', 'msg': '동일한 id를 가진 계정이 존재합니다.'})
+            flash("동일한 id를 가진 계정이 존재합니다.")
         else:
-            usertable = User(userid, username, password)
+            usertable = User(userid, username, email, password)
             pymongodb.testuser.insert_one(usertable.get_dic())
-            return jsonify({'status' : 'success', 'msg' : '회원가입'})
+            return redirect('/login')
+    else:
+        session.pop('_flashes', None)
     return render_template('signup.html')
+
+@app.route('/signup/check', methods=['GET'])  # GET(정보보기), POST(정보수정) 메서드 허용
+def check_id():
+    userid = request.args.get('userid')
+    print(userid)
+    if pymongodb.testuser.find_one({'userid':userid}) == None:
+        result = {'result': 'success', 'msg': '햅격'}
+    else:
+        result = {'result': 'fail', 'msg': '동일한 id를 가진 계정이 존재합니다.'}
+    return jsonify(result)
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -118,12 +129,12 @@ if __name__ == '__main__':
 
     app.run('0.0.0.0', port=5000, debug=True)
 
-def check_token():
-    try:
-        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
-        user_info = pymongodb.testuser.find_one({"userid": payload['userid']})
-        return render_template('index.html', nickname=user_info["nick"])
-    except jwt.ExpiredSignatureError:
-        return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
-    except jwt.exceptions.DecodeError:
-        return redirect(url_for("login", msg="로그인 정보가 존재하지 않습니다."))
+# def check_token():
+#     try:
+#         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+#         user_info = pymongodb.testuser.find_one({"userid": payload['userid']})
+#         return render_template('index.html', nickname=user_info["nick"])
+#     except jwt.ExpiredSignatureError:
+#         return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
+#     except jwt.exceptions.DecodeError:
+#         return redirect(url_for("login", msg="로그인 정보가 존재하지 않습니다."))
