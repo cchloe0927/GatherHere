@@ -12,13 +12,26 @@
             integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
             crossorigin="anonymous"></script>
 
-    <style>
-        a{
-            text-decoration: none;
-            color:black;
-        }
-    </style>
-    <script src="static/mypage.js">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css"/>
+    <!-- Bootstrap -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.2/js/bootstrap.min.js"></script>
+    <!-- Swiper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
+
+    <!-- 메인 -->
+    <link rel="stylesheet" href="../static/main.css">
+    <!-- 폰트 -->
+    <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap" rel="stylesheet">
+    <!-- Jquery -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <!-- Link Swiper's CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css"/>
+
+    <link rel="stylesheet" href="../static/mypage.css">
+
+    <script src="../static/mypage.js">
+
     </script>
 
     <link rel="stylesheet" href="../static/detail.css">
@@ -26,13 +39,16 @@
     <title>Title</title>
 </head>
 <body>
-<div>
-    BookMark
-    <div class="mycards">
-        <div class="row row-cols-1 row-cols-md-4 g-4" id="cards-box">
-
-        </div>
+<header>
+    <h1>GatherHere</h1>
+</header>
+<h2>🍿영화 인기 순위 Top 30</h2>
+<div class="swiper mySwiper">
+    <div class="swiper-wrapper" id="swipeMovie">
     </div>
+    <div class="swiper-button-next"></div>
+    <div class="swiper-button-prev"></div>
+    <div class="swiper-pagination"></div>
 </div>
 <div>
     Comment List

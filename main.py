@@ -10,7 +10,7 @@ db = client.dbGatherHere
 
 @app.route('/main')
 def main():
-    return render_template('main.html')
+    return render_template('index.html')
 
 @app.route('/main/movie', methods=['GET'])
 def show_movie():

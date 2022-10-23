@@ -28,21 +28,33 @@ function listing_bookmark() {
                 } else if (type == 'album') {
                     creator = rows[i]['artist']
                 }
+                // let temp_html = `
+                //     <div class="swiper-slide" onclick="location.href='detail?type=movie&id=${id}'">
+                //         <div class="col">
+                //         <a class ="Link" href="https://www.naver.com">
+                //             <div class="card h-100">
+                //                 <img src="${image}"
+                //                      class="card-img-top">
+                //                 <div class="card-body">
+                //                     <h5 class="card-title">${title}</h5>
+                //                     <p>평점 : ${star}</p>
+                //                     <p>${creator}</p>
+                //                 </div>
+                //             </div>
+                //             </a>
+                //         </div>
+                //     </div>`
                 let temp_html = `
-                    <div class="col">
-                    <a class ="Link" href="https://www.naver.com">
-                        <div class="card h-100">
-                            <img src="${image}"
-                                 class="card-img-top">
-                            <div class="card-body">
-                                <h5 class="card-title">${title}</h5>
-                                <p>평점 : ${star}</p>
-                                <p>${creator}</p>
-                            </div>
+                    <div class="swiper-slide" onclick="location.href='detail?type=movie&id=${id}'">
+                        <img src="${image}" alt="${title}">
+                        <div>
+                        <div class="contentDesc">
+                          <h4>${title}</h4>
+                          <p>${creator}<br>평점: ${star}</p>
                         </div>
-                        </a>
+                        </div>
                     </div>`
-                $('#cards-box').append(temp_html)
+                $('#swipeMovie').append(temp_html)
             }
         }
     })
@@ -93,4 +105,49 @@ function listing_comment() {
         }
     })
 }
+
+
+// Initialize Swiper
+let swiper = new Swiper(".mySwiper", {
+        slidesPerView: 3,
+        spaceBetween: 10,
+        // Responsive breakpoints
+        breakpoints: {
+            // when window width is >= 320px
+            180: {
+                slidesPerView: 1,
+                slidesPerGroup: 1,
+                spaceBetween: 10,
+            },
+            320: {
+                slidesPerView: 2,
+                slidesPerGroup: 2,
+                spaceBetween: 10,
+            },
+            // when window width is >= 480px
+            480: {
+                slidesPerView: 3,
+                slidesPerGroup: 3,
+                spaceBetween: 10,
+            },
+            // when window width is >= 640px
+            720: {
+                slidesPerView: 4,
+                slidesPerGroup: 4,
+                spaceBetween: 10,
+            }
+        },
+        loop: true,
+        loopAdditionalSlides: 1,
+        loopFillGroupWithBlank: true,
+        pagination: {
+            el: ".swiper-pagination",
+            clickable: true,
+        },
+        navigation: {
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev",
+        },
+    }
+)
 

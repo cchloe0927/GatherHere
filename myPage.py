@@ -21,12 +21,10 @@ def bookmark_get():
         if bm['type'] == 'movie':
             data = db.testmovie.find_one({'title': bm['content']}, {'_id': False})
             data['type'] = 'movie'
-            print(data['type'])
             datas.append(data)
         elif bm['type'] == 'book':
             data = db.testbook.find_one({'title': bm['content']}, {'_id': False})
             data['type'] = 'book'
-            print(data['type'])
             datas.append(data)
         elif bm['type'] == 'album':
             data = db.testalbum.find_one({'title': bm['content']}, {'_id': False})
