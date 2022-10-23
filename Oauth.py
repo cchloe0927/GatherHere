@@ -2,7 +2,7 @@ import requests
 from config import CLIENT_ID, CLIENT_SECRET, REDIRECT_URI
 
 class Oauth:
-
+    code = ""
     def __init__(self):
         self.auth_server = "https://kauth.kakao.com%s"
         self.api_server = "https://kapi.kakao.com%s"
@@ -10,6 +10,7 @@ class Oauth:
             "Content-Type": "application/x-www-form-urlencoded",
             "Cache-Control": "no-cache",
         }
+
 
     def auth(self, code):
         return requests.post(
@@ -35,3 +36,18 @@ class Oauth:
             # "property_keys":'["kakao_account.profile_image_url"]'
             data={}
         ).json()
+
+    def set_access_code(self, code):
+        self.code = code
+
+    def logout(self):
+        return requests.post(
+            url=self.api_server % "/v2/user/unlink",
+            headers={
+                **self.default_header,
+                **{"Authorization": "KakaoAK "+ self.code}
+            },
+            # "property_keys":'["kakao_account.profile_image_url"]'
+            data={}
+        ).json()
+
