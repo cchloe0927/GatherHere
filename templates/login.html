@@ -1,3 +1,9 @@
+
+{%  if error %}
+    <script>
+        alert("{{ error }}")
+    </script>
+{% endif %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -19,12 +25,13 @@
 
     <div class="container">
         <div class="header">로그인 또는 회원가입
-            <img class="close" src="/static/image/close.png">
+{#            <img class="close" src="/static/image/close.png">#}
         </div>
     
         <div class="login">
             <h1>GatherHere!</h1>
-            <div class="keep">
+            <form action="/login" method="post">
+                 <div class="keep">
 
                 <div class="form-floating">
                     <input type="text" class="form-control form-control-lg" id="userid" placeholder="아이디 입력..." name="userid">
@@ -36,7 +43,9 @@
                 </div>
 
             </div>
-            <button id="submitBtn" class="w-100 btn btn-lg btn-primary" onclick="login()">로그인</button>
+            <button id="submitBtn" class="w-100 btn btn-lg btn-primary" >로그인</button>
+            </form>
+
             <p class="sgin_up" style="font-size: 17px;"><a href="/signup"> 회원가입</a></p>
             <span class="or_txt">또는</span>
             <div class="login-type">
