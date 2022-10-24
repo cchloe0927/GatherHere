@@ -12,7 +12,7 @@ function banner() {
                     </a>
                     <div>
                         <button class="header_rightBtn">로그인</button>
-                        <button class="header_rightBtn">마이페이지</button>
+                        <button class="header_rightBtn" onclick="location.href='/mypage'">마이페이지</button>
                     </div>
                 </nav>`
 
