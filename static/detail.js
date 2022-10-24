@@ -131,17 +131,25 @@ function comment_get() {
         url: "/detail/comment?type="+type+"&id="+id,
         data: {},
         success: function (response) {
-            let rows = response['comments']
-            for (let i=0; i<rows.length; i++) {
+            let comments = response['comments']
+            let userid = response['userid']['userid']
+            console.log(comments)
+            console.log(userid)
+            for (let i=0; i<comments.length; i++) {
                 //console.log(rows[i])
-                let username = rows[i]['username']
-                let myStar = rows[i]['myStar']
+                let username = comments[i]['username']
+                let myStar = comments[i]['myStar']
                 let star_img = "⭐️".repeat(myStar)
-                let text = rows[i]['text']
+                let text = comments[i]['text']
 
-                let commentId = rows[i]['commentId'] //코멘트 삭제용
+                let commentId = comments[i]['commentId'] //코멘트 삭제용
+                let id = comments[i]['id'] //comments['id'] vs userid['userid'] 비교용
+                console.log(id)
+                console.log(userid)
 
-                let temp_html = `<div class="reviewCard_card">
+                let temp_html = ``
+                if (id == userid) {
+                    temp_html = `<div class="reviewCard_card">
                                     <div>
                                         <div>${username}님 <span>평점 : ${star_img}</span>
                                             <button onclick="commentDelete(${commentId})" type="button" class="reviewCard_card-btn">X</button>
@@ -149,6 +157,14 @@ function comment_get() {
                                     </div>
                                     <div class="reviewCard_card-text">${text}</div>
                                 </div>`
+                } else {
+                    temp_html = `<div class="reviewCard_card">
+                                    <div>
+                                        <div>${username}님 <span>평점 : ${star_img}</span>
+                                        </div>
+                                    </div>
+                                    <div class="reviewCard_card-text">${text}</div>
+                                </div>`}
                 $('#comment-list').append(temp_html)
             }
         }

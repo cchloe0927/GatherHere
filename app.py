@@ -1,7 +1,7 @@
 import hashlib
 import datetime
 
-from flask import Flask, render_template, jsonify, request, redirect, session, make_response, flash
+from flask import Flask, render_template, jsonify, request, redirect, make_response, flash
 import jwt
 from config import SECRET_KEY, CLIENT_ID, REDIRECT_URI
 from Oauth import Oauth
@@ -69,7 +69,6 @@ def comment_post():
         comment_list = list(db.testcomment.find({}, {'_id': False}))
         commentId = len(comment_list) + 1
 
-
         type = request.form['type']
         contentId = request.form['id']
         myStar = request.form['myStar']
@@ -79,8 +78,8 @@ def comment_post():
         # print(type, contentId, myStar, myStar, text, date, title)
 
         doc = {
-            'id': user_info['userid'],  # 이후에 db find이후 데이터 입력
-            'username': user_info['username'],  # 이후에 db find이후 데이터 입력
+            'id': user_info['userid'],  # 토큰에서 가져옴
+            'username': user_info['username'],  # 토큰에서 가져옴
             'type': type,
             'contentId': int(contentId),
             'myStar': int(myStar),
@@ -89,11 +88,13 @@ def comment_post():
             'title': title,
             'commentId': commentId,
         }
+
         if myStar == "0":
             return jsonify({'msg': '나만의 평점을 선택해 주세요!'})
         else:
             db.testcomment.insert_one(doc)
             return jsonify({'msg': '감상평이 등록되었습니다.'})
+
     except jwt.ExpiredSignatureError:
         print('만료')
         return jsonify({'msg': '로그인이 만료되었습니다.'})
@@ -101,14 +102,19 @@ def comment_post():
         print('오류')
         return jsonify({'msg': '로그인이 필요한 작업입니다.'})
 
-
-
 @app.route("/detail/comment", methods=["GET"])
 def comment_get():
     id = request.args.get('id')
-    #print(id)
     comment_list = list(db.testcomment.find({'contentId': int(id)}, {'_id': False}))
-    return jsonify({'comments': comment_list})
+
+    token_receive = request.cookies.get('Authorization')
+    payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+    user_info = db.testuser.find_one({"userid": payload['userid']}, {'_id': False})
+
+    #print(comment_list)
+    #print(user_info)
+
+    return jsonify({'comments': comment_list, 'userid': user_info})
 
 @app.route("/detail/comment/delete", methods=["POST"])
 def delete_card():
@@ -170,9 +176,7 @@ def user_comment_get():
     return jsonify({'comments': comments})
 
 
-
-
-# 로그인 관련
+######로그인 관련 part
 @app.route('/logintest')
 def loginpage():
     token_receive = request.cookies.get('Authorization')
@@ -316,7 +320,7 @@ def login():
 
 @app.route('/logout', methods=['GET', 'POST'])
 def logout():
-    return redirect('/')
+    return redirect('/main')
 
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)
