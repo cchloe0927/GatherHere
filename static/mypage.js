@@ -16,6 +16,7 @@ function listing_bookmark() {
         success: function (response) {
             let rows = response['bookmarks']
             for (let i = 0; i < rows.length; i++) {
+                let id = rows[i]['id']
                 let title = rows[i]['title']
                 let image = rows[i]['image']
                 let star = rows[i]['star']
@@ -28,19 +29,30 @@ function listing_bookmark() {
                 } else if (type == 'album') {
                     creator = rows[i]['artist']
                 }
+                // let temp_html = `
+                //     <div class="col">
+                //     <a class ="Link" href="https://www.naver.com">
+                //         <div class="card h-100">
+                //             <img src="${image}"
+                //                  class="card-img-top">
+                //             <div class="card-body">
+                //                 <h5 class="card-title">${title}</h5>
+                //                 <p>평점 : ${star}</p>
+                //                 <p>${creator}</p>
+                //             </div>
+                //         </div>
+                //         </a>
+                //     </div>`
+
                 let temp_html = `
-                    <div class="col">
-                    <a class ="Link" href="https://www.naver.com">
-                        <div class="card h-100">
-                            <img src="${image}"
-                                 class="card-img-top">
-                            <div class="card-body">
-                                <h5 class="card-title">${title}</h5>
-                                <p>평점 : ${star}</p>
-                                <p>${creator}</p>
-                            </div>
+                    <div class="swiper-slide" id="${id}">
+                        <div class="poster" alt="${title}" 
+                            style="background-image:url(${image})" 
+                            onclick="location.href='detail?type=movie&id=${id}'">
                         </div>
-                        </a>
+                      <h4>${title}</h4>
+                      <p class="sumContent">${creator}<br>평점: ${star}</p>
+                    <div class="heart-like-button" href="#" id="h${id}"></div>
                     </div>`
                 $('#cards-box').append(temp_html)
             }
