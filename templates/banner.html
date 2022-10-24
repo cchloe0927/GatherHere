@@ -1,9 +1,16 @@
+<script>
+      function logout(){
+            document.cookie = 'Authorization' + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+            location.href = '/main';
+        }
+</script>
+
+
 <nav class="navbar navbar-light bg-light header">
 <a class="header_link" href="/main">
     GatherHere
 </a>
 <div>
-    <div id="banner"></div>
     {% if username %}
         {{ username }}
         <button class="header_rightBtn" onclick="logout()">로그아웃</button>
