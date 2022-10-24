@@ -88,7 +88,7 @@ def kakao_callback():
     # session['isKakao'] = True
     message = '로그인에 성공하였습니다.'
     payload = {
-        'userid': email,
+        'userid': userid,
         'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=5)  # 유효시간, seconds 가 초단위로 진행 ex) 300 = 5분
     }
 
