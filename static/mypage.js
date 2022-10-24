@@ -11,7 +11,7 @@ $(document).ready(function () {
 function listing_bookmark() {
     $.ajax({
         type: 'GET',
-        url: '/bookmark',
+        url: '/mypage/bookmark',
         data: {},
         success: function (response) {
             let rows = response['bookmarks']
@@ -51,7 +51,7 @@ function listing_bookmark() {
 function listing_comment() {
     $.ajax({
         type: 'GET',
-        url: '/comment',
+        url: '/mypage/comment',
         data: {},
         success: function (response) {
             console.log(response['comments'])
