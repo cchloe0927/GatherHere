@@ -1,8 +1,8 @@
 'use strict'
 
 $(document).ready(function () {
-    show_detail_id();
-    commentGeting();
+    show_detail();
+    comment_get();
 });
 
 function open_box() {
@@ -20,7 +20,7 @@ const type = paramData.get('type')
 const id = paramData.get('id')
 //console.log(param, type, id)
 
-function show_detail_id() {
+function show_detail() {
     $.ajax({
     type: "GET",
     url: "/detail/info?type="+type+"&id="+id,
@@ -94,7 +94,7 @@ function show_detail_id() {
   })
 }
 
-function commentPosting() {
+function comment_post() {
     let title= $('#title').text()
 
     let myStar = $('#myStar').val()
@@ -125,7 +125,7 @@ function commentPosting() {
     })
 }
 
-function commentGeting() {
+function comment_get() {
     $.ajax({
         type: "GET",
         url: "/detail/comment?type="+type+"&id="+id,
