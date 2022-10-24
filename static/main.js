@@ -5,8 +5,6 @@ $(document).ready(function () {
   $('#bmk').hide()
 })
 
-let movieArr = []
-
 function show_movie() {
   $('#swipeMovie').empty()
   $.ajax({
@@ -25,8 +23,9 @@ function show_movie() {
         <div class="poster" alt="${title}" style="background-image:url(${image})" onclick="location.href='detail?type=movie&id=${id}'"></div>
           <h4>${title}</h4>
           <p class="sumContent">감독: ${direction}<br>평점: ${star}</p>
-        <div class="heart-like-button" href="#" id="h${id}"></div>
+        <div class="heart-like-button"></div>
         </div>`
+        $('#swipeMovie').append(temp_html)
         const heart = document.querySelectorAll(".heart-like-button")
         heart.forEach((heart) => {
           heart.onclick = (e) => {
@@ -34,15 +33,17 @@ function show_movie() {
             if (heart.classList.contains("liked")) {
               heart.classList.remove("liked")
               $(bmkDiv).remove()
-              // $('#swipeBookmark').empty() 어떻게 하지
+              $('#swipeMovie').append(bmkDiv)
             } else {
               heart.classList.add("liked")
               $('#bmk').show()
               $('#swipeBookmark').append(bmkDiv)
+              // console.log(e.path[1]);
+              // console.log(e.path[1].classList.length);
+              // 즐겨찾기 swiper 슬라이드 안 넘어가는 문제 파악하는 중
             }
           }
         })
-        $('#swipeMovie').append(temp_html)
       }
     }
   })
@@ -66,7 +67,7 @@ function show_book() {
         <div class="poster" alt="${title}" style="background-image:url(${image})" onclick="location.href='detail?type=book&id=${id}'"></div>
           <h4>${title}</h4>
           <p class="sumContent">${author}<br>평점: ${star}</p>
-        <div class="heart-like-button" href="#">
+        <div class="heart-like-button">
         </div></div>`
         $('#swipeBook').append(temp_html)
         const heart = document.querySelectorAll(".heart-like-button")
@@ -76,6 +77,7 @@ function show_book() {
             if (heart.classList.contains("liked")) {
               heart.classList.remove("liked")
               $(bmkDiv).remove()
+              $('#swipeBook').append(temp_html)
             } else {
               heart.classList.add("liked")
               $('#bmk').show()
@@ -103,10 +105,10 @@ function show_album() {
         let id = rows[i].id
         let image = rows[i].image
         let temp_html = `<div class="swiper-slide">
-        <div class="posterAlbum" alt="${title}" style="background-image:url(${image})" onclick="location.href='detail?type=album&id=${id}'"></div>
+        <div class="poster" alt="${title}" style="background-image:url(${image})" onclick="location.href='detail?type=book&id=${id}'"></div>
           <h4>${title}</h4>
           <p class="sumContent">${artist}<br>평점: ${star}</p>
-        <div class="heart-like-button" href="#">
+        <div class="heart-like-button">
         </div></div>`
         $('#swipeAlbum').append(temp_html)
         const heart = document.querySelectorAll(".heart-like-button")
@@ -116,6 +118,7 @@ function show_album() {
             if (heart.classList.contains("liked")) {
               heart.classList.remove("liked")
               $(bmkDiv).remove()
+              $('#swipeAlbum').append(temp_html)
             } else {
               heart.classList.add("liked")
               $('#bmk').show()
