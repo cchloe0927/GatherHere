@@ -1,4 +1,11 @@
-from flask import Flask, render_template, jsonify, request
+import hashlib
+import datetime
+
+from flask import Flask, render_template, jsonify, request, redirect, session, make_response, flash
+import jwt
+from config import SECRET_KEY, CLIENT_ID, REDIRECT_URI
+from Oauth import Oauth
+from models.User import User
 app = Flask(__name__)
 
 from pymongo import MongoClient
@@ -53,37 +60,48 @@ def show_detail():
 
 @app.route("/detail/comment", methods=["POST"])
 def comment_post():
-    # comment 리스트에 고유 id 넣어주기 #comment 삭제 기능 구현
-    comment_list = list(db.testcomment.find({}, {'_id': False}))
-    commentId = len(comment_list) + 1
+    token_receive = request.cookies.get('Authorization')
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        user_info = db.testuser.find_one({"userid": payload['userid']})
 
-    # id = request.form['id']
-    # username = request.form['username']
+        # comment 리스트에 고유 id 넣어주기 #comment 삭제 기능 구현
+        comment_list = list(db.testcomment.find({}, {'_id': False}))
+        commentId = len(comment_list) + 1
 
-    type = request.form['type']
-    contentId = request.form['id']
-    myStar = request.form['myStar']
-    text = request.form['text']
-    date = request.form['date']
-    title = request.form['title']
-    #print(type, contentId, myStar, myStar, text, date, title)
 
-    doc = {
-        'id': '임시테스트UserID',  #이후에 db find이후 데이터 입력
-        'username': '이현정', #이후에 db find이후 데이터 입력
-        'type': type,
-        'contentId': int(contentId),
-        'myStar': int(myStar),
-        'text': text,
-        'date': date,
-        'title': title,
-        'commentId': commentId,
-    }
-    if myStar == "0":
-        return jsonify({'msg': '나만의 평점을 선택해 주세요!'})
-    else:
-        db.testcomment.insert_one(doc)
-        return jsonify({'msg': '감상평이 등록되었습니다.'})
+        type = request.form['type']
+        contentId = request.form['id']
+        myStar = request.form['myStar']
+        text = request.form['text']
+        date = request.form['date']
+        title = request.form['title']
+        # print(type, contentId, myStar, myStar, text, date, title)
+
+        doc = {
+            'id': user_info['userid'],  # 이후에 db find이후 데이터 입력
+            'username': user_info['username'],  # 이후에 db find이후 데이터 입력
+            'type': type,
+            'contentId': int(contentId),
+            'myStar': int(myStar),
+            'text': text,
+            'date': date,
+            'title': title,
+            'commentId': commentId,
+        }
+        if myStar == "0":
+            return jsonify({'msg': '나만의 평점을 선택해 주세요!'})
+        else:
+            db.testcomment.insert_one(doc)
+            return jsonify({'msg': '감상평이 등록되었습니다.'})
+    except jwt.ExpiredSignatureError:
+        print('만료')
+        return jsonify({'msg': '로그인이 만료되었습니다.'})
+    except jwt.exceptions.DecodeError:
+        print('오류')
+        return jsonify({'msg': '로그인이 필요한 작업입니다.'})
+
+
 
 @app.route("/detail/comment", methods=["GET"])
 def comment_get():
@@ -102,7 +120,20 @@ def delete_card():
 ######정훈님 part
 @app.route('/mypage')
 def my_page():
-    return render_template('myPage.html')
+    token_receive = request.cookies.get('Authorization')
+    print(token_receive)
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        user_info = db.testuser.find_one({"userid": payload['userid']})
+        print(user_info)
+        print('try')
+        return render_template('myPage.html', username=user_info["username"]) #로그인 되었을 때
+    except jwt.ExpiredSignatureError:
+        print('만료')
+        return render_template("login.html", error="로그인 시간이 만료되었습니다.") # 로그인 만료 되었을 때
+    except jwt.exceptions.DecodeError:
+        print('오류')
+        return render_template("login.html", error="로그인 정보가 존재하지 않습니다.") # 로그인 안되었거나 토큰이 글러먹엇을 때
 
 @app.route("/mypage/bookmark", methods=["GET"])
 def bookmark_get():
@@ -131,12 +162,161 @@ def bookmark_get():
 
 @app.route("/mypage/comment", methods=["GET"])
 def user_comment_get():
-    user_id = '임시테스트UserID'
-    comments = list(db.testcomment.find({'id': user_id}, {'_id': False}))
+    token_receive = request.cookies.get('Authorization')
+    payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+    user_info = db.testuser.find_one({"userid": payload['userid']})
+
+    comments = list(db.testcomment.find({'id': user_info['userid']}, {'_id': False}))
     return jsonify({'comments': comments})
 
 
 
+
+# 로그인 관련
+@app.route('/logintest')
+def loginpage():
+    token_receive = request.cookies.get('Authorization')
+    print(token_receive)
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        user_info = db.testuser.find_one({"userid": payload['userid']})
+        print(user_info)
+        print('try')
+        return render_template('test.html', username=user_info["username"])
+    except jwt.ExpiredSignatureError:
+        print('만료')
+        return render_template("login.html", error="로그인 시간이 만료되었습니다.")
+    except jwt.exceptions.DecodeError:
+        print('오류')
+        return render_template("login.html", error="로그인 정보가 존재하지 않습니다.")
+    # return render_template('test.html')
+
+def example():
+
+    token_receive = request.cookies.get('Authorization') #프론트에서 쿠키 전달 받는 곳
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256']) #쿠키에 있는 jwt 인코딩(쿠키에 있는 데이터 추출하는 곳)
+        user_info = db.testuser.find_one({"userid": payload['userid']}) #추출한 데이터가 DB에 존재하는지 확인하고 해당 데이터를 user_info에 넣기
+        return render_template('test.html', username=user_info["username"]) #로그인이 되었을 때 작동하는곳
+    except jwt.ExpiredSignatureError:
+        print('만료')
+        return render_template("login.html", error="로그인 시간이 만료되었습니다.") #로그인 만료 되었을때 (밑에 시간 다되었을 때랑 거의 비슷)
+    except jwt.exceptions.DecodeError:
+        print('오류')
+        return render_template("login.html", error="로그인 정보가 존재하지 않습니다.") #로그인 오류 났을 때(로그인이 안되었을 때)
+
+
+
+@app.route('/kakao/login')
+def kakao_sign_in():
+    # 카카오톡으로 로그인 버튼을 눌렀을 때
+    kakao_oauth_url = f"https://kauth.kakao.com/oauth/authorize?client_id={CLIENT_ID}&redirect_uri={REDIRECT_URI}&response_type=code"
+    print(kakao_oauth_url)
+    return redirect(kakao_oauth_url)
+
+
+@app.route('/kakao')
+def kakao_login():
+    # 카카오톡으로 로그인 버튼을 눌렀을 때
+    return render_template('loginPage.html')
+
+
+@app.route('/kakao/callback')
+def kakao_callback():
+    code = request.args.get("code")
+    print(code)
+    oauth = Oauth()
+    auth_info = oauth.auth(code)
+    print(auth_info)
+    # error 발생 시 로그인 페이지로 redirect
+    if "error" in auth_info:
+        print("에러가 발생했습니다.")
+        return redirect('/login')
+
+    # 아닐 시
+    user = oauth.userinfo("Bearer " + auth_info['access_token'])
+
+    print(user)
+    kakao_account = user["kakao_account"]
+    userid = user['id']
+    profile = kakao_account["profile"]
+    name = profile["nickname"]
+
+    if "email" in kakao_account.keys():
+        email = kakao_account["email"]
+    else:
+        email = f"{name}@kakao.com"
+
+    # user = User.query.filter(User.name =name= name).first() #등록된 유저인지 확인
+    user = db.testuser.find_one({'userid':userid})
+
+    if user is None:
+        # 유저 테이블에 추가
+        user = User(userid=userid, username=name, email=email, password=hashlib.sha256(name.encode('utf-8')).hexdigest())
+        db.testuser.insert_one(user.get_dic())
+
+        message = '회원가입이 완료되었습니다.'
+
+    # session['email'] = user.email
+    # session['isKakao'] = True
+    message = '로그인에 성공하였습니다.'
+    payload = {
+        'userid': userid,
+        'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=600)  # 유효시간, seconds 가 초단위로 진행 ex) 300 = 5분
+    }
+
+    token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
+    response = make_response(redirect('/main'))
+    response.set_cookie('Authorization', token)
+    return response
+
+@app.route('/signup', methods=['GET', 'POST'])  # GET(정보보기), POST(정보수정) 메서드 허용
+def signup():
+    if request.method == 'POST':
+        userid = request.form.get('userid')
+        username = request.form.get('username')
+        email = request.form.get('email')
+        password = request.form.get('password')
+        password_2 = request.form.get('repassword')
+        print(userid, username, password, password_2)
+        if password != password_2:
+            flash("입력한 비밀번호가 다릅니다.")
+        elif db.testuser.find_one({'userid' : userid}) is not None:
+            flash("동일한 id를 가진 계정이 존재합니다.")
+        else:
+            usertable = User(userid, username, email, password)
+            db.testuser.insert_one(usertable.get_dic())
+            return redirect('/login')
+
+    return render_template('signup.html')
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        userid = request.form['userid']
+        print(userid)
+        print(db.testuser.find_one({'userid': userid}))
+        password = hashlib.sha256(request.form['password'].encode('utf-8')).hexdigest()
+        print(userid, password)
+        if  db.testuser.find_one({'userid':userid, 'password':password}) is not None:
+            payload = {
+                'userid' : userid,
+                'exp' : datetime.datetime.utcnow() + datetime.timedelta(seconds=600)
+            }
+
+            token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
+            result = {'result': 'success', 'token': token, 'username':db.testuser.find_one({'userid':userid})['username']}
+            response = make_response(redirect('/main'))
+            response.set_cookie('Authorization',token)
+            return response
+        else:
+            return render_template('login.html', error='ID와 PassWord를 확인해주세요.')
+    response = make_response(render_template('login.html'))
+    return response
+
+@app.route('/logout', methods=['GET', 'POST'])
+def logout():
+    return redirect('/')
 
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)
