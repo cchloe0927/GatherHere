@@ -15,6 +15,7 @@ function listing_bookmark() {
         data: {},
         success: function (response) {
             let rows = response['bookmarks']
+            console.log(rows)
             for (let i = 0; i < rows.length; i++) {
                 let id = rows[i]['id']
                 let title = rows[i]['title']
@@ -29,6 +30,7 @@ function listing_bookmark() {
                 } else if (type == 'album') {
                     creator = rows[i]['artist']
                 }
+
                 // let temp_html = `
                 //     <div class="col">
                 //     <a class ="Link" href="https://www.naver.com">
@@ -54,7 +56,7 @@ function listing_bookmark() {
                       <p class="sumContent">${creator}<br>평점: ${star}</p>
                     <div class="heart-like-button" href="#" id="h${id}"></div>
                     </div>`
-                $('#cards-box').append(temp_html)
+                $('#swipeBookmark').append(temp_html)
             }
         }
     })
@@ -76,6 +78,7 @@ function listing_comment() {
 
                 let commentId = rows[i]['commentId'] //코멘트 삭제용
                 let title = rows[i]['title']
+
                 // let mystar = rows[i]['myStar']
                 // let date = rows[i]['date']
 
