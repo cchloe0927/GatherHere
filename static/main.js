@@ -2,8 +2,43 @@ $(document).ready(function () {
   show_movie()
   show_book()
   show_album()
+  // show_bmk()
   $('#bmk').hide()
 })
+
+function show_bmk() {
+  $.ajax({
+    type: "GET",
+    url: "/main/bookmark",
+    data: {},
+    success: function (response) {
+      console.log(response);
+    }
+  })
+}
+
+function save_bmk() {
+  $.ajax({
+    type: "POST",
+    url: "main/bookmark",
+    data: { sample_give: 'this is from main.js save_bmk' },
+    success: function (response) {
+      console.log(response['msg'])
+    }
+  })
+}
+
+function erase_bmk() {
+  $.ajax({
+    type: "POST",
+    url: "main/bookmark",
+    data: { sample_give: 'this is from main.js erase_bmk' },
+    success: function (response) {
+      console.log(response['msg'])
+    }
+  })
+}
+
 
 function show_movie() {
   $('#swipeMovie').empty()
@@ -26,6 +61,7 @@ function show_movie() {
         <div class="heart-like-button"></div>
         </div>`
         $('#swipeMovie').append(temp_html)
+        let countBmk = []
         const heart = document.querySelectorAll(".heart-like-button")
         heart.forEach((heart) => {
           heart.onclick = (e) => {
@@ -34,10 +70,17 @@ function show_movie() {
               heart.classList.remove("liked")
               $(bmkDiv).remove()
               $('#swipeMovie').append(bmkDiv)
+              countBmk.pop()
+              erase_bmk()
+              if (countBmk.length < 1) {
+                $('#bmk').hide()
+              }
             } else {
               heart.classList.add("liked")
               $('#bmk').show()
               $('#swipeBookmark').append(bmkDiv)
+              countBmk.push(1)
+              save_bmk()
               // console.log(e.path[1]);
               // console.log(e.path[1].classList.length);
               // 즐겨찾기 swiper 슬라이드 안 넘어가는 문제 파악하는 중
@@ -70,6 +113,7 @@ function show_book() {
         <div class="heart-like-button">
         </div></div>`
         $('#swipeBook').append(temp_html)
+        let countBmk = []
         const heart = document.querySelectorAll(".heart-like-button")
         heart.forEach((heart) => {
           heart.onclick = (e) => {
@@ -77,11 +121,18 @@ function show_book() {
             if (heart.classList.contains("liked")) {
               heart.classList.remove("liked")
               $(bmkDiv).remove()
-              $('#swipeBook').append(temp_html)
+              $('#swipeBook').append(bmkDiv)
+              countBmk.pop()
+              erase_bmk()
+              if (countBmk.length < 1) {
+                $('#bmk').hide()
+              }
             } else {
               heart.classList.add("liked")
               $('#bmk').show()
               $('#swipeBookmark').append(bmkDiv)
+              countBmk.push(1)
+              save_bmk()
             }
           }
         })
@@ -111,6 +162,8 @@ function show_album() {
         <div class="heart-like-button">
         </div></div>`
         $('#swipeAlbum').append(temp_html)
+
+        let countBmk = []
         const heart = document.querySelectorAll(".heart-like-button")
         heart.forEach((heart) => {
           heart.onclick = (e) => {
@@ -118,11 +171,18 @@ function show_album() {
             if (heart.classList.contains("liked")) {
               heart.classList.remove("liked")
               $(bmkDiv).remove()
-              $('#swipeAlbum').append(temp_html)
+              $('#swipeAlbum').append(bmkDiv)
+              countBmk.pop()
+              erase_bmk()
+              if (countBmk.length < 1) {
+                $('#bmk').hide()
+              }
             } else {
               heart.classList.add("liked")
               $('#bmk').show()
               $('#swipeBookmark').append(bmkDiv)
+              countBmk.push(1)
+              save_bmk()
             }
           }
         })
