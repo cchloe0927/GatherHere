@@ -47,6 +47,7 @@ def show_album():
     show_album = list(db.crawlingalbum.find({}, {'_id': False}))
     return jsonify({'result':'success', 'show_album': show_album})
 
+
 ######현정님 part
 @app.route('/detail')
 def detail():
@@ -61,7 +62,7 @@ def detail():
 def show_detail():
     type = request.args.get('type') #type으로 조건 예외처리
     id = request.args.get('id')
-    print(type, id)
+    #print(type, id)
 
     if type == "movie":
         detail_id = db.crawlingMovie.find_one({'id': int(id)}, {'_id': False})
@@ -76,22 +77,22 @@ def show_detail():
 
 @app.route("/detail/comment", methods=["POST"])
 def comment_post():
+    # comment 리스트에 고유 id 넣어주기 #comment 삭제 기능 구현
+    comment_list = list(db.testcomment.find({}, {'_id': False}))
+    commentId = len(comment_list) + 1
+
+    type = request.form['type']
+    contentId = request.form['id']
+    myStar = request.form['myStar']
+    text = request.form['text']
+    date = request.form['date']
+    title = request.form['title']
+    # print(type, contentId, myStar, myStar, text, date, title)
+
     token_receive = request.cookies.get('Authorization')
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
         user_info = db.testuser.find_one({"userid": payload['userid']})
-
-        # comment 리스트에 고유 id 넣어주기 #comment 삭제 기능 구현
-        comment_list = list(db.testcomment.find({}, {'_id': False}))
-        commentId = len(comment_list) + 1
-
-        type = request.form['type']
-        contentId = request.form['id']
-        myStar = request.form['myStar']
-        text = request.form['text']
-        date = request.form['date']
-        title = request.form['title']
-        # print(type, contentId, myStar, myStar, text, date, title)
 
         doc = {
             'id': user_info['userid'],  # 토큰에서 가져옴
@@ -124,13 +125,16 @@ def comment_get():
     comment_list = list(db.testcomment.find({'contentId': int(id)}, {'_id': False}))
 
     token_receive = request.cookies.get('Authorization')
-    payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
-    user_info = db.testuser.find_one({"userid": payload['userid']}, {'_id': False})
-
-    #print(comment_list)
-    #print(user_info)
-
-    return jsonify({'comments': comment_list, 'userid': user_info})
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        user_info = db.testuser.find_one({"userid": payload['userid']}, {'_id': False})
+        return jsonify({'comments': comment_list, 'user_info': user_info['userid']})
+    except jwt.ExpiredSignatureError:
+        print('만료')
+        return jsonify({'comments': comment_list, 'user_info': None})
+    except jwt.exceptions.DecodeError:
+        print('오류')
+        return jsonify({'comments': comment_list, 'user_info': None})
 
 @app.route("/detail/comment/delete", methods=["POST"])
 def delete_card():
@@ -164,8 +168,6 @@ def my_page():
         return render_template('myPage.html', username=temp['data']) #로그인 되었을 때
     else:
         return render_template("login.html", error="로그인이 필요합니다.")  # 로그인 안되었거나 토큰이 글러먹엇을 때
-
-
 
 @app.route("/mypage/bookmark", methods=["GET"])
 def bookmark_get():
@@ -247,8 +249,6 @@ def check(token_receive, key):
     except jwt.exceptions.DecodeError:
         return {'result':False, 'data' : None}
 
-
-
 @app.route('/kakao/login')
 def kakao_sign_in():
     # 카카오톡으로 로그인 버튼을 눌렀을 때
@@ -256,12 +256,10 @@ def kakao_sign_in():
     print(kakao_oauth_url)
     return redirect(kakao_oauth_url)
 
-
 @app.route('/kakao')
 def kakao_login():
     # 카카오톡으로 로그인 버튼을 눌렀을 때
     return render_template('loginPage.html')
-
 
 @app.route('/kakao/callback')
 def kakao_callback():
@@ -340,25 +338,21 @@ def login():
         print(db.testuser.find_one({'userid': userid}))
         password = hashlib.sha256(request.form['password'].encode('utf-8')).hexdigest()
         print(userid, password)
-        if  db.testuser.find_one({'userid':userid, 'password':password}) is not None:
+        if db.testuser.find_one({'userid': userid, 'password': password}) is not None:
             payload = {
-                'userid' : userid,
-                'exp' : datetime.datetime.utcnow() + datetime.timedelta(seconds=600)
+                'userid': userid,
+                'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=600)
             }
 
             token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
-            result = {'result': 'success', 'token': token, 'username':db.testuser.find_one({'userid':userid})['username']}
             response = make_response(redirect('/main'))
-            response.set_cookie('Authorization',token)
+            response.set_cookie('Authorization', token)
             return response
         else:
             return render_template('login.html', error='ID와 PassWord를 확인해주세요.')
     response = make_response(render_template('login.html'))
     return response
 
-@app.route('/logout', methods=['GET', 'POST'])
-def logout():
-    return redirect('/main')
 
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)
