@@ -19,7 +19,18 @@ db = client.dbGatherHere
 ######령빈님 part
 @app.route('/main')
 def main():
-    return render_template('main.html')
+    token_receive = request.cookies.get('Authorization')  # 프론트에서 쿠키 전달 받는 곳
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])  # 쿠키에 있는 jwt 인코딩(쿠키에 있는 데이터 추출하는 곳)
+        user_info = db.testuser.find_one({"userid": payload['userid']})  # 추출한 데이터가 DB에 존재하는지 확인하고 해당 데이터를 user_info에 넣기
+
+        return render_template('main.html', username=user_info['username']) # 로그인이 되었을 때 작동하는곳
+    except jwt.ExpiredSignatureError:
+        print('만료')
+        return render_template("main.html")  # 로그인 만료 되었을때 (밑에 시간 다되었을 때랑 거의 비슷)
+    except jwt.exceptions.DecodeError:
+        print('오류')
+        return render_template("main.html")  # 로그인 오류 났을 때(로그인이 안되었을 때)
 
 @app.route('/main/movie', methods=['GET'])
 def show_movie():
@@ -39,7 +50,12 @@ def show_album():
 ######현정님 part
 @app.route('/detail')
 def detail():
-    return render_template('detail.html')
+    token_receive = request.cookies.get('Authorization')
+    temp = check(token_receive, 'username')
+    if temp['result']:
+        return render_template('detail.html', username=temp['data'])
+    else:
+        return render_template('detail.html')
 
 @app.route('/detail/info', methods=["GET"])
 def show_detail():
@@ -124,22 +140,32 @@ def delete_card():
 
 
 ######정훈님 part
+# @app.route('/mypage')
+# def my_page():
+#     token_receive = request.cookies.get('Authorization')
+#     print(token_receive)
+#     try:
+#         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+#         user_info = db.testuser.find_one({"userid": payload['userid']})
+#         print(user_info)
+#         print('try')
+#         return render_template('myPage.html', username=user_info["username"]) #로그인 되었을 때
+#     except jwt.ExpiredSignatureError:
+#         print('만료')
+#         return render_template("login.html", error="로그인 시간이 만료되었습니다.") # 로그인 만료 되었을 때
+#     except jwt.exceptions.DecodeError:
+#         print('오류')
+#         return render_template("login.html", error="로그인 정보가 존재하지 않습니다.") # 로그인 안되었거나 토큰이 글러먹엇을 때
 @app.route('/mypage')
 def my_page():
     token_receive = request.cookies.get('Authorization')
-    print(token_receive)
-    try:
-        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
-        user_info = db.testuser.find_one({"userid": payload['userid']})
-        print(user_info)
-        print('try')
-        return render_template('myPage.html', username=user_info["username"]) #로그인 되었을 때
-    except jwt.ExpiredSignatureError:
-        print('만료')
-        return render_template("login.html", error="로그인 시간이 만료되었습니다.") # 로그인 만료 되었을 때
-    except jwt.exceptions.DecodeError:
-        print('오류')
-        return render_template("login.html", error="로그인 정보가 존재하지 않습니다.") # 로그인 안되었거나 토큰이 글러먹엇을 때
+    temp = check(token_receive, 'username')
+    if temp['result']:
+        return render_template('myPage.html', username=temp['data']) #로그인 되었을 때
+    else:
+        return render_template("login.html", error="로그인이 필요합니다.")  # 로그인 안되었거나 토큰이 글러먹엇을 때
+
+
 
 @app.route("/mypage/bookmark", methods=["GET"])
 def bookmark_get():
@@ -208,6 +234,18 @@ def example():
     except jwt.exceptions.DecodeError:
         print('오류')
         return render_template("login.html", error="로그인 정보가 존재하지 않습니다.") #로그인 오류 났을 때(로그인이 안되었을 때)
+
+
+def check(token_receive, key):
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256']) #쿠키에 있는 jwt 인코딩(쿠키에 있는 데이터 추출하는 곳)
+
+        user_info = db.testuser.find_one({"userid": payload['userid']}) #추출한 데이터가 DB에 존재하는지 확인하고 해당 데이터를 user_info에 넣기
+        return {'result':True, 'data' : user_info[key]}
+    except jwt.ExpiredSignatureError:
+        return {'result':False, 'data' : None}
+    except jwt.exceptions.DecodeError:
+        return {'result':False, 'data' : None}
 
 
 
