@@ -31,6 +31,16 @@
         </div>
     </nav>
     <!-- Swiper -->
+    <div id="bmk">
+        <h2>💖즐겨찾기</h2>
+        <div class="swiper mySwiper">
+            <div class="swiper-wrapper" id="swipeBookmark">
+            </div>
+            <div class="swiper-button-next"></div>
+            <div class="swiper-button-prev"></div>
+            <div class="swiper-pagination"></div>
+        </div>
+    </div>
     <h2>🍿영화 인기 순위 Top 30</h2>
     <div class="swiper mySwiper">
         <div class="swiper-wrapper" id="swipeMovie">
@@ -95,6 +105,11 @@
                 1280: {
                     slidesPerView: 5,
                     slidesPerGroup: 5,
+                    spaceBetween: 10,
+                },
+                1600: {
+                    slidesPerView: 6,
+                    slidesPerGroup: 6,
                     spaceBetween: 10,
                 }
             },
