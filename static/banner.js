@@ -7,7 +7,7 @@ $(document).ready(function () {
 function banner() {
 
     let temp_html = `<nav class="navbar navbar-light bg-light header">
-                    <a class="header_link" href="#">
+                    <a class="header_link" href="/main">
                         GatherHere
                     </a>
                     <div>
