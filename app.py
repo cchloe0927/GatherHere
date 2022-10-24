@@ -130,10 +130,10 @@ def bookmark_get():
     return jsonify({'bookmarks': datas})
 
 @app.route("/mypage/comment", methods=["GET"])
-def comment_get():
+def user_comment_get():
     user_id = '임시테스트UserID'
     comments = list(db.testcomment.find({'id': user_id}, {'_id': False}))
-    return jsonify({'comments':comments})
+    return jsonify({'comments': comments})
 
 
 
