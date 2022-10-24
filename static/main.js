@@ -30,22 +30,15 @@ function show_movie() {
         const heart = document.querySelectorAll(".heart-like-button")
         heart.forEach((heart) => {
           heart.onclick = (e) => {
+            const bmkDiv = e.target.parentNode
             if (heart.classList.contains("liked")) {
-              heart.classList.remove("liked");
-              // $('#swipeBookmark').empty(temp_html)
+              heart.classList.remove("liked")
+              $(bmkDiv).remove()
+              // $('#swipeBookmark').empty() 어떻게 하지
             } else {
-              heart.classList.add("liked");
-              // let parent = child.parentElement.closest('div')
+              heart.classList.add("liked")
               $('#bmk').show()
-              const idd = e.target.parentNode.id
-              console.log(e.target.parentNode.id);
-              let temp2 = `<div class="swiper-slide" id="${idd}">
-              <div class="poster" alt="${title}" style="background-image:url(${image})" onclick="location.href='detail?type=movie&id=${id}'"></div>
-                <h4>${title}</h4>
-                <p class="sumContent">감독: ${direction}<br>평점: ${star}</p>
-              <div class="heart-like-button" href="#" id="h${id}"></div>
-              </div>`
-              $('#swipeBookmark').append(temp2)
+              $('#swipeBookmark').append(bmkDiv)
             }
           }
         })
@@ -79,10 +72,14 @@ function show_book() {
         const heart = document.querySelectorAll(".heart-like-button")
         heart.forEach((heart) => {
           heart.onclick = (e) => {
+            const bmkDiv = e.target.parentNode
             if (heart.classList.contains("liked")) {
-              heart.classList.remove("liked");
+              heart.classList.remove("liked")
+              $(bmkDiv).remove()
             } else {
-              heart.classList.add("liked");
+              heart.classList.add("liked")
+              $('#bmk').show()
+              $('#swipeBookmark').append(bmkDiv)
             }
           }
         })
@@ -115,10 +112,14 @@ function show_album() {
         const heart = document.querySelectorAll(".heart-like-button")
         heart.forEach((heart) => {
           heart.onclick = (e) => {
+            const bmkDiv = e.target.parentNode
             if (heart.classList.contains("liked")) {
-              heart.classList.remove("liked");
+              heart.classList.remove("liked")
+              $(bmkDiv).remove()
             } else {
-              heart.classList.add("liked");
+              heart.classList.add("liked")
+              $('#bmk').show()
+              $('#swipeBookmark').append(bmkDiv)
             }
           }
         })
