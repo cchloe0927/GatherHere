@@ -54,7 +54,7 @@ def kakao_callback():
     print(code)
     oauth = Oauth()
     auth_info = oauth.auth(code)
-
+    print(auth_info)
     # error 발생 시 로그인 페이지로 redirect
     if "error" in auth_info:
         print("에러가 발생했습니다.")
@@ -65,21 +65,21 @@ def kakao_callback():
 
     print(user)
     kakao_account = user["kakao_account"]
+    userid = user['id']
     profile = kakao_account["profile"]
     name = profile["nickname"]
+
     if "email" in kakao_account.keys():
         email = kakao_account["email"]
     else:
         email = f"{name}@kakao.com"
 
     # user = User.query.filter(User.name =name= name).first() #등록된 유저인지 확인
-    user = pymongodb.testuser.find_one({'userid':name})
+    user = pymongodb.testuser.find_one({'userid':userid})
 
     if user is None:
         # 유저 테이블에 추가
-        print('추가')
-        user = User(userid=email, username=name, email=email, password=hashlib.sha256(name.encode('utf-8')).hexdigest())
-        print(user)
+        user = User(userid=userid, username=name, email=email, password=hashlib.sha256(name.encode('utf-8')).hexdigest())
         pymongodb.testuser.insert_one(user.get_dic())
 
         message = '회원가입이 완료되었습니다.'
@@ -93,7 +93,7 @@ def kakao_callback():
     }
 
     token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
-    result = {'result': 'success', 'token': token, 'username': pymongodb.testuser.find_one({'userid': email})['username']}
+    result = {'result': 'success', 'token': token, 'username': pymongodb.testuser.find_one({'userid': userid})['username']}
     session['access'] = result
     response = make_response(redirect('/'))
     response.set_cookie('Authorization', token)
