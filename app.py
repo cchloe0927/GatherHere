@@ -66,10 +66,8 @@ def show_detail():
 
     if type == "movie":
         detail_id = db.crawlingMovie.find_one({'id': int(id)}, {'_id': False})
-        print(detail_id)
     elif type == "book":
         detail_id = db.crawlingBook.find_one({'id': int(id)}, {'_id': False})
-        print(detail_id)
     else:
         detail_id = db.crawlingalbum.find_one({'id': int(id)}, {'_id': False})
 
