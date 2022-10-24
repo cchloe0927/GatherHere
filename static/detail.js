@@ -132,9 +132,10 @@ function comment_get() {
         data: {},
         success: function (response) {
             let comments = response['comments']
-            let userid = response['userid']['userid']
-            console.log(comments)
+            let userid = response['user_info']
+            //console.log(comments)
             console.log(userid)
+
             for (let i=0; i<comments.length; i++) {
                 //console.log(rows[i])
                 let username = comments[i]['username']
@@ -144,8 +145,8 @@ function comment_get() {
 
                 let commentId = comments[i]['commentId'] //코멘트 삭제용
                 let id = comments[i]['id'] //comments['id'] vs userid['userid'] 비교용
-                console.log(id)
-                console.log(userid)
+                //console.log(id)
+                //console.log(userid)
 
                 let temp_html = ``
                 if (id == userid) {
