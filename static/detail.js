@@ -12,6 +12,7 @@ function close_box() {
     $('#reviewUpload_card').hide()
 }
 
+document.cookie
 // 전역변수
 const param = window.location.search;
 const paramData = new URLSearchParams(param)
