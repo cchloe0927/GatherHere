@@ -2,6 +2,7 @@ $(document).ready(function () {
   show_movie()
   show_book()
   show_album()
+  $('#swipeBookmark').hide()
 })
 
 function show_movie() {
@@ -18,15 +19,28 @@ function show_movie() {
         let star = rows[i].star
         let id = rows[i].id
         let image = rows[i].image
-        let temp_html = `<div class="swiper-slide">
+        let temp_html = `<div class="swiper-slide" id="m${id}">
         <div class="poster" alt="${title}" style="background-image:url(${image})" onclick="location.href='detail?type=movie&id=${id}'"></div>
-        <div>
         <div class="contentDesc">
-          <h4 onclick="location.href='detail?type=movie&id=${id}'">${title}</h4>
-          <p class="sumContent">${direction}<br>평점: ${star}</p>
+          <h4>${title}</h4>
+          <p class="sumContent">감독: ${direction}<br>평점: ${star}</p>
         </div>
-        </div>
-        <a class="heart" href="#">💖</a>`
+        <div class="heart-like-button" id="m${id}" href="#"></div>`
+        const heart = document.querySelectorAll(".heart-like-button")
+        // let child = document.getElementById('test')
+        heart.forEach((heart) => {
+          heart.onclick = (e) => {
+            if (heart.classList.contains("liked")) {
+              heart.classList.remove("liked");
+              // $('#swipeBookmark').empty(temp_html)
+            } else {
+              heart.classList.add("liked");
+              // let parent = child.parentElement.closest('div.swiper-slide')
+              console.log(e);
+              // $('#swipeBookmark').append($('#id'))
+            }
+          }
+        })
         $('#swipeMovie').append(temp_html)
       }
     }
@@ -49,14 +63,22 @@ function show_book() {
         let image = rows[i].image
         let temp_html = `<div class="swiper-slide">
         <div class="poster" alt="${title}" style="background-image:url(${image})" onclick="location.href='detail?type=book&id=${id}'"></div>
-        <div>
         <div class="contentDesc">
           <h4>${title}</h4>
           <p class="sumContent">${author}<br>평점: ${star}</p>
         </div>
-        </div>
-        <a class="heart" href="#">💖</a>`
+        <div class="heart-like-button" href="#"></div>`
         $('#swipeBook').append(temp_html)
+        const heart = document.querySelectorAll(".heart-like-button")
+        heart.forEach((heart) => {
+          heart.onclick = (e) => {
+            if (heart.classList.contains("liked")) {
+              heart.classList.remove("liked");
+            } else {
+              heart.classList.add("liked");
+            }
+          }
+        })
       }
     }
   })
@@ -78,14 +100,22 @@ function show_album() {
         let image = rows[i].image
         let temp_html = `<div class="swiper-slide">
         <div class="posterAlbum" alt="${title}" style="background-image:url(${image})" onclick="location.href='detail?type=album&id=${id}'"></div>
-        <div>
         <div class="contentDesc">
           <h4>${title}</h4>
           <p class="sumContent">${artist}<br>평점: ${star}</p>
         </div>
-        </div>
-        <a class="heart" href="#">💖</a>`
+        <div class="heart-like-button" href="#"></div>`
         $('#swipeAlbum').append(temp_html)
+        const heart = document.querySelectorAll(".heart-like-button")
+        heart.forEach((heart) => {
+          heart.onclick = (e) => {
+            if (heart.classList.contains("liked")) {
+              heart.classList.remove("liked");
+            } else {
+              heart.classList.add("liked");
+            }
+          }
+        })
       }
     }
   })

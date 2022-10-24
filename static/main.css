@@ -11,11 +11,15 @@ body {
   margin: 0;
   color: #000;
   overflow-x: hidden;
+  font-family: futura-pt, sans-serif;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
-header {
-  background-color: #000;
-  color: #fff;
+/* 메뉴 바 */
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 h1 {
@@ -35,11 +39,12 @@ h4 {
 /* 대표 이미지 */
 .poster {
   background-repeat: no-repeat;
-  background-size: contain;
+  background-size: cover;
   background-position: center;
   width: 100%;
   height: 0;
   padding-top: 150%;
+  cursor: pointer;
 }
 
 .posterAlbum {
@@ -49,6 +54,7 @@ h4 {
   width: 100%;
   height: 0;
   padding-top: 100%;
+  cursor: pointer;
 }
 
 /* 글자 수 자르기 */
@@ -64,8 +70,8 @@ p.sumContent {
 /* 즐겨찾기 버튼 */
 .heart {
   font-size: 30px;
-  cursor: pointer;
   margin: auto 0 0 auto;
+  cursor: pointer;
 }
 
 a {
@@ -86,7 +92,7 @@ a {
   background: #000;
   color: #fff;
   margin-bottom: auto;
-  padding: 10px;
+  padding: 10px 10px 25px 10px;
   border-radius: 10px;
 
   /* Center slide text vertically */
@@ -126,3 +132,45 @@ a {
 } */
 
 /* 슬라이더 끝 */
+
+/* 즐겨찾기 버튼 */
+.heart-like-button {
+  display: flex;
+  justify-content: end;
+  align-items: baseline;
+}
+
+.heart-like-button:before {
+  position: absolute;
+  right: 6px;
+  bottom: 7px;
+  transform: rotate(-45deg);
+  transform-origin: 0 100%;
+  width: 18px;
+  height: 30px;
+  border-radius: 40px 40px 0 0;
+  background-color: #574136;
+  content: "";
+  cursor: pointer;
+  transition: background .4s;
+}
+
+.heart-like-button:after {
+  position: absolute;
+  right: 24px;
+  bottom: 7px;
+  transform: rotate(45deg);
+  transform-origin: 100% 100%;
+  width: 18px;
+  height: 30px;
+  border-radius: 40px 40px 0 0;
+  background-color: #574136;
+  content: "";
+  cursor: pointer;
+  transition: background .4s;
+}
+
+.heart-like-button.liked::before,
+.heart-like-button.liked::after {
+  background-color: #d8003d;
+}
