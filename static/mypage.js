@@ -80,7 +80,7 @@ function listing_comment() {
                 let title = rows[i]['title']
 
                 // let mystar = rows[i]['myStar']
-                // let date = rows[i]['date']
+                let date = rows[i]['date']
 
                 // let temp_html = `
                 //             <div class="card">
@@ -97,11 +97,13 @@ function listing_comment() {
                 //             </div>`
                 let temp_html = `<div class="reviewCard_card">
                                     <div>
+                                        <h2>${title}</h2>
                                         <div>${username}님 <span>평점 : ${star_img}</span>
                                             <button onclick="commentDelete(${commentId})" type="button" class="reviewCard_card-btn">X</button>
                                         </div>
                                     </div>
                                     <div class="reviewCard_card-text">${text}</div>
+                                    <div>${date}</div>
                                 </div>`
                 $('#comment-list').append(temp_html)
             }
@@ -109,3 +111,17 @@ function listing_comment() {
     })
 }
 
+
+function commentDelete(commentId) {
+    $.ajax({
+        type: "POST",
+        url: "/detail/comment/delete",
+        data: {
+            commentId: commentId
+        },
+        success: function (response) {
+            alert(response["msg"])
+            window.location.reload()
+        }
+    });
+}
