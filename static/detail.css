@@ -34,7 +34,7 @@
     height: 330px;
 }
 .detail_info {
-    width: 700px;
+    width: 730px;
     height: 300px;
 }
 .detail_info-special {
@@ -67,7 +67,7 @@
 .reviewUpload_btn{
     width: 150px;
     height: 40px;
-    margin: 0 0 20px 0;
+    margin: 0 0 20px 10px;
 }
 .reviewUpload_card {
     display: none;

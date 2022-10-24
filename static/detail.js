@@ -12,6 +12,7 @@ function close_box() {
     $('#reviewUpload_card').hide()
 }
 
+document.cookie
 // 전역변수
 const param = window.location.search;
 const paramData = new URLSearchParams(param)
@@ -39,7 +40,6 @@ function show_detail_id() {
         //book
         let author = rows['author']
         //album
-        let url = rows['url']
         let artist = rows['artist']
         let company = rows['company']
 
@@ -76,7 +76,7 @@ function show_detail_id() {
                                 </div>
                             </div>`
         } else {
-            temp_html = `<img class="detail_img" src="${url}" />
+            temp_html = `<img class="detail_img" src="${image}" />
                             <div class="detail_info">
                                 <div class="detail_info-special">
                                     <div class="detail_info-special--rank">${rank}</div>

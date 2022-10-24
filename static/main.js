@@ -2,8 +2,10 @@ $(document).ready(function () {
   show_movie()
   show_book()
   show_album()
-  $('#swipeBookmark').hide()
+  $('#bmk').hide()
 })
+
+let movieArr = []
 
 function show_movie() {
   $('#swipeMovie').empty()
@@ -19,15 +21,13 @@ function show_movie() {
         let star = rows[i].star
         let id = rows[i].id
         let image = rows[i].image
-        let temp_html = `<div class="swiper-slide" id="m${id}">
+        let temp_html = `<div class="swiper-slide" id="${id}">
         <div class="poster" alt="${title}" style="background-image:url(${image})" onclick="location.href='detail?type=movie&id=${id}'"></div>
-        <div class="contentDesc">
           <h4>${title}</h4>
           <p class="sumContent">감독: ${direction}<br>평점: ${star}</p>
-        </div>
-        <div class="heart-like-button" id="m${id}" href="#"></div>`
+        <div class="heart-like-button" href="#" id="h${id}"></div>
+        </div>`
         const heart = document.querySelectorAll(".heart-like-button")
-        // let child = document.getElementById('test')
         heart.forEach((heart) => {
           heart.onclick = (e) => {
             if (heart.classList.contains("liked")) {
@@ -35,9 +35,17 @@ function show_movie() {
               // $('#swipeBookmark').empty(temp_html)
             } else {
               heart.classList.add("liked");
-              // let parent = child.parentElement.closest('div.swiper-slide')
-              console.log(e);
-              // $('#swipeBookmark').append($('#id'))
+              // let parent = child.parentElement.closest('div')
+              $('#bmk').show()
+              const idd = e.target.parentNode.id
+              console.log(e.target.parentNode.id);
+              let temp2 = `<div class="swiper-slide" id="${idd}">
+              <div class="poster" alt="${title}" style="background-image:url(${image})" onclick="location.href='detail?type=movie&id=${id}'"></div>
+                <h4>${title}</h4>
+                <p class="sumContent">감독: ${direction}<br>평점: ${star}</p>
+              <div class="heart-like-button" href="#" id="h${id}"></div>
+              </div>`
+              $('#swipeBookmark').append(temp2)
             }
           }
         })
@@ -63,11 +71,10 @@ function show_book() {
         let image = rows[i].image
         let temp_html = `<div class="swiper-slide">
         <div class="poster" alt="${title}" style="background-image:url(${image})" onclick="location.href='detail?type=book&id=${id}'"></div>
-        <div class="contentDesc">
           <h4>${title}</h4>
           <p class="sumContent">${author}<br>평점: ${star}</p>
-        </div>
-        <div class="heart-like-button" href="#"></div>`
+        <div class="heart-like-button" href="#">
+        </div></div>`
         $('#swipeBook').append(temp_html)
         const heart = document.querySelectorAll(".heart-like-button")
         heart.forEach((heart) => {
@@ -100,11 +107,10 @@ function show_album() {
         let image = rows[i].image
         let temp_html = `<div class="swiper-slide">
         <div class="posterAlbum" alt="${title}" style="background-image:url(${image})" onclick="location.href='detail?type=album&id=${id}'"></div>
-        <div class="contentDesc">
           <h4>${title}</h4>
           <p class="sumContent">${artist}<br>평점: ${star}</p>
-        </div>
-        <div class="heart-like-button" href="#"></div>`
+        <div class="heart-like-button" href="#">
+        </div></div>`
         $('#swipeAlbum').append(temp_html)
         const heart = document.querySelectorAll(".heart-like-button")
         heart.forEach((heart) => {
