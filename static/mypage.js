@@ -11,7 +11,7 @@ $(document).ready(function () {
 function listing_bookmark() {
     $.ajax({
         type: 'GET',
-        url: '/bookmark',
+        url: '/mypage/bookmark',
         data: {},
         success: function (response) {
             let rows = response['bookmarks']
@@ -63,7 +63,7 @@ function listing_bookmark() {
 function listing_comment() {
     $.ajax({
         type: 'GET',
-        url: '/comment',
+        url: '/mypage/comment',
         data: {},
         success: function (response) {
             console.log(response['comments'])
@@ -94,6 +94,7 @@ function listing_comment() {
                 //             </div>`
                 let temp_html = `<div class="reviewCard_card">
                                     <div>
+                                    <h4>${title}</h4>
                                         <div>${username}님 <span>평점 : ${star_img}</span>
                                             <button onclick="commentDelete(${commentId})" type="button" class="reviewCard_card-btn">X</button>
                                         </div>
@@ -105,49 +106,4 @@ function listing_comment() {
         }
     })
 }
-
-
-// Initialize Swiper
-let swiper = new Swiper(".mySwiper", {
-        slidesPerView: 3,
-        spaceBetween: 10,
-        // Responsive breakpoints
-        breakpoints: {
-            // when window width is >= 320px
-            180: {
-                slidesPerView: 1,
-                slidesPerGroup: 1,
-                spaceBetween: 10,
-            },
-            320: {
-                slidesPerView: 2,
-                slidesPerGroup: 2,
-                spaceBetween: 10,
-            },
-            // when window width is >= 480px
-            480: {
-                slidesPerView: 3,
-                slidesPerGroup: 3,
-                spaceBetween: 10,
-            },
-            // when window width is >= 640px
-            720: {
-                slidesPerView: 4,
-                slidesPerGroup: 4,
-                spaceBetween: 10,
-            }
-        },
-        loop: true,
-        loopAdditionalSlides: 1,
-        loopFillGroupWithBlank: true,
-        pagination: {
-            el: ".swiper-pagination",
-            clickable: true,
-        },
-        navigation: {
-            nextEl: ".swiper-button-next",
-            prevEl: ".swiper-button-prev",
-        },
-    }
-)
 
