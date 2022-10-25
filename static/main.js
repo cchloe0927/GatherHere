@@ -42,6 +42,20 @@ function del_bookmark(type, id) {
   })
 }
 
+function add_bookmark(type, id) {
+  $.ajax({
+    type: "POST",
+    url: "/add_bookmark",
+    data: {
+      type: type,
+      id: id,
+    },
+    success: function (response) {
+      console.log(response['result'])
+    }
+  })
+}
+
 let cnt = 0
 
 function show_movie() {
@@ -58,7 +72,7 @@ function show_movie() {
         let star = rows[i].star
         let id = rows[i].id
         let image = rows[i].image
-        let temp_html = `<div class="swiper-slide" id="${id}">
+        let temp_html = `<div class="movie swiper-slide" id="${id}">
         <div class="poster" alt="${title}" style="background-image:url(${image})" onclick="location.href='detail?type=movie&id=${id}'"></div>
           <h4>${title}</h4>
           <p class="sumContent">감독: ${direction}<br>평점: ${star}</p>
@@ -70,6 +84,7 @@ function show_movie() {
           heart.onclick = (e) => {
             const bmkDiv = e.target.parentNode
             // 클릭한 개체의 아이디
+            let contentType = bmkDiv.classList[0]
             let contentId = bmkDiv.id
 
             if (heart.classList.contains("liked")) {
@@ -81,14 +96,14 @@ function show_movie() {
                 $('#bmk').hide()
               }
               resizeDiv()
-              del_bookmark('movie', contentId)
+              del_bookmark(contentType, contentId)
             } else {
               heart.classList.add("liked")
               $('#bmk').show()
               $('#swipeBookmark').append(bmkDiv)
               cnt += 1
               resizeDiv()
-              add_bookmark('movie', contentId)
+              add_bookmark(contentType, contentId)
             }
           }
         })
@@ -111,7 +126,7 @@ function show_book() {
         let star = rows[i].star
         let id = rows[i].id
         let image = rows[i].image
-        let temp_html = `<div class="swiper-slide">
+        let temp_html = `<div class="book swiper-slide" id="${id}">
         <div class="poster" alt="${title}" style="background-image:url(${image})" onclick="location.href='detail?type=book&id=${id}'"></div>
           <h4>${title}</h4>
           <p class="sumContent">${author}<br>평점: ${star}</p>
@@ -122,6 +137,7 @@ function show_book() {
         heart.forEach((heart) => {
           heart.onclick = (e) => {
             const bmkDiv = e.target.parentNode
+            let contentType = bmkDiv.classList[0]
             let contentId = bmkDiv.id
 
             if (heart.classList.contains("liked")) {
@@ -133,7 +149,7 @@ function show_book() {
                 $('#bmk').hide()
               }
               resizeDiv()
-              del_bookmark('book', contentId)
+              del_bookmark(contentType, contentId)
             } else {
               $('#bmk').show()
               heart.classList.add("liked")
@@ -141,7 +157,7 @@ function show_book() {
               $('#swipeBookmark').append(bmkDiv)
               cnt += 1
               resizeDiv()
-              add_bookmark('book', contentId)
+              add_bookmark(contentType, contentId)
             }
           }
         })
@@ -164,7 +180,7 @@ function show_album() {
         let star = rows[i].star
         let id = rows[i].id
         let image = rows[i].image
-        let temp_html = `<div class="swiper-slide">
+        let temp_html = `<div class="album swiper-slide" id="${id}">
         <div class="poster" alt="${title}" style="background-image:url(${image})" onclick="location.href='detail?type=album&id=${id}'"></div>
           <h4>${title}</h4>
           <p class="sumContent">${artist}<br>평점: ${star}</p>
@@ -175,7 +191,8 @@ function show_album() {
         heart.forEach((heart) => {
           heart.onclick = (e) => {
             const bmkDiv = e.target.parentNode
-            let contentId = bmkDiv.id
+            let contentId = bmkDiv.classList[0]
+            let contentType = bmkDiv.id
 
             if (heart.classList.contains("liked")) {
               heart.classList.remove("liked")
@@ -186,14 +203,14 @@ function show_album() {
                 $('#bmk').hide()
               }
               resizeDiv()
-              del_bookmark('album', contentId)
+              del_bookmark(contentType, contentId)
             } else {
               heart.classList.add("liked")
               $('#bmk').show()
               $('#swipeBookmark').append(bmkDiv)
               cnt += 1
               resizeDiv()
-              add_bookmark('album', contentId)
+              add_bookmark(contentType, contentId)
             }
           }
         })
