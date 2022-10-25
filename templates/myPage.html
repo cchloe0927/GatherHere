@@ -25,81 +25,86 @@
     <link rel="stylesheet" href="../static/main.css">
     <link rel="stylesheet" href="../static/detail.css">
     <link rel="stylesheet" href="../static/banner.css">
+    <link rel="stylesheet" href="../static/mypage.css">
+
 
     <title>Title</title>
 </head>
 <body>
 <div id="banner"></div>
-<div id="bmk">
-        <h2>💖즐겨찾기</h2>
-        <div class="swiper mySwiper">
-            <div class="swiper-wrapper" id="swipeBookmark">
-            </div>
-            <div class="swiper-button-next"></div>
-            <div class="swiper-button-prev"></div>
-            <div class="swiper-pagination"></div>
+<div class="mypage_container">
+    <div id="bmk">
+    <h2>💖즐겨찾기</h2>
+    <div class="swiper mySwiper">
+        <div class="swiper-wrapper" id="swipeBookmark">
         </div>
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+        <div class="swiper-pagination"></div>
     </div>
-<div>
-    Comment List
+</div>
+</div>
+
+<div class="mypage_container">
+    <h2> Comment List</h2>
     <div id="comment-list" class="reviewCard_container">
     </div>
-    <!-- Swiper JS -->
-    <script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
-    <script>
-        // Initialize Swiper
-        let swiper = new Swiper(".mySwiper", {
-                slidesPerView: 3,
-                spaceBetween: 10,
-                // Responsive breakpoints
-                breakpoints: {
-                    // when window width is >=
-                    120: {
-                        slidesPerView: 1,
-                        slidesPerGroup: 1,
-                        spaceBetween: 10,
-                    },
-                    380: {
-                        slidesPerView: 2,
-                        slidesPerGroup: 2,
-                        spaceBetween: 10,
-                    },
-                    760: {
-                        slidesPerView: 3,
-                        slidesPerGroup: 3,
-                        spaceBetween: 10,
-                    },
-                    1024: {
-                        slidesPerView: 4,
-                        slidesPerGroup: 4,
-                        spaceBetween: 10,
-                    },
-                    1280: {
-                        slidesPerView: 5,
-                        slidesPerGroup: 5,
-                        spaceBetween: 10,
-                    },
-                    1600: {
-                        slidesPerView: 6,
-                        slidesPerGroup: 6,
-                        spaceBetween: 10,
-                    }
-                },
-                loop: true,
-                loopAdditionalSlides: 1,
-                loopFillGroupWithBlank: true,
-                pagination: {
-                    el: ".swiper-pagination",
-                    clickable: true,
-                },
-                navigation: {
-                    nextEl: ".swiper-button-next",
-                    prevEl: ".swiper-button-prev",
-                },
-            }
-        )
-    </script>
 </div>
+<!-- Swiper JS -->
+<script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
+<script>
+    // Initialize Swiper
+    let swiper = new Swiper(".mySwiper", {
+            slidesPerView: 3,
+            spaceBetween: 10,
+            // Responsive breakpoints
+            breakpoints: {
+                // when window width is >=
+                120: {
+                    slidesPerView: 1,
+                    slidesPerGroup: 1,
+                    spaceBetween: 10,
+                },
+                380: {
+                    slidesPerView: 2,
+                    slidesPerGroup: 2,
+                    spaceBetween: 10,
+                },
+                760: {
+                    slidesPerView: 3,
+                    slidesPerGroup: 3,
+                    spaceBetween: 10,
+                },
+                1024: {
+                    slidesPerView: 4,
+                    slidesPerGroup: 4,
+                    spaceBetween: 10,
+                },
+                1280: {
+                    slidesPerView: 5,
+                    slidesPerGroup: 5,
+                    spaceBetween: 10,
+                },
+                1600: {
+                    slidesPerView: 6,
+                    slidesPerGroup: 6,
+                    spaceBetween: 10,
+                }
+            },
+            loop: true,
+            loopAdditionalSlides: 1,
+            loopFillGroupWithBlank: true,
+            pagination: {
+                el: ".swiper-pagination",
+                clickable: true,
+            },
+            navigation: {
+                nextEl: ".swiper-button-next",
+                prevEl: ".swiper-button-prev",
+            },
+        }
+    )
+</script>
 
 </body>
 </html>

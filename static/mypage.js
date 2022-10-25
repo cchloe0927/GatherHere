@@ -50,7 +50,7 @@ function listing_bookmark() {
                     <div class="swiper-slide" id="${id}">
                         <div class="poster" alt="${title}" 
                             style="background-image:url(${image})" 
-                            onclick="location.href='detail?type=movie&id=${id}'">
+                            onclick="location.href='detail?type=${type}&id=${id}'">
                         </div>
                       <h4>${title}</h4>
                       <p class="sumContent">${creator}<br>평점: ${star}</p>
@@ -95,15 +95,15 @@ function listing_comment() {
                 //                     </blockquote>
                 //                 </div>
                 //             </div>`
-                let temp_html = `<div class="reviewCard_card">
+                let temp_html = `<div class="reviewCard_card mypage_comment">
                                     <div>
-                                        <h2>${title}</h2>
+                                        <h4>${title}</h4>
                                         <div>${username}님 <span>평점 : ${star_img}</span>
                                             <button onclick="commentDelete(${commentId})" type="button" class="reviewCard_card-btn">X</button>
                                         </div>
                                     </div>
                                     <div class="reviewCard_card-text">${text}</div>
-                                    <div>${date}</div>
+                                    <div class="mypage_date">${date}</div>
                                 </div>`
                 $('#comment-list').append(temp_html)
             }
