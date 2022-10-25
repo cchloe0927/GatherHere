@@ -22,7 +22,14 @@ for main in mains:
     urls = main.select_one('td.title > div > a')
     stars = main.select_one('td.point')
     if (ranks is not None) and (urls is not None):
-        rank = ranks['alt']
+        rank_data = ranks['alt']
+        rank = ''
+        if rank_data[0:1] == '0':
+            rank = rank_data[1:3]
+        else:
+            rank = rank_data
+        # print(rank)
+
         url = urls['href']
         id = url.split('=')[1]
         star = stars.text
@@ -35,10 +42,10 @@ for main in mains:
         genre = detail.select_one('div.mv_info > dl > dd:nth-child(2) > p > span:nth-child(1) > a').text
         direction = detail.select_one('dl > dd:nth-child(4) > p > a').text
         actor = detail.select_one('dl > dd:nth-child(6) > p').text.replace('\t', '').replace('\r', '').replace('\n', '')
-        releasedata = detail.select('dl > dd:nth-child(2) > p > span:nth-child(4) >a')
+        release_data = detail.select('dl > dd:nth-child(2) > p > span:nth-child(4) >a')
         release = ""
         for i in range(2):
-            release += releasedata[i].text
+            release += release_data[i].text
 
         summary = movieSoup.select_one(
             '#content > div.article > div.section_group.section_group_frst > div:nth-child(1) > div > div.story_area > p').text
