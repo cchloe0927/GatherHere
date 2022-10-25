@@ -20,7 +20,6 @@
     {#    <link rel="stylesheet" href="../static/normalize.css">#}
 
     <script src="../static/mypage.js"></script>
-    <script src="../static/banner.js"></script>
     <!-- main.css -->
     <link rel="stylesheet" href="../static/main.css">
     <link rel="stylesheet" href="../static/detail.css">
@@ -30,18 +29,25 @@
     <title>Title</title>
 </head>
 <body>
-<div id="banner"></div>
-<div class="mypage_container">
+{% include "banner.html" %}
+<div>
+    <div class="mycards">
+        <div class="row row-cols-1 row-cols-md-4 g-4" id="cards-box">
     <div id="bmk">
-    <h2>💖즐겨찾기</h2>
-    <div class="swiper mySwiper">
-        <div class="swiper-wrapper" id="swipeBookmark">
+        <h2>💖즐겨찾기</h2>
+        <div class="swiper mySwiper">
+            <div class="swiper-wrapper" id="swipeBookmark">
+            </div>
+            <div class="swiper-button-next"></div>
+            <div class="swiper-button-prev"></div>
+            <div class="swiper-pagination"></div>
+
         </div>
         <div class="swiper-button-next"></div>
         <div class="swiper-button-prev"></div>
         <div class="swiper-pagination"></div>
     </div>
-</div>
+    </div>
 </div>
 
 <div class="mypage_container">

@@ -12,8 +12,7 @@ function close_box() {
     $('#reviewUpload_card').hide()
 }
 
-document.cookie
-// 전역변수
+// 전역 변수
 const param = window.location.search;
 const paramData = new URLSearchParams(param)
 const type = paramData.get('type')
@@ -27,22 +26,22 @@ function show_detail() {
     data: {},
     success: function(response){
         let rows = response['detailID']
-        //movie
+        //all
         let image = rows['image']
         let rank = rows['rank']
         let title = rows['title']
         let star = rows['star']
         let release = rows['release']
         let genre = rows['genre']
+        let summary = rows['summary']
+        //movie
         let direction = rows['direction']
         let actor = rows['actor']
-        let summary = rows['summary']
         //book
         let author = rows['author']
         //album
         let artist = rows['artist']
         let company = rows['company']
-
 
         let temp_html = ``
         if (type=="movie") {
@@ -131,24 +130,44 @@ function comment_get() {
         url: "/detail/comment?type="+type+"&id="+id,
         data: {},
         success: function (response) {
-            let rows = response['comments']
-            for (let i=0; i<rows.length; i++) {
+            let comments = response['comments']
+            let userid = response['user_info']
+            //console.log(comments)
+            //console.log(userid)
+
+            for (let i=0; i<comments.length; i++) {
                 //console.log(rows[i])
-                let username = rows[i]['username']
-                let myStar = rows[i]['myStar']
+                let username = comments[i]['username']
+                let myStar = comments[i]['myStar']
                 let star_img = "⭐️".repeat(myStar)
-                let text = rows[i]['text']
+                let text = comments[i]['text']
 
-                let commentId = rows[i]['commentId'] //코멘트 삭제용
+                let commentId = comments[i]['commentId'] //코멘트 삭제용
+                let id = comments[i]['id'] //comments['id'] vs userid['userid'] 비교용
+                //console.log(id)
+                //console.log(userid)
 
-                let temp_html = `<div class="reviewCard_card">
+                let temp_html = ``
+                if (id == userid) {
+                    temp_html = `<div class="reviewCard_card">
                                     <div>
-                                        <div>${username}님 <span>평점 : ${star_img}</span>
+                                        <div>
+                                            <span class="reviewCard_card-username">${username}님</span>
+                                            <span class="reviewCard_card-mystar">평점 : ${star_img}</span>
                                             <button onclick="commentDelete(${commentId})" type="button" class="reviewCard_card-btn">X</button>
                                         </div>
                                     </div>
                                     <div class="reviewCard_card-text">${text}</div>
                                 </div>`
+                } else {
+                    temp_html = `<div class="reviewCard_card">
+                                    <div>
+                                        <span class="reviewCard_card-username">${username}님</span>
+                                        <span class="reviewCard_card-mystar">평점 : ${star_img}</span>
+                                    </div>
+                                    <div class="reviewCard_card-text">${text}</div>
+                                </div>`
+                }
                 $('#comment-list').append(temp_html)
             }
         }

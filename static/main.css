@@ -1,6 +1,5 @@
 * {
   box-sizing: border-box;
-  font-family: 'Gowun Dodum', sans-serif;
 }
 
 html,
@@ -26,6 +25,10 @@ h1 {
   margin: 0;
 }
 
+h2 {
+  margin-left: 0.5em;
+}
+
 /* 작품 제목 */
 h4 {
   display: inline-block;
@@ -34,6 +37,8 @@ h4 {
   white-space: nowrap;
   max-width: 23ch;
   cursor: pointer;
+  font-size: 1.3em;
+  padding-top: 1em;
 }
 
 /* 대표 이미지 */
@@ -118,9 +123,9 @@ a {
   cursor: pointer;
 }
 
-.swiper-slide .album {
+/* .swiper-slide .album {
   height: 100%;
-}
+} */
 
 /* swiper arrow buttons (css available)*/
 /* .swiper-button-prev {
