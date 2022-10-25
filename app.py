@@ -214,11 +214,11 @@ def add_bookmark():
         bookmark = user_info['bookmark']
         bookmark.append({'type':type, 'id':id})
         db.testuser.update_one({'userid':user_info['userid']}, {'$set':{'bookmark':bookmark}})
-        return jsonify({'resutl':'success'})
+        return jsonify({'result':'success'})
     except jwt.ExpiredSignatureError:
-        return jsonify({'resutl':'fail'})
+        return jsonify({'result':'fail'})
     except jwt.exceptions.DecodeError:
-        return jsonify({'resutl':'fail'})
+        return jsonify({'result':'fail'})
 
 
 @app.route('/del_bookmark', methods=['POST'])
@@ -232,11 +232,11 @@ def del_bookmark():
         bookmark = user_info['bookmark']
         del bookmark[bookmark.index({'type':type, 'id':id})]
         db.testuser.update_one({'userid':user_info['userid']}, {'$set':{'bookmark':bookmark}})
-        return jsonify({'resutl':'success'})
+        return jsonify({'result':'success'})
     except jwt.ExpiredSignatureError:
-        return jsonify({'resutl':'fail'})
+        return jsonify({'result':'fail'})
     except jwt.exceptions.DecodeError:
-        return jsonify({'resutl':'fail'})
+        return jsonify({'result':'fail'})
 @app.route("/mypage/comment", methods=["GET"])
 def user_comment_get():
     token_receive = request.cookies.get('Authorization')
