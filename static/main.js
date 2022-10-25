@@ -5,8 +5,8 @@ $(document).ready(function () {
   $('#bmk').hide()
 })
 
+// 즐겨찾기 스와이퍼 고친 거
 function resizeDiv() {
-  // $('.swiper').width('98vw')
   if (cnt % 2 === 1) {
     $('.swiper').width('96.01vw')
   } else {
@@ -43,6 +43,8 @@ function del_bookmark(type, id) {
 }
 
 let cnt = 0
+const bmkSelf = document.querySelector('bmk')
+let bmkArr = []
 
 function show_movie() {
   $('#swipeMovie').empty()
@@ -89,7 +91,6 @@ function show_movie() {
               cnt += 1
               resizeDiv()
               add_bookmark('movie', contentId)
-              // console.log(contentId);
             }
           }
         })
@@ -202,5 +203,3 @@ function show_album() {
     }
   })
 }
-
-// test push
