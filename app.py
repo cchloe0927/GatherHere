@@ -219,7 +219,7 @@ def add_bookmark():
 def del_bookmark():
     token_receive = request.cookies.get('Authorization')
     type = request.form.get('type')
-    id = request.form.get('id')
+    id = int(request.form.get('id'))
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
         user_info = db.testuser.find_one({"userid": payload['userid']})
