@@ -197,7 +197,7 @@ def bookmark_get():
     return jsonify({'bookmarks': datas})
 
 
-@app.route('/add_bookmark', method=['POST'])
+@app.route('/add_bookmark', methods=['POST'])
 def add_bookmark():
     token_receive = request.cookies.get('Authorization')
     type = request.form.get('type')
@@ -215,7 +215,7 @@ def add_bookmark():
         return jsonify({'resutl':'fail'})
 
 
-@app.route('/del_bookmark', method=['POST'])
+@app.route('/del_bookmark', methods=['POST'])
 def del_bookmark():
     token_receive = request.cookies.get('Authorization')
     type = request.form.get('type')
