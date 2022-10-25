@@ -1,4 +1,8 @@
 /*detail_container*/
+* {
+    font-family: 'Noto Sans KR', sans-serif;
+}
+
 .detail_container {
     margin: auto;
     width: 1000px;
