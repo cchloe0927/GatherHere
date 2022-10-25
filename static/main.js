@@ -2,43 +2,39 @@ $(document).ready(function () {
   show_movie()
   show_book()
   show_album()
-  // show_bmk()
   $('#bmk').hide()
 })
 
-function show_bmk() {
-  $.ajax({
-    type: "GET",
-    url: "/main/bookmark",
-    data: {},
-    success: function (response) {
-      console.log(response);
-    }
-  })
-}
+let cnt = 0
 
-function save_bmk() {
+function add_bookmark(type, id) {
   $.ajax({
     type: "POST",
-    url: "main/bookmark",
-    data: { sample_give: 'this is from main.js save_bmk' },
+    url: "/add_bookmark",
+    data: {
+      type: type,
+      id: id,
+    },
     success: function (response) {
-      console.log(response['msg'])
+      console.log(response['result'])
     }
   })
 }
 
-function erase_bmk() {
+
+function del_bookmark(type, id) {
   $.ajax({
     type: "POST",
-    url: "main/bookmark",
-    data: { sample_give: 'this is from main.js erase_bmk' },
+    url: "/del_bookmark",
+    data: {
+      type: type,
+      id: id,
+    },
     success: function (response) {
-      console.log(response['msg'])
+      console.log(response['result'])
     }
   })
 }
-
 
 function show_movie() {
   $('#swipeMovie').empty()
@@ -61,29 +57,25 @@ function show_movie() {
         <div class="heart-like-button"></div>
         </div>`
         $('#swipeMovie').append(temp_html)
-        let countBmk = []
         const heart = document.querySelectorAll(".heart-like-button")
         heart.forEach((heart) => {
           heart.onclick = (e) => {
             const bmkDiv = e.target.parentNode
+            // 클릭한 개체의 아이디
+            let contentId = bmkDiv.id
+
             if (heart.classList.contains("liked")) {
               heart.classList.remove("liked")
               $(bmkDiv).remove()
               $('#swipeMovie').append(bmkDiv)
-              countBmk.pop()
-              erase_bmk()
-              if (countBmk.length < 1) {
-                $('#bmk').hide()
-              }
+              cnt -= 1
+              del_bookmark('movie', contentId)
             } else {
               heart.classList.add("liked")
               $('#bmk').show()
               $('#swipeBookmark').append(bmkDiv)
-              countBmk.push(1)
-              save_bmk()
-              // console.log(e.path[1]);
-              // console.log(e.path[1].classList.length);
-              // 즐겨찾기 swiper 슬라이드 안 넘어가는 문제 파악하는 중
+              cnt += 1
+              add_bookmark('movie', contentId)
             }
           }
         })
@@ -113,26 +105,24 @@ function show_book() {
         <div class="heart-like-button">
         </div></div>`
         $('#swipeBook').append(temp_html)
-        let countBmk = []
         const heart = document.querySelectorAll(".heart-like-button")
         heart.forEach((heart) => {
           heart.onclick = (e) => {
             const bmkDiv = e.target.parentNode
+            let contentId = bmkDiv.id
+
             if (heart.classList.contains("liked")) {
               heart.classList.remove("liked")
               $(bmkDiv).remove()
               $('#swipeBook').append(bmkDiv)
-              countBmk.pop()
-              erase_bmk()
-              if (countBmk.length < 1) {
-                $('#bmk').hide()
-              }
+              cnt -= 1
+              del_bookmark()
             } else {
-              heart.classList.add("liked")
               $('#bmk').show()
+              heart.classList.add("liked")
               $('#swipeBookmark').append(bmkDiv)
-              countBmk.push(1)
-              save_bmk()
+              cnt += 1
+              add_bookmark()
             }
           }
         })
@@ -156,37 +146,38 @@ function show_album() {
         let id = rows[i].id
         let image = rows[i].image
         let temp_html = `<div class="swiper-slide">
-        <div class="poster" alt="${title}" style="background-image:url(${image})" onclick="location.href='detail?type=book&id=${id}'"></div>
+        <div class="poster" alt="${title}" style="background-image:url(${image})" onclick="location.href='detail?type=album&id=${id}'"></div>
           <h4>${title}</h4>
           <p class="sumContent">${artist}<br>평점: ${star}</p>
         <div class="heart-like-button">
         </div></div>`
         $('#swipeAlbum').append(temp_html)
-
-        let countBmk = []
         const heart = document.querySelectorAll(".heart-like-button")
         heart.forEach((heart) => {
           heart.onclick = (e) => {
             const bmkDiv = e.target.parentNode
+            let contentId = bmkDiv.id
+
             if (heart.classList.contains("liked")) {
               heart.classList.remove("liked")
               $(bmkDiv).remove()
               $('#swipeAlbum').append(bmkDiv)
-              countBmk.pop()
-              erase_bmk()
-              if (countBmk.length < 1) {
-                $('#bmk').hide()
-              }
+              cnt -= 1
+              del_bookmark()
             } else {
               heart.classList.add("liked")
               $('#bmk').show()
               $('#swipeBookmark').append(bmkDiv)
-              countBmk.push(1)
-              save_bmk()
+              cnt += 1
+              add_bookmark()
             }
           }
         })
       }
     }
   })
+}
+
+if (cnt < 1) {
+  $('#bmk').hide()
 }
