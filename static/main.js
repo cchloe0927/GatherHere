@@ -69,6 +69,9 @@ function show_movie() {
               $(bmkDiv).remove()
               $('#swipeMovie').append(bmkDiv)
               cnt -= 1
+              if (cnt < 1) {
+                $('#bmk').hide()
+              }
               del_bookmark('movie', contentId)
             } else {
               heart.classList.add("liked")
@@ -116,13 +119,17 @@ function show_book() {
               $(bmkDiv).remove()
               $('#swipeBook').append(bmkDiv)
               cnt -= 1
-              del_bookmark()
+              if (cnt < 1) {
+                $('#bmk').hide()
+              }
+              del_bookmark('book', contentId)
             } else {
               $('#bmk').show()
               heart.classList.add("liked")
+              $('#bmk').show()
               $('#swipeBookmark').append(bmkDiv)
               cnt += 1
-              add_bookmark()
+              add_bookmark('book', contentId)
             }
           }
         })
@@ -163,21 +170,20 @@ function show_album() {
               $(bmkDiv).remove()
               $('#swipeAlbum').append(bmkDiv)
               cnt -= 1
-              del_bookmark()
+              if (cnt < 1) {
+                $('#bmk').hide()
+              }
+              del_bookmark('album', contentId)
             } else {
               heart.classList.add("liked")
               $('#bmk').show()
               $('#swipeBookmark').append(bmkDiv)
               cnt += 1
-              add_bookmark()
+              add_bookmark('album', contentId)
             }
           }
         })
       }
     }
   })
-}
-
-if (cnt < 1) {
-  $('#bmk').hide()
 }
