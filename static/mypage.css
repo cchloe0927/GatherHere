@@ -1,7 +1,10 @@
 .mypage_container{
-    /*margin-left: 50px;*/
-    /*margin-right: 100px;*/
+    /* width: 70%;
+    margin: 50px; */
     margin-bottom: 50px;
+}
+.swiper-wrapper{
+    width: 70%;
 }
 
 .mypage_comment{
@@ -13,6 +16,10 @@
 .reviewCard_card-btn{
     top:0px;
     right: 0px;
+}
+
+.swiper-slide{
+    width:100px;
 }
 
 .mypage_date{
