@@ -1,0 +1,22 @@
+.mypage_container{
+    /*margin-left: 50px;*/
+    /*margin-right: 100px;*/
+    margin-bottom: 50px;
+}
+
+.mypage_comment{
+    border: thick double black;
+    padding : 10px;
+    padding-bottom: 30px;
+}
+
+.reviewCard_card-btn{
+    top:0px;
+    right: 0px;
+}
+
+.mypage_date{
+    position: absolute;
+    right: 10px;
+    bottom: 5px;
+}

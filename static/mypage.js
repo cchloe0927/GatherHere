@@ -15,6 +15,7 @@ function listing_bookmark() {
         data: {},
         success: function (response) {
             let rows = response['bookmarks']
+            console.log(rows)
             for (let i = 0; i < rows.length; i++) {
                 let id = rows[i]['id']
                 let title = rows[i]['title']
@@ -29,6 +30,7 @@ function listing_bookmark() {
                 } else if (type == 'album') {
                     creator = rows[i]['artist']
                 }
+
                 // let temp_html = `
                 //     <div class="col">
                 //     <a class ="Link" href="https://www.naver.com">
@@ -48,13 +50,13 @@ function listing_bookmark() {
                     <div class="swiper-slide" id="${id}">
                         <div class="poster" alt="${title}" 
                             style="background-image:url(${image})" 
-                            onclick="location.href='detail?type=movie&id=${id}'">
+                            onclick="location.href='detail?type=${type}&id=${id}'">
                         </div>
                       <h4>${title}</h4>
                       <p class="sumContent">${creator}<br>평점: ${star}</p>
                     <div class="heart-like-button" href="#" id="h${id}"></div>
                     </div>`
-                $('#cards-box').append(temp_html)
+                $('#swipeBookmark').append(temp_html)
             }
         }
     })
@@ -76,8 +78,9 @@ function listing_comment() {
 
                 let commentId = rows[i]['commentId'] //코멘트 삭제용
                 let title = rows[i]['title']
+
                 // let mystar = rows[i]['myStar']
-                // let date = rows[i]['date']
+                let date = rows[i]['date']
 
                 // let temp_html = `
                 //             <div class="card">
@@ -92,13 +95,15 @@ function listing_comment() {
                 //                     </blockquote>
                 //                 </div>
                 //             </div>`
-                let temp_html = `<div class="reviewCard_card">
+                let temp_html = `<div class="reviewCard_card mypage_comment">
                                     <div>
+                                        <h4>${title}</h4>
                                         <div>${username}님 <span>평점 : ${star_img}</span>
                                             <button onclick="commentDelete(${commentId})" type="button" class="reviewCard_card-btn">X</button>
                                         </div>
                                     </div>
                                     <div class="reviewCard_card-text">${text}</div>
+                                    <div class="mypage_date">${date}</div>
                                 </div>`
                 $('#comment-list').append(temp_html)
             }
@@ -106,3 +111,17 @@ function listing_comment() {
     })
 }
 
+
+function commentDelete(commentId) {
+    $.ajax({
+        type: "POST",
+        url: "/detail/comment/delete",
+        data: {
+            commentId: commentId
+        },
+        success: function (response) {
+            alert(response["msg"])
+            window.location.reload()
+        }
+    });
+}
