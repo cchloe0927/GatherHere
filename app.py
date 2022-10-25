@@ -339,7 +339,7 @@ def kakao_callback():
 
         message = '회원가입이 완료되었습니다.'
 
-    # session['isKakao'] = True
+    session['isKakao'] = True
     # session['kakaoToken'] = auth_info['access_token']
     message = '로그인에 성공하였습니다.'
     payload = {
