@@ -43,8 +43,6 @@ function del_bookmark(type, id) {
 }
 
 let cnt = 0
-const bmkSelf = document.querySelector('bmk')
-let bmkArr = []
 
 function show_movie() {
   $('#swipeMovie').empty()
