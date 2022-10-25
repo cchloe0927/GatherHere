@@ -5,7 +5,14 @@ $(document).ready(function () {
   $('#bmk').hide()
 })
 
-let cnt = 0
+function resizeDiv() {
+  // $('.swiper').width('98vw')
+  if (cnt % 2 === 1) {
+    $('.swiper').width('96.01vw')
+  } else {
+    $('.swiper').width('96vw')
+  }
+}
 
 function add_bookmark(type, id) {
   $.ajax({
@@ -21,7 +28,6 @@ function add_bookmark(type, id) {
   })
 }
 
-
 function del_bookmark(type, id) {
   $.ajax({
     type: "POST",
@@ -35,6 +41,8 @@ function del_bookmark(type, id) {
     }
   })
 }
+
+let cnt = 0
 
 function show_movie() {
   $('#swipeMovie').empty()
@@ -72,13 +80,16 @@ function show_movie() {
               if (cnt < 1) {
                 $('#bmk').hide()
               }
+              resizeDiv()
               del_bookmark('movie', contentId)
             } else {
               heart.classList.add("liked")
               $('#bmk').show()
               $('#swipeBookmark').append(bmkDiv)
               cnt += 1
+              resizeDiv()
               add_bookmark('movie', contentId)
+              // console.log(contentId);
             }
           }
         })
@@ -122,6 +133,7 @@ function show_book() {
               if (cnt < 1) {
                 $('#bmk').hide()
               }
+              resizeDiv()
               del_bookmark('book', contentId)
             } else {
               $('#bmk').show()
@@ -129,6 +141,7 @@ function show_book() {
               $('#bmk').show()
               $('#swipeBookmark').append(bmkDiv)
               cnt += 1
+              resizeDiv()
               add_bookmark('book', contentId)
             }
           }
@@ -173,12 +186,14 @@ function show_album() {
               if (cnt < 1) {
                 $('#bmk').hide()
               }
+              resizeDiv()
               del_bookmark('album', contentId)
             } else {
               heart.classList.add("liked")
               $('#bmk').show()
               $('#swipeBookmark').append(bmkDiv)
               cnt += 1
+              resizeDiv()
               add_bookmark('album', contentId)
             }
           }
