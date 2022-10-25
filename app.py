@@ -169,26 +169,30 @@ def my_page():
 
 @app.route("/mypage/bookmark", methods=["GET"])
 def bookmark_get():
-    user_id = 'test1234'
-    bookmark = db.testuser.find_one({'id': user_id}, {'_id': False, 'bookmark': 1})
+    token_receive = request.cookies.get('Authorization')
+    payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+    user_info = db.testuser.find_one({"userid": payload['userid']})
+    user_id = user_info['userid']
+
+    bookmark = db.testuser.find_one({'userid': user_id}, {'_id': False, 'bookmark': 1})
     bookmarks = bookmark['bookmark']
+    print(bookmarks)
 
     datas = []
     for bm in bookmarks:
         if bm['type'] == 'movie':
-            data = db.testmovie.find_one({'title': bm['content']}, {'_id': False})
-            data['type'] = 'movie'
-            print(data['type'])
+            data = db.crawlingMovie.find_one({'id': bm['id']}, {'_id': False})
+            # data['type'] = 'movie'
             datas.append(data)
         elif bm['type'] == 'book':
-            data = db.testbook.find_one({'title': bm['content']}, {'_id': False})
-            data['type'] = 'book'
-            print(data['type'])
+            data = db.crawlingBook.find_one({'id': bm['id']}, {'_id': False})
+            # data['type'] = 'book'
             datas.append(data)
         elif bm['type'] == 'album':
-            data = db.testalbum.find_one({'title': bm['content']}, {'_id': False})
-            data['type'] = 'album'
+            data = db.crawlingalbum.find_one({'id': bm['id']}, {'_id': False})
+            # data['type'] = 'album'
             datas.append(data)
+        print('data : ', data)
 
     return jsonify({'bookmarks': datas})
 

@@ -48,7 +48,8 @@ for i in range(50):
          'release': release,
          'star': star,
          'genre': genre,
-         'rank': rank}
+         'rank': rank,
+         'type': 'album'}
     )
 db.crawlingalbum.delete_many({})
 db.crawlingalbum.insert_many(datas)

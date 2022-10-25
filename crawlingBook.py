@@ -60,9 +60,10 @@ for book in books:
          'summary': summary,
          'star': star,
          'genre': genre,
-         'rank': rank}
+         'rank': rank,
+         'type': 'book'}
     )
     print(rank, book_id, title, author, release, star, genre)
 
-# db.crawlingBook.delete_many({})
-# db.crawlingBook.insert_many(datas)
+db.crawlingBook.delete_many({})
+db.crawlingBook.insert_many(datas)
