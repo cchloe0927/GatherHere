@@ -32,7 +32,7 @@ function listing_bookmark() {
                         </div>
                         <h4>${title}</h4>
                         <p class="sumContent">${creator}<br>평점: ${star}</p>
-                    <div class="heart-like-button" href="#" id="${id}" 
+                    <div class="heart-like-button liked" href="#" id="${id}" 
                     onclick="delete_bookmark(${id}, '${type}')"></div>
                     </div>`
                 console.log(type)
