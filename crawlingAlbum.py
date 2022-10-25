@@ -31,6 +31,7 @@ for i in range(50):
 
     image = soup_d.select_one("#CoverMainImage").get('src')
 
+    company = soup_d.select_one('li.Ere_sub2_title > a:nth-child(3)').text
     info = soup_d.select_one('li.Ere_sub2_title').text.split("-")
     release = info[0][-4:] + "." + info[1] + "." + info[2][:2]
 
@@ -43,6 +44,7 @@ for i in range(50):
          'title': title,
          'image': image,
          'artist': artist,
+         'company': company,
          'release': release,
          'star': star,
          'genre': genre,
