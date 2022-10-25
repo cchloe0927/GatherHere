@@ -40,12 +40,12 @@ class Oauth:
     def set_access_code(self, code):
         self.code = code
 
-    def logout(self):
+    def logout(self, bearer_token):
         return requests.post(
-            url=self.api_server % "/v2/user/unlink",
+            url=self.api_server % "/v1/user/logout",
             headers={
                 **self.default_header,
-                **{"Authorization": "KakaoAK "+ self.code}
+                **{"Authorization": bearer_token}
             },
             # "property_keys":'["kakao_account.profile_image_url"]'
             data={}

@@ -1,9 +1,9 @@
 import hashlib
 import datetime
 
-from flask import Flask, render_template, jsonify, request, redirect, make_response, flash
+from flask import Flask, render_template, jsonify, request, redirect, make_response, flash, session
 import jwt
-from config import SECRET_KEY, CLIENT_ID, REDIRECT_URI
+from config import SECRET_KEY, CLIENT_ID, REDIRECT_URI, LOGOUT_REDIRECT_URI
 from Oauth import Oauth
 from models.User import User
 app = Flask(__name__)
@@ -15,6 +15,12 @@ ca = certifi.where()
 url = 'mongodb+srv://faulty:qwer1234@cluster0.qnaw7kn.mongodb.net/?retryWrites=true&w=majority'
 client = MongoClient(url, tlsCAFile=ca)
 db = client.dbGatherHere
+
+
+app.secret_key = SECRET_KEY
+
+
+
 
 ######령빈님 part
 @app.route('/main')
@@ -293,6 +299,9 @@ def kakao_sign_in():
     print(kakao_oauth_url)
     return redirect(kakao_oauth_url)
 
+
+
+
 @app.route('/kakao')
 def kakao_login():
     # 카카오톡으로 로그인 버튼을 눌렀을 때
@@ -301,19 +310,15 @@ def kakao_login():
 @app.route('/kakao/callback')
 def kakao_callback():
     code = request.args.get("code")
-    print(code)
     oauth = Oauth()
     auth_info = oauth.auth(code)
-    print(auth_info)
     # error 발생 시 로그인 페이지로 redirect
     if "error" in auth_info:
-        print("에러가 발생했습니다.")
         return redirect('/login')
 
     # 아닐 시
     user = oauth.userinfo("Bearer " + auth_info['access_token'])
 
-    print(user)
     kakao_account = user["kakao_account"]
     userid = user['id']
     profile = kakao_account["profile"]
@@ -334,8 +339,8 @@ def kakao_callback():
 
         message = '회원가입이 완료되었습니다.'
 
-    # session['email'] = user.email
     # session['isKakao'] = True
+    # session['kakaoToken'] = auth_info['access_token']
     message = '로그인에 성공하였습니다.'
     payload = {
         'userid': userid,
@@ -346,7 +351,24 @@ def kakao_callback():
     response = make_response(redirect('/main'))
     response.set_cookie('Authorization', token)
     return response
+@app.route('/logout')
+def logout():
+    if session['isKakao']:
+        # auth = Oauth()
+        # userid = auth.logout("Bearer " + session['kakaoToken'])
+        # print(userid)
+        kakao_logout_url = f"https://kauth.kakao.com/oauth/logout?client_id={CLIENT_ID}&logout_redirect_uri={LOGOUT_REDIRECT_URI}"
+        print(kakao_logout_url)
+        return redirect(kakao_logout_url)
 
+    else:
+        return redirect('/main')
+    # return redirect('/main')
+# @app.route('/kakao/logout')
+# def kakao_logout_url():
+#     kakao_logout_url = f"https://kauth.kakao.com/oauth/logout?client_id={CLIENT_ID}&logout_redirect_uri={LOGOUT_REDIRECT_URI}"
+#     print(kakao_logout_url)
+#     return redirect(kakao_logout_url)
 @app.route('/signup', methods=['GET', 'POST'])  # GET(정보보기), POST(정보수정) 메서드 허용
 def signup():
     if request.method == 'POST':
