@@ -176,29 +176,27 @@ def my_page():
 @app.route("/mypage/bookmark", methods=["GET"])
 def bookmark_get():
     token_receive = request.cookies.get('Authorization')
-    payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
-    user_info = db.users.find_one({"userid": payload['userid']})
-    user_id = user_info['userid']
 
+    temp = check(token_receive, 'userid')
+    if temp['result'] is False:
+        return jsonify({'bookmarks': None})
+    user_id = temp['data']
     bookmark = db.users.find_one({'userid': user_id}, {'_id': False, 'bookmark': 1})
     bookmarks = bookmark['bookmark']
-    print(bookmarks)
-
     datas = []
     for bm in bookmarks:
         if bm['type'] == 'movie':
-            data = db.crawlingMovie.find_one({'id': bm['id']}, {'_id': False})
+            data = db.crawlingMovie.find_one({'id': int(bm['id'])}, {'_id': False})
             # data['type'] = 'movie'
             datas.append(data)
         elif bm['type'] == 'book':
-            data = db.crawlingBook.find_one({'id': bm['id']}, {'_id': False})
+            data = db.crawlingBook.find_one({'id': int(bm['id'])}, {'_id': False})
             # data['type'] = 'book'
             datas.append(data)
         elif bm['type'] == 'album':
-            data = db.crawlingalbum.find_one({'id': bm['id']}, {'_id': False})
+            data = db.crawlingalbum.find_one({'id': int(bm['id'])}, {'_id': False})
             # data['type'] = 'album'
             datas.append(data)
-
     return jsonify({'bookmarks': datas})
 
 
@@ -211,8 +209,9 @@ def add_bookmark():
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
         user_info = db.users.find_one({"userid": payload['userid']})
         bookmark = user_info['bookmark']
-        bookmark.append({'type':type, 'id':id})
+        bookmark.append({'type':type, 'id':int(id)})
         db.users.update_one({'userid':user_info['userid']}, {'$set':{'bookmark':bookmark}})
+        print('?')
         return jsonify({'result':'success'})
     except jwt.ExpiredSignatureError:
         return jsonify({'result':'fail'})
@@ -229,7 +228,7 @@ def del_bookmark():
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
         user_info = db.users.find_one({"userid": payload['userid']})
         bookmark = user_info['bookmark']
-        del bookmark[bookmark.index({'type':type, 'id':id})]
+        del bookmark[bookmark.index({'type':type, 'id':int(id)})]
         db.users.update_one({'userid':user_info['userid']}, {'$set':{'bookmark':bookmark}})
         return jsonify({'result':'success'})
     except jwt.ExpiredSignatureError:
