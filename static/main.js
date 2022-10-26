@@ -72,7 +72,9 @@ function show_movie() {
         let star = rows[i].star
         let id = rows[i].id
         let image = rows[i].image
+        let rank = rows[i].rank
         let temp_html = `<div class="movie swiper-slide" id="${id}">
+        <div class="detail_info-special--rank">${rank}</div>
         <div class="poster" alt="${title}" style="background-image:url(${image})" onclick="location.href='detail?type=movie&id=${id}'"></div>
           <h4>${title}</h4>
           <p class="sumContent">감독: ${direction}<br>평점: ${star}</p>
@@ -126,7 +128,9 @@ function show_book() {
         let star = rows[i].star
         let id = rows[i].id
         let image = rows[i].image
+        let rank = rows[i].rank
         let temp_html = `<div class="book swiper-slide" id="${id}">
+        <div class="detail_info-special--rank">${rank}</div>
         <div class="poster" alt="${title}" style="background-image:url(${image})" onclick="location.href='detail?type=book&id=${id}'"></div>
           <h4>${title}</h4>
           <p class="sumContent">${author}<br>평점: ${star}</p>
@@ -180,7 +184,9 @@ function show_album() {
         let star = rows[i].star
         let id = rows[i].id
         let image = rows[i].image
+        let rank = rows[i].rank
         let temp_html = `<div class="album swiper-slide" id="${id}">
+        <div class="detail_info-special--rank">${rank}</div>
         <div class="poster" alt="${title}" style="background-image:url(${image})" onclick="location.href='detail?type=album&id=${id}'"></div>
           <h4>${title}</h4>
           <p class="sumContent">${artist}<br>평점: ${star}</p>

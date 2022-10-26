@@ -180,3 +180,18 @@ a {
 .heart-like-button.liked::after {
   background-color: #d8003d;
 }
+
+.detail_info-special--rank{
+  position: absolute;
+  left:5px;
+  top:5px;
+  background-color: black;
+  border: 2px solid black;
+  border-radius: 10px;
+  width: 35px;
+  height: 35px;
+  text-align: center;
+  color: rgb(255, 5, 88);
+  font-weight: bold;
+  font-size: 20px;
+}
