@@ -198,7 +198,6 @@ def bookmark_get():
             data = db.crawlingalbum.find_one({'id': bm['id']}, {'_id': False})
             # data['type'] = 'album'
             datas.append(data)
-        print('data : ', data)
 
     return jsonify({'bookmarks': datas})
 
