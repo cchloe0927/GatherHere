@@ -16,7 +16,8 @@ class User():  # 데이터 모델을 나타내는 객체 선언
         return ({'userid':self.userid,
                  'username':self.username,
                  'email':self.email,
-                 'password':self.password})
+                 'password':self.password,
+                 'bookmark':[]})
 
     def set_dic(self, dic):
         self.userid = dic['id']
