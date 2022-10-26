@@ -17,6 +17,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
         crossorigin="anonymous"></script>
+    <!-- fontawesome -->
+    <script src="https://kit.fontawesome.com/e7998fb1be.js" crossorigin="anonymous"></script>
     <!-- normalize -->
     <link rel="stylesheet" href="../static/normalize.css">
     <!-- main.css -->
@@ -26,6 +28,19 @@
 
 <body>
     {% include "banner.html" %}
+
+    <!-- Search -->
+    <div class="search">
+        <i class="fas fa-search fa-lg"></i>
+        <input
+                id="input"
+                type="text"
+                placeholder="검색"
+                class="searchInput"
+                onkeyup="search(event)"
+        />
+    </div>
+
     <!-- Swiper -->
     <div id="bmk">
         <h2>💖즐겨찾기</h2>
@@ -68,6 +83,9 @@
         <div class="swiper-pagination"></div>
     </div>
     <br>
+
+    <!-- mainSearch.js -->
+    <script src="../static/mainSearch.js"></script>
     <!-- main JS -->
     <script src="../static/main.js"></script>
     <!-- Swiper JS -->
