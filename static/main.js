@@ -2,6 +2,7 @@ $(document).ready(function () {
   show_movie()
   show_book()
   show_album()
+  show_bookmark()
   $('.heart-like-button').hide()
   if (localStorage.length > 0) {
     $('#bmk').show()
@@ -11,13 +12,8 @@ $(document).ready(function () {
     }
   } else {
     $('#bmk').hide()
-    // $('bodyWrap').show()
   }
 })
-
-// document.querySelectorAll('.heart-like-button').addEventListener((click) => {
-//   window.location.reload(true);
-// })
 
 // 즐겨찾기 스와이퍼 고친 거
 function resizeDiv() {
@@ -80,7 +76,7 @@ function removeLocal(id) {
   localStorage.removeItem(id)
 }
 
-let testarr = []
+let cnt = 0
 
 function show_movie() {
   $('#swipeMovie').empty()
@@ -117,14 +113,21 @@ function show_movie() {
               // 즐겨찾기 취소할 때
               heart.classList.remove("liked")
               // $("#bmk").load('main.html' + " #bmk");
-              $(bmkDiv).remove()
+              // 즐겨찾기 아래 있는 항목일 때
+              if (bmkDiv.parentNode.id === 'swipeBookmark') {
+                contentId = `m${contentId}`
+                $(`#m${contentId}`).remove()
+              } else {
+                $(`#m${contentId}`).remove()
+                $('#bmk').append('hey')
+              }
+              contentId = bmkDiv.id
               removeLocal(contentId)
               if (localStorage.length < 1) {
                 $('#bmk').hide()
               }
               resizeDiv()
               del_bookmark(contentType, contentId)
-
             } else { // 즐겨찾기 눌렀을 때
               heart.classList.add("liked")
               $('#bmk').show()
@@ -180,7 +183,7 @@ function show_book() {
               $(bmkDiv).remove()
               removeLocal(contentId)
               if (localStorage.length < 1) {
-                $('#bmk').hide()
+                $('#bmk').remove()
               }
               resizeDiv()
               del_bookmark(contentType, contentId)
@@ -193,6 +196,7 @@ function show_book() {
               add_bookmark(contentType, contentId)
               // 로컬 저장 후 불러오기
               saveLocal(contentId, JSON.stringify(bmkDiv.outerHTML))
+              location.reload(true)
               // $("#bmk").load('/main' + " #bmk");
               // event.preventDefault()
             }
