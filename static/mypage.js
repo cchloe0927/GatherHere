@@ -75,6 +75,7 @@ function listing_comment() {
                             <div>${username}님 <span>평점 : ${star_img}</span>
                                 <button onclick="commentDelete(${commentId})" type="button" 
                                 class="reviewCard_card-btn">X</button>
+                                <div class="square_btn"></div>
                             </div>
                         </div>
                         <div class="reviewCard_card-text">${text}</div>
