@@ -89,9 +89,8 @@ function show_bookmark() {
           $('#swipeBookmark').on('click', '.heart-like-button', function () {
             // const bmkDiv = $(this).closest('.swiper-slide')
             let contentId = $(this).closest('.swiper-slide').attr('id')
-
-            if (this.classList.contains("liked")) {
-              this.classList.remove("liked")
+            if ($(this).hasClass("liked")) {
+              $(this).removeClass("liked")
               $(this).closest('.swiper-slide').remove();
               del_bookmark(contentType, contentId)
               bmkcnt--
