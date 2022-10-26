@@ -406,6 +406,7 @@ def login():
             token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
             response = make_response(redirect('/main'))
             response.set_cookie('Authorization', token)
+            session['isKakao'] = False
             return response
         else:
             return render_template('login.html', error='ID와 PassWord를 확인해주세요.')
