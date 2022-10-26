@@ -33,9 +33,17 @@
 
 <body>
     {% include "banner.html" %}
+    <div  class = 'greeting'>
+        <h1>
+            Welcome to GatherHere
+        </h2>
+        <br>
+        <h2>It's Your Page</h2>
+        <br>
+    </div>
     <div class="mypage_container">
         <div id="bmk">
-            <h2>💖즐겨찾기</h2>
+            <h2 class="sub_title">Your Favorites</h2>
             <div class="swiper mySwiper">
                 <div class="swiper-wrapper" id="swipeBookmark"></div>
                 <div class="swiper-pagination"></div>
@@ -48,8 +56,10 @@
 
 
     <div class="mypage_container">
-        <h2> Comment List</h2>
-        <div id="comment-list" class="reviewCard_container">
+        <div id="cmt">
+            <h2 class="sub_title">Your Comments</h2>
+            <div id="comment-list" class="reviewCard_container">
+            </div>
         </div>
     </div>
     <!-- Swiper JS -->

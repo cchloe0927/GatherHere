@@ -3,6 +3,7 @@ import ssl
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
 from pymongo import MongoClient
+import re
 
 mongoUrl = 'mongodb+srv://faulty:qwer1234@cluster0.qnaw7kn.mongodb.net/?retryWrites=true&w=majority'
 mongoClient = MongoClient(mongoUrl)
@@ -22,8 +23,10 @@ ranks = soup.select('#Myform > div > table > tr > td:nth-child(1) > table > tr:n
 artists = soup.select(
     '#Myform > div > table > tr > td:nth-child(3) > table > tr:nth-child(1) > td:nth-child(1) > div:nth-child(1) > ul > li > a:nth-child(1)')
 
-for i in range(50):
-    title = titles[i].text.split('[버')[0]
+# b = re.sub("\[.*?\]",'',a)
+for i in range(50):    
+    ex_title =titles[i].text
+    title = re.sub("\[.*?\]",'',ex_title)
     rank = int(ranks[i].text.strip('.'))
     artist = artists[i].text
     url = titles[i].get('href')

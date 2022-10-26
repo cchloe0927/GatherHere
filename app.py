@@ -28,7 +28,7 @@ def main():
     token_receive = request.cookies.get('Authorization')  # 프론트에서 쿠키 전달 받는 곳
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])  # 쿠키에 있는 jwt 인코딩(쿠키에 있는 데이터 추출하는 곳)
-        user_info = db.testuser.find_one({"userid": payload['userid']})  # 추출한 데이터가 DB에 존재하는지 확인하고 해당 데이터를 user_info에 넣기
+        user_info = db.users.find_one({"userid": payload['userid']})  # 추출한 데이터가 DB에 존재하는지 확인하고 해당 데이터를 user_info에 넣기
 
         return render_template('main.html', username=user_info['username']) # 로그인이 되었을 때 작동하는곳
     except jwt.ExpiredSignatureError:
@@ -96,7 +96,7 @@ def comment_post():
     token_receive = request.cookies.get('Authorization')
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
-        user_info = db.testuser.find_one({"userid": payload['userid']})
+        user_info = db.users.find_one({"userid": payload['userid']})
 
         doc = {
             'id': user_info['userid'],  # 토큰에서 가져옴
@@ -131,7 +131,7 @@ def comment_get():
     token_receive = request.cookies.get('Authorization')
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
-        user_info = db.testuser.find_one({"userid": payload['userid']}, {'_id': False})
+        user_info = db.users.find_one({"userid": payload['userid']}, {'_id': False})
         return jsonify({'comments': comment_list, 'user_info': user_info['userid']})
     except jwt.ExpiredSignatureError:
         print('만료')
@@ -154,7 +154,7 @@ def delete_card():
 #     print(token_receive)
 #     try:
 #         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
-#         user_info = db.testuser.find_one({"userid": payload['userid']})
+#         user_info = db.users.find_one({"userid": payload['userid']})
 #         print(user_info)
 #         print('try')
 #         return render_template('myPage.html', username=user_info["username"]) #로그인 되었을 때
@@ -177,10 +177,10 @@ def my_page():
 def bookmark_get():
     token_receive = request.cookies.get('Authorization')
     payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
-    user_info = db.testuser.find_one({"userid": payload['userid']})
+    user_info = db.users.find_one({"userid": payload['userid']})
     user_id = user_info['userid']
 
-    bookmark = db.testuser.find_one({'userid': user_id}, {'_id': False, 'bookmark': 1})
+    bookmark = db.users.find_one({'userid': user_id}, {'_id': False, 'bookmark': 1})
     bookmarks = bookmark['bookmark']
     print(bookmarks)
 
@@ -198,7 +198,6 @@ def bookmark_get():
             data = db.crawlingalbum.find_one({'id': bm['id']}, {'_id': False})
             # data['type'] = 'album'
             datas.append(data)
-        print('data : ', data)
 
     return jsonify({'bookmarks': datas})
 
@@ -210,10 +209,10 @@ def add_bookmark():
     id = request.form.get('id')
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
-        user_info = db.testuser.find_one({"userid": payload['userid']})
+        user_info = db.users.find_one({"userid": payload['userid']})
         bookmark = user_info['bookmark']
         bookmark.append({'type':type, 'id':id})
-        db.testuser.update_one({'userid':user_info['userid']}, {'$set':{'bookmark':bookmark}})
+        db.users.update_one({'userid':user_info['userid']}, {'$set':{'bookmark':bookmark}})
         return jsonify({'result':'success'})
     except jwt.ExpiredSignatureError:
         return jsonify({'result':'fail'})
@@ -228,10 +227,10 @@ def del_bookmark():
     id = int(request.form.get('id'))
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
-        user_info = db.testuser.find_one({"userid": payload['userid']})
+        user_info = db.users.find_one({"userid": payload['userid']})
         bookmark = user_info['bookmark']
         del bookmark[bookmark.index({'type':type, 'id':id})]
-        db.testuser.update_one({'userid':user_info['userid']}, {'$set':{'bookmark':bookmark}})
+        db.users.update_one({'userid':user_info['userid']}, {'$set':{'bookmark':bookmark}})
         return jsonify({'result':'success'})
     except jwt.ExpiredSignatureError:
         return jsonify({'result':'fail'})
@@ -241,7 +240,7 @@ def del_bookmark():
 def user_comment_get():
     token_receive = request.cookies.get('Authorization')
     payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
-    user_info = db.testuser.find_one({"userid": payload['userid']})
+    user_info = db.users.find_one({"userid": payload['userid']})
 
     comments = list(db.testcomment.find({'id': user_info['userid']}, {'_id': False}))
     return jsonify({'comments': comments})
@@ -254,7 +253,7 @@ def loginpage():
     print(token_receive)
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
-        user_info = db.testuser.find_one({"userid": payload['userid']})
+        user_info = db.users.find_one({"userid": payload['userid']})
         print(user_info)
         print('try')
         return render_template('test.html', username=user_info["username"])
@@ -271,7 +270,7 @@ def example():
     token_receive = request.cookies.get('Authorization') #프론트에서 쿠키 전달 받는 곳
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256']) #쿠키에 있는 jwt 인코딩(쿠키에 있는 데이터 추출하는 곳)
-        user_info = db.testuser.find_one({"userid": payload['userid']}) #추출한 데이터가 DB에 존재하는지 확인하고 해당 데이터를 user_info에 넣기
+        user_info = db.users.find_one({"userid": payload['userid']}) #추출한 데이터가 DB에 존재하는지 확인하고 해당 데이터를 user_info에 넣기
         return render_template('test.html', username=user_info["username"]) #로그인이 되었을 때 작동하는곳
     except jwt.ExpiredSignatureError:
         print('만료')
@@ -285,7 +284,7 @@ def check(token_receive, key):
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256']) #쿠키에 있는 jwt 인코딩(쿠키에 있는 데이터 추출하는 곳)
 
-        user_info = db.testuser.find_one({"userid": payload['userid']}) #추출한 데이터가 DB에 존재하는지 확인하고 해당 데이터를 user_info에 넣기
+        user_info = db.users.find_one({"userid": payload['userid']}) #추출한 데이터가 DB에 존재하는지 확인하고 해당 데이터를 user_info에 넣기
         return {'result':True, 'data' : user_info[key]}
     except jwt.ExpiredSignatureError:
         return {'result':False, 'data' : None}
@@ -330,12 +329,12 @@ def kakao_callback():
         email = f"{name}@kakao.com"
 
     # user = User.query.filter(User.name =name= name).first() #등록된 유저인지 확인
-    user = db.testuser.find_one({'userid':userid})
+    user = db.users.find_one({'userid':userid})
 
     if user is None:
         # 유저 테이블에 추가
         user = User(userid=userid, username=name, email=email, password=hashlib.sha256(name.encode('utf-8')).hexdigest())
-        db.testuser.insert_one(user.get_dic())
+        db.users.insert_one(user.get_dic())
 
         message = '회원가입이 완료되었습니다.'
 
@@ -380,11 +379,11 @@ def signup():
         print(userid, username, password, password_2)
         if password != password_2:
             flash("입력한 비밀번호가 다릅니다.")
-        elif db.testuser.find_one({'userid' : userid}) is not None:
+        elif db.users.find_one({'userid' : userid}) is not None:
             flash("동일한 id를 가진 계정이 존재합니다.")
         else:
             usertable = User(userid, username, email, password)
-            db.testuser.insert_one(usertable.get_dic())
+            db.users.insert_one(usertable.get_dic())
             return redirect('/login')
 
     return render_template('signup.html')
@@ -394,10 +393,10 @@ def login():
     if request.method == 'POST':
         userid = request.form['userid']
         print(userid)
-        print(db.testuser.find_one({'userid': userid}))
+        print(db.users.find_one({'userid': userid}))
         password = hashlib.sha256(request.form['password'].encode('utf-8')).hexdigest()
         print(userid, password)
-        if db.testuser.find_one({'userid': userid, 'password': password}) is not None:
+        if db.users.find_one({'userid': userid, 'password': password}) is not None:
             payload = {
                 'userid': userid,
                 'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=600)
@@ -406,6 +405,7 @@ def login():
             token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
             response = make_response(redirect('/main'))
             response.set_cookie('Authorization', token)
+            session['isKakao'] = False
             return response
         else:
             return render_template('login.html', error='ID와 PassWord를 확인해주세요.')

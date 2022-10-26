@@ -3,6 +3,8 @@ $(document).ready(function () {
     listing_comment();
 });
 
+let cnt =0;
+
 function listing_bookmark() {
     $.ajax({
         type: 'GET',
@@ -11,6 +13,7 @@ function listing_bookmark() {
         success: function (response) {
             let rows = response['bookmarks']
             for (let i = 0; i < rows.length; i++) {
+                cnt++
                 let id = rows[i]['id']
                 let title = rows[i]['title']
                 let image = rows[i]['image']
@@ -38,10 +41,13 @@ function listing_bookmark() {
                 console.log(type)
                 $('#swipeBookmark').append(temp_html)
             }
+        },error: function () {
+            $('#bmk').hide()
         }
     })
 }
 
+let c_cnt = 0
 function listing_comment() {
     $.ajax({
         type: 'GET',
@@ -50,6 +56,7 @@ function listing_comment() {
         success: function (response) {
             let rows = response['comments']
             for (i = 0; i < rows.length; i++) {
+                c_cnt++
                 let username = rows[i]['username']
                 let text = rows[i]['text']
                 let myStar = rows[i]['myStar']
@@ -66,8 +73,11 @@ function listing_comment() {
                         <div>
                             <h4>${title}</h4>
                             <div>${username}님 <span>평점 : ${star_img}</span>
-                                <button onclick="commentDelete(${commentId})" type="button" 
-                                class="reviewCard_card-btn">X</button>
+
+                                <div class="delete_btn_mypage"
+                                onclick="commentDelete(${commentId})">
+                                <span class="cp_bar"></span>
+                                </div>
                             </div>
                         </div>
                         <div class="reviewCard_card-text">${text}</div>
@@ -75,6 +85,11 @@ function listing_comment() {
                     </div>`
                 $('#comment-list').append(temp_html)
             }
+            if(c_cnt < 1){
+                $('#cmt').hide()
+            }
+        },error: function () {
+            $('#cmt').hide()
         }
     })
 }
@@ -90,7 +105,6 @@ function delete_bookmark(id, type) {
             type: type
         },
         success: function (response) {
-
             window.location.reload()
         }
     });
