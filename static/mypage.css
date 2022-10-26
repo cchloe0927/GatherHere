@@ -2,32 +2,106 @@
     font-family: 'Noto Sans KR', sans-serif;
 }
 
-.mypage_container{
+.mypage_container {
     /* width: 70%;
     margin: 50px; */
     margin-bottom: 50px;
 }
-.swiper-wrapper{
+
+.swiper-wrapper {
     width: 70%;
 }
 
-.mypage_comment{
+.mypage_comment {
     border: thick double black;
-    padding : 10px;
+    padding: 10px;
     padding-bottom: 30px;
 }
 
-.reviewCard_card-btn{
-    top:0px;
+.reviewCard_card-btn {
+    top: 0px;
     right: 0px;
 }
 
-.swiper-slide{
-    width:100px;
+.swiper-slide {
+    width: 100px;
 }
 
-.mypage_date{
+.mypage_date {
     position: absolute;
     right: 10px;
     bottom: 5px;
 }
+
+.greeting {
+    margin-bottom: 100px;
+    text-align: center;
+    font-size: 48px;
+    color: white;
+    font-weight: bold;
+    letter-spacing: 5px;
+    text-shadow:
+        3px 3px 10px rgb(255, 0, 88),
+        -3px 3px 10px rgb(255, 0, 88),
+        3px -3px 10px rgb(255, 0, 88),
+        -3px -3px 10px rgb(255, 0, 88),
+        3px 0px 10px rgb(255, 0, 88),
+        0px 3px 10px rgb(255, 0, 88),
+        -3px 0px 10px rgb(255, 0, 88),
+        0px -3px 10px rgb(255, 0, 88);
+}
+
+.sub_title {
+    color: aliceblue;
+    text-shadow:
+        3px 3px 10px black,
+        -3px 3px 10px black,
+        3px -3px 10px black,
+        -3px -3px 10px black,
+        3px 0px 10px black,
+        0px 3px 10px black,
+        -3px 0px 10px black,
+        0px -3px 10px black;
+}
+
+.delete_btn_mypage .cp_bar,
+.delete_btn_mypage:before,
+.delete_btn_mypage:after {
+    display: block;
+    width: 40px;
+    height: 3px;
+    content: '';
+    -webkit-transition: all 0.2s ease-in-out;
+    transition: all 0.3s ease-in-out;
+    border-radius: 5px;
+    background-color: black;
+}
+
+.delete_btn_mypage .cp_bar {
+    position: relative;
+    margin: 5px 0;
+}
+
+.delete_btn_mypage {
+    position: absolute;
+    width: 40px;
+    cursor: pointer;
+    top:20px;
+    right:10px;
+}
+
+.delete_btn_mypage:hover .cp_bar {
+    -webkit-transform: scale(0);
+    transform: scale(0);
+}
+
+.delete_btn_mypage:hover:before {
+    -webkit-transform: translateY(10px) rotate(135deg);
+    transform: translateY(6px) rotate(135deg);
+}
+
+.delete_btn_mypage:hover:after {
+    -webkit-transform: translateY(-10px) rotate(-135deg);
+    transform: translateY(-10px) rotate(-135deg);
+}
+
