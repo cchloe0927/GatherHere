@@ -1,4 +1,6 @@
 import requests
+import ssl
+from urllib.request import urlopen
 from bs4 import BeautifulSoup
 from pymongo import MongoClient
 import re
@@ -10,7 +12,8 @@ db = mongoClient.dbGatherHere
 headers = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36'}
 data = requests.get('https://www.aladin.co.kr/shop/common/wbest.aspx?BranchType=2', headers=headers)
-
+context = ssl._create_unverified_context()
+res = urlopen('https://www.aladin.co.kr/shop/common/wbest.aspx?BranchType=1&BestType=MonthlyBest', context=context)
 soup = BeautifulSoup(data.text, 'html.parser')
 
 datas = []
@@ -54,5 +57,7 @@ for i in range(50):
          'rank': rank,
          'type': 'album'}
     )
-db.crawlingalbum.delete_many({})
-db.crawlingalbum.insert_many(datas)
+    print(rank, content_id, title, release, star, genre)
+
+# db.crawlingalbum.delete_many({})
+# db.crawlingalbum.insert_many(datas)
