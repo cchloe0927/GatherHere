@@ -8,6 +8,47 @@ $(document).ready(function () {
 
 let bmkcnt = 0
 
+function removeBmkDiv(sth) {
+  $(sth).on('click', '.heart-like-button', function () {
+    let contentId = $(this).closest('.swiper-slide').attr('id')
+    contentType = this.parentNode.classList[0]
+    if ($(this).hasClass("liked")) {
+      $('#bmk').find(`#${contentId}`).remove()
+      del_bookmark(contentType, contentId)
+      bmkcnt--
+      if (bmkcnt < 1) {
+        $('#bmk').hide()
+        bmkcnt = 0
+      }
+      resizeDiv()
+      for (let i = 0; i < localStorage.length; i++) {
+        let key = localStorage.key(i);
+        if ($(`#${contentId}`).attr('id') === key) {
+          $(`#${key}`).children('.heart-like-button').removeClass('liked')
+        }
+      }
+      removeLocal(contentId)
+    }
+  })
+}
+
+function paintHeart(id) {
+  for (let i = 0; i < localStorage.length; i++) {
+    let key = localStorage.key(i);
+    if ($(`#${id}`).attr('id') === key) {
+      $(`#${key}`).children('.heart-like-button').addClass('liked')
+    }
+  }
+}
+
+function saveLocal(id, status) {
+  localStorage.setItem(id, status)
+}
+
+function removeLocal(id) {
+  localStorage.removeItem(id)
+}
+
 // 즐겨찾기 swiper 고친 거
 function resizeDiv() {
   if (bmkcnt % 2 === 1) {
@@ -81,6 +122,9 @@ function show_bookmark() {
           ></div>
           </div>`
           $('#swipeBookmark').append(temp_html)
+          let ttt = $(`#${id}`).children('.heart-like-button liked').attr('id')
+          saveLocal(`${id}`, 'liked')
+
           // onclick 시 하트 지우고 DB에서 삭제
           $('#swipeBookmark').on('click', '.heart-like-button', function () {
             let contentId = $(this).closest('.swiper-slide').attr('id')
@@ -95,8 +139,17 @@ function show_bookmark() {
                 bmkcnt = 0
               }
               resizeDiv()
+              for (let i = 0; i < localStorage.length; i++) {
+                let key = localStorage.key(i);
+                if ($(`#${contentId}`).attr('id') === key) {
+                  $(`#${key}`).children('.heart-like-button').removeClass('liked')
+                }
+              }
+              removeLocal(contentId)
+
             }
           });
+
         }
       }
     }
@@ -127,6 +180,8 @@ function show_movie() {
         <div class="heart-like-button"></div>
         </div>`
         $('#swipeMovie').append(temp_html)
+        // 로그인 후 칠해진 거 갖고 오기
+        paintHeart(id)
         const heart = document.querySelectorAll(".heart-like-button")
         heart.forEach((heart) => {
           heart.onclick = (e) => {
@@ -139,6 +194,9 @@ function show_movie() {
               heart.classList.remove("liked")
               resizeDiv()
               del_bookmark(mType, contentId)
+              removeLocal(contentId)
+              // body에서 눌러도 삭제하기
+              $(`#bmk`).find(`#${contentId}`).remove()
               bmkcnt--
               if (bmkcnt < 1) {
                 $('#bmk').remove()
@@ -150,6 +208,7 @@ function show_movie() {
               $('#swipeBookmark').append($(bmkDiv).clone())
               resizeDiv()
               add_bookmark(mType, contentId)
+              saveLocal(contentId, 'liked')
               bmkcnt++
             }
           }
@@ -184,27 +243,7 @@ function show_book() {
         <div class="heart-like-button">
         </div></div>`
         $('#swipeBook').append(temp_html)
-        /* $('#swipeBookmark').on('click', '.heart-like-button', function () {
-          let bType = bmkDiv.classList[0]
-          let contentId = $(this).closest('.swiper-slide').attr('id')
-          if ($(this).hasClass("liked")) {
-            $(this).removeClass("liked")
-            $(this).closest('.swiper-slide').remove();
-            // del_bookmark(bType, contentId)
-            bmkcnt--
-            if (bmkcnt < 1) {
-              $('#bmk').hide()
-              bmkcnt = 0
-            }
-          } else if ($(this).not("liked")) {
-            $(this).addClass("liked")
-            console.log(bType, contentId);
-            // add_bookmark(bType, contentId)
-            bmkcnt++
-          }
-        });
-        resizeDiv() */
-
+        paintHeart(id)
         const heart = document.querySelectorAll(".heart-like-button")
         heart.forEach((heart) => {
           heart.onclick = (e) => {
@@ -218,6 +257,8 @@ function show_book() {
               heart.classList.remove("liked")
               resizeDiv()
               del_bookmark(bType, contentId)
+              removeLocal(contentId)
+              $(`#bmk`).find(`#${contentId}`).remove()
               bmkcnt--
               if (bmkcnt < 1) {
                 $('#bmk').remove()
@@ -229,6 +270,7 @@ function show_book() {
               $('#swipeBookmark').append($(bmkDiv).clone())
               resizeDiv()
               add_bookmark(bType, contentId)
+              saveLocal(contentId, 'liked')
               bmkcnt++
             }
           }
@@ -261,7 +303,7 @@ function show_album() {
         <div class="heart-like-button">
         </div></div>`
         $('#swipeAlbum').append(temp_html)
-
+        paintHeart(id)
         const heart = document.querySelectorAll(".heart-like-button")
         heart.forEach((heart) => {
           heart.onclick = (e) => {
@@ -275,6 +317,8 @@ function show_album() {
               heart.classList.remove("liked")
               resizeDiv()
               del_bookmark(aType, contentId)
+              removeLocal(contentId)
+              $(`#bmk`).find(`#${contentId}`).remove()
               bmkcnt--
               if (bmkcnt < 1) {
                 $('#bmk').remove()
@@ -286,6 +330,7 @@ function show_album() {
               $('#swipeBookmark').append($(bmkDiv).clone())
               resizeDiv()
               add_bookmark(aType, contentId)
+              saveLocal(contentId, 'liked')
               bmkcnt++
             }
           }
