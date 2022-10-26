@@ -16,10 +16,7 @@ url = 'mongodb+srv://faulty:qwer1234@cluster0.qnaw7kn.mongodb.net/?retryWrites=t
 client = MongoClient(url, tlsCAFile=ca)
 db = client.dbGatherHere
 
-
 app.secret_key = SECRET_KEY
-
-
 
 
 ######령빈님 part
@@ -53,6 +50,13 @@ def show_album():
     show_album = list(db.crawlingalbum.find({}, {'_id': False}))
     return jsonify({'result':'success', 'show_album': show_album})
 
+@app.route("/search", methods=["GET"])
+def search():
+    keyword_receive = request.args.get('keyword')
+    # print(keyword_receive)
+    keyword = db.crawlingMovie.find_one({'title': {"$regex":keyword_receive+".*"}}, {'_id': False})
+    # print(keyword)
+    return jsonify({'keyword': keyword})
 
 ######현정님 part
 @app.route('/detail')
