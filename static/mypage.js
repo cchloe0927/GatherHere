@@ -41,7 +41,7 @@ function listing_bookmark() {
                     console.log(type)
                     $('#swipeBookmark').append(temp_html)
                 } console.log(b_cnt)
-                if(b_cnt) $('#bmk').hide()
+                if(b_cnt < 1) $('#bmk').hide()
             } else {
                 $('#bmk').hide()
             }
