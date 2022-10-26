@@ -2,13 +2,27 @@ $(document).ready(function () {
   show_movie()
   show_book()
   show_album()
-  $('#bmk').hide()
+  $('.heart-like-button').hide()
+  if (localStorage.length > 0) {
+    $('#bmk').show()
+    // 로컬에 저장된 즐겨찾기 전부 append
+    for (let i = 0; i < localStorage.length; i++) {
+      $('#swipeBookmark').prepend(JSON.parse(localStorage.getItem(localStorage.key(i))))
+    }
+  } else {
+    $('#bmk').hide()
+    // $('bodyWrap').show()
+  }
 })
+
+// document.querySelectorAll('.heart-like-button').addEventListener((click) => {
+//   window.location.reload(true);
+// })
 
 // 즐겨찾기 스와이퍼 고친 거
 function resizeDiv() {
-  if (cnt % 2 === 1) {
-    $('.swiper').width('96.01vw')
+  if (localStorage.length % 2 === 1) {
+    $('.swiper').width('96.001vw')
   } else {
     $('.swiper').width('96vw')
   }
@@ -23,7 +37,7 @@ function add_bookmark(type, id) {
       id: id,
     },
     success: function (response) {
-      console.log(response['result'])
+      // console.log(response['result'])
     }
   })
 }
@@ -37,26 +51,25 @@ function del_bookmark(type, id) {
       id: id,
     },
     success: function (response) {
-      console.log(response['result'])
+      // console.log(response['result'])
     }
   })
 }
 
-function add_bookmark(type, id) {
-  $.ajax({
-    type: "POST",
-    url: "/add_bookmark",
-    data: {
-      type: type,
-      id: id,
-    },
-    success: function (response) {
-      console.log(response['result'])
-    }
-  })
+function saveLocal(id, content) {
+  localStorage.setItem(id, content)
 }
 
-let cnt = 0
+function getLocal(id) {
+  const data = JSON.parse(localStorage.getItem(id))
+  console.log('data', data);
+}
+
+function removeLocal(id) {
+  localStorage.removeItem(id)
+}
+
+let testarr = []
 
 function show_movie() {
   $('#swipeMovie').empty()
@@ -84,28 +97,33 @@ function show_movie() {
         const heart = document.querySelectorAll(".heart-like-button")
         heart.forEach((heart) => {
           heart.onclick = (e) => {
+            // 클릭한 개체의 div
             const bmkDiv = e.target.parentNode
-            // 클릭한 개체의 아이디
             let contentType = bmkDiv.classList[0]
             let contentId = bmkDiv.id
 
             if (heart.classList.contains("liked")) {
+              // 즐겨찾기 취소할 때
               heart.classList.remove("liked")
+              // $("#bmk").load('main.html' + " #bmk");
               $(bmkDiv).remove()
-              $('#swipeMovie').append(bmkDiv)
-              cnt -= 1
-              if (cnt < 1) {
+              removeLocal(contentId)
+              if (localStorage.length < 1) {
                 $('#bmk').hide()
               }
               resizeDiv()
               del_bookmark(contentType, contentId)
-            } else {
+
+            } else { // 즐겨찾기 눌렀을 때
               heart.classList.add("liked")
               $('#bmk').show()
-              $('#swipeBookmark').append(bmkDiv)
-              cnt += 1
+              $('#swipeBookmark').append($(bmkDiv).clone())
               resizeDiv()
               add_bookmark(contentType, contentId)
+              // 로컬 저장 후 불러오기
+              saveLocal(contentId, JSON.stringify(bmkDiv.outerHTML))
+              // $("#bmk").load('/main' + " #bmk");
+              // event.preventDefault()
             }
           }
         })
