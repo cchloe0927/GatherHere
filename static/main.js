@@ -56,6 +56,17 @@ function del_bookmark(type, id) {
   })
 }
 
+function show_bookmark() {
+  $.ajax({
+    type: 'GET',
+    url: '/mypage/bookmark',
+    data: {},
+    success: function (response) {
+      console.log(response);
+    }
+  })
+}
+
 function saveLocal(id, content) {
   localStorage.setItem(id, content)
 }
@@ -163,23 +174,27 @@ function show_book() {
             let contentId = bmkDiv.id
 
             if (heart.classList.contains("liked")) {
+              // 즐겨찾기 취소할 때
               heart.classList.remove("liked")
+              // $("#bmk").load('main.html' + " #bmk");
               $(bmkDiv).remove()
-              $('#swipeBook').append(bmkDiv)
-              cnt -= 1
-              if (cnt < 1) {
+              removeLocal(contentId)
+              if (localStorage.length < 1) {
                 $('#bmk').hide()
               }
               resizeDiv()
               del_bookmark(contentType, contentId)
-            } else {
-              $('#bmk').show()
+
+            } else { // 즐겨찾기 눌렀을 때
               heart.classList.add("liked")
               $('#bmk').show()
-              $('#swipeBookmark').append(bmkDiv)
-              cnt += 1
+              $('#swipeBookmark').append($(bmkDiv).clone())
               resizeDiv()
               add_bookmark(contentType, contentId)
+              // 로컬 저장 후 불러오기
+              saveLocal(contentId, JSON.stringify(bmkDiv.outerHTML))
+              // $("#bmk").load('/main' + " #bmk");
+              // event.preventDefault()
             }
           }
         })
@@ -219,22 +234,27 @@ function show_album() {
             let contentType = bmkDiv.id
 
             if (heart.classList.contains("liked")) {
+              // 즐겨찾기 취소할 때
               heart.classList.remove("liked")
+              // $("#bmk").load('main.html' + " #bmk");
               $(bmkDiv).remove()
-              $('#swipeAlbum').append(bmkDiv)
-              cnt -= 1
-              if (cnt < 1) {
+              removeLocal(contentId)
+              if (localStorage.length < 1) {
                 $('#bmk').hide()
               }
               resizeDiv()
               del_bookmark(contentType, contentId)
-            } else {
+
+            } else { // 즐겨찾기 눌렀을 때
               heart.classList.add("liked")
               $('#bmk').show()
-              $('#swipeBookmark').append(bmkDiv)
-              cnt += 1
+              $('#swipeBookmark').append($(bmkDiv).clone())
               resizeDiv()
               add_bookmark(contentType, contentId)
+              // 로컬 저장 후 불러오기
+              saveLocal(contentId, JSON.stringify(bmkDiv.outerHTML))
+              // $("#bmk").load('/main' + " #bmk");
+              // event.preventDefault()
             }
           }
         })
