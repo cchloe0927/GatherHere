@@ -2,6 +2,14 @@ $(document).ready(function () {
     listing_bookmark();
     listing_comment();
 });
+
+function resizeDiv() {
+    if (localStorage.length % 2 === 1) {
+        $('.swiper').width('96.001vw')
+    } else {
+        $('.swiper').width('96vw')
+    }
+}
 let comment_count = 0;
 let b_cnt =0;
 function listing_bookmark() {
@@ -28,7 +36,7 @@ function listing_bookmark() {
                         creator = rows[i]['artist']
                     }
                     let temp_html = `
-                        <div id='bmk_card' class="swiper-slide" id="${id}">
+                        <div class="${type} swiper-slide" id="${id}">
                             <div class="poster" alt="${title}" 
                                 style="background-image:url(${image})" 
                                 onclick="location.href='detail?type=${type}&id=${id}'">
@@ -36,10 +44,32 @@ function listing_bookmark() {
                             <h4>${title}</h4>
                             <p class="sumContent">${creator}<br>평점: ${star}</p>
                         <div class="heart-like-button liked" href="#" id="${id}" 
-                        onclick="delete_bookmark(${id}, '${type}')"></div>
+                        ></div>
                         </div>`
                     console.log(type)
                     $('#swipeBookmark').append(temp_html)
+                    const heart = document.querySelectorAll(".heart-like-button")
+                    heart.forEach((heart) => {
+                        heart.onclick = (e) => {
+                            // 클릭한 개체의 div
+                            const bmkDiv = e.target.parentNode
+                            let contentType = bmkDiv.classList[0]
+                            let contentId = bmkDiv.id
+
+                            if (heart.classList.contains("liked")) {
+                                // 즐겨찾기 취소할 때
+                                heart.classList.remove("liked")
+                                // $("#bmk").load('main.html' + " #bmk");
+                                $(bmkDiv).remove()
+                                b_cnt--;
+                                if (b_cnt < 1) {
+                                    $('#bmk').hide()
+                                }
+                                resizeDiv()
+                                delete_bookmark(contentType, contentId)
+                            }
+                        }
+                    })
                 } console.log(b_cnt)
                 if(b_cnt < 1) $('#bmk').hide()
             } else {
@@ -93,8 +123,7 @@ function listing_comment() {
     })
 }
 
-function delete_bookmark(id, type) {
-    b_cnt--;
+function delete_bookmark(type, id) {
     console.log(id, type)
     if(b_cnt <= 0){
         $('#bmk').hide();
@@ -116,7 +145,7 @@ function delete_bookmark(id, type) {
 function commentDelete(commentId) {
     alert('button active')
     c_cnt--;
-    if(c_cnt <=0){
+    if(c_cnt <1){
         $('#cmt').hide()
     }
     $.ajax({
