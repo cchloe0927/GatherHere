@@ -193,5 +193,14 @@ a {
   text-align: center;
   color: rgb(255, 5, 88);
   font-weight: bold;
-  font-size: 20px;
+  font-size: 20px;               
+  /* text-shadow: 
+       3px  3px 3px white,
+      -3px  3px 3px white,
+       3px -3px 3px white,
+      -3px -3px 3px white,
+       3px  0px 3px white,
+       0px  3px 3px white,
+      -3px  0px 3px white,
+       0px -3px 3px white;       */
 }
