@@ -2,98 +2,106 @@
     font-family: 'Noto Sans KR', sans-serif;
 }
 
-.mypage_container{
+.mypage_container {
     /* width: 70%;
     margin: 50px; */
     margin-bottom: 50px;
 }
-.swiper-wrapper{
+
+.swiper-wrapper {
     width: 70%;
 }
 
-.mypage_comment{
+.mypage_comment {
     border: thick double black;
-    padding : 10px;
+    padding: 10px;
     padding-bottom: 30px;
 }
 
-.reviewCard_card-btn{
-    top:0px;
+.reviewCard_card-btn {
+    top: 0px;
     right: 0px;
 }
 
-.swiper-slide{
-    width:100px;
+.swiper-slide {
+    width: 100px;
 }
 
-.mypage_date{
+.mypage_date {
     position: absolute;
     right: 10px;
     bottom: 5px;
 }
 
-.greeting{
+.greeting {
     margin-bottom: 100px;
     text-align: center;
     font-size: 48px;
     color: white;
-    font-weight: bold;  
-    letter-spacing: 5px;            
-    text-shadow: 
-         3px  3px 10px rgb(255, 0, 88),
-        -3px  3px 10px rgb(255, 0, 88),
-         3px -3px 10px rgb(255, 0, 88),
+    font-weight: bold;
+    letter-spacing: 5px;
+    text-shadow:
+        3px 3px 10px rgb(255, 0, 88),
+        -3px 3px 10px rgb(255, 0, 88),
+        3px -3px 10px rgb(255, 0, 88),
         -3px -3px 10px rgb(255, 0, 88),
-         3px  0px 10px rgb(255, 0, 88),
-         0px  3px 10px rgb(255, 0, 88),
-        -3px  0px 10px rgb(255, 0, 88),
-         0px -3px 10px rgb(255, 0, 88);
+        3px 0px 10px rgb(255, 0, 88),
+        0px 3px 10px rgb(255, 0, 88),
+        -3px 0px 10px rgb(255, 0, 88),
+        0px -3px 10px rgb(255, 0, 88);
 }
 
-.sub_title{
+.sub_title {
     color: aliceblue;
-    text-shadow: 
-    3px  3px 10px black,
-   -3px  3px 10px black,
-    3px -3px 10px black,
-   -3px -3px 10px black,
-    3px  0px 10px black,
-    0px  3px 10px black,
-   -3px  0px 10px black,
-    0px -3px 10px black;
+    text-shadow:
+        3px 3px 10px black,
+        -3px 3px 10px black,
+        3px -3px 10px black,
+        -3px -3px 10px black,
+        3px 0px 10px black,
+        0px 3px 10px black,
+        -3px 0px 10px black,
+        0px -3px 10px black;
 }
 
-.square_btn {
+.delete_btn_mypage .cp_bar,
+.delete_btn_mypage:before,
+.delete_btn_mypage:after {
     display: block;
+    width: 40px;
+    height: 3px;
+    content: '';
+    -webkit-transition: all 0.2s ease-in-out;
+    transition: all 0.3s ease-in-out;
+    border-radius: 5px;
+    background-color: black;
+}
+
+.delete_btn_mypage .cp_bar {
     position: relative;
-    width: 30px;
-    height: 30px;
-    border: 2px solid #333; /* 枠の調整 */
-    background: #fff; /* ボタンの背景色 */
+    margin: 5px 0;
 }
 
-.square_btn::before, .square_btn::after {
-content: "";
-position: absolute;
-top: 50%;
-left: 50%;
-width: 3px; /* 棒の幅（太さ） */
-height: 27px; /* 棒の高さ */
-background: #333; /* バツ印の色 */
+.delete_btn_mypage {
+    position: absolute;
+    width: 40px;
+    cursor: pointer;
+    top:20px;
+    right:10px;
 }
 
-.square_btn::before {
-transform: translate(-50%,-50%) rotate(45deg);
+.delete_btn_mypage:hover .cp_bar {
+    -webkit-transform: scale(0);
+    transform: scale(0);
 }
 
-.square_btn::after {
-transform: translate(-50%,-50%) rotate(-45deg);
+.delete_btn_mypage:hover:before {
+    -webkit-transform: translateY(10px) rotate(135deg);
+    transform: translateY(6px) rotate(135deg);
 }
 
-.square_btn:hover{
-background-color: #333;
+.delete_btn_mypage:hover:after {
+    -webkit-transform: translateY(-10px) rotate(-135deg);
+    transform: translateY(-10px) rotate(-135deg);
 }
 
-.square_btn:hover .square_btn::after .square_btn::before{
-background: white;
-}
