@@ -19,6 +19,10 @@ db = client.dbGatherHere
 app.secret_key = SECRET_KEY
 
 
+@app.route('/')
+def index():
+    return redirect(('/main'))
+
 ######령빈님 part
 @app.route('/main')
 def main():
@@ -47,14 +51,18 @@ def show_book():
 
 @app.route('/main/album', methods=['GET'])
 def show_album():
-    show_album = list(db.crawlingalbum.find({}, {'_id': False}))
+    show_album = list(db.crawlingAlbum.find({}, {'_id': False}))
     return jsonify({'result':'success', 'show_album': show_album})
 
 @app.route("/search", methods=["GET"])
 def search():
     keyword_receive = request.args.get('keyword')
     # print(keyword_receive)
-    keyword = db.crawlingMovie.find_one({'title': {"$regex":keyword_receive+".*"}}, {'_id': False})
+    keyword = db.crawlingMovie.find_one({'title': {"$regex":keyword_receive+".*"}}, {'_id': False}) # movie check
+    if keyword is None:
+        keyword = db.crawlingBook.find_one({'title': {"$regex":keyword_receive+".*"}}, {'_id': False}) # book check
+        if keyword is None:
+            keyword = db.crawlingAlbum.find_one({'title': {"$regex": keyword_receive + ".*"}}, {'_id': False}) # album check
     # print(keyword)
     return jsonify({'keyword': keyword})
 
@@ -79,14 +87,14 @@ def show_detail():
     elif type == "book":
         detail_id = db.crawlingBook.find_one({'id': int(id)}, {'_id': False})
     else:
-        detail_id = db.crawlingalbum.find_one({'id': int(id)}, {'_id': False})
+        detail_id = db.crawlingAlbum.find_one({'id': int(id)}, {'_id': False})
 
     return jsonify({'detailID': detail_id})
 
 @app.route("/detail/comment", methods=["POST"])
 def comment_post():
     # comment 리스트에 고유 id 넣어주기 #comment 삭제 기능 구현
-    comment_list = list(db.testcomment.find({}, {'_id': False}))
+    comment_list = list(db.comment.find({}, {'_id': False}))
     commentId = len(comment_list) + 1
 
     type = request.form['type']
@@ -117,7 +125,7 @@ def comment_post():
         if myStar == "0":
             return jsonify({'msg': '나만의 평점을 선택해 주세요!'})
         else:
-            db.testcomment.insert_one(doc)
+            db.comment.insert_one(doc)
             return jsonify({'msg': '감상평이 등록되었습니다.'})
 
     except jwt.ExpiredSignatureError:
@@ -130,7 +138,8 @@ def comment_post():
 @app.route("/detail/comment", methods=["GET"])
 def comment_get():
     id = request.args.get('id')
-    comment_list = list(db.testcomment.find({'contentId': int(id)}, {'_id': False}))
+    comment_list = list(db.comment.find({'contentId': int(id)}, {'_id': False}))
+    comment_list.reverse()
 
     token_receive = request.cookies.get('Authorization')
     try:
@@ -147,7 +156,7 @@ def comment_get():
 @app.route("/detail/comment/delete", methods=["POST"])
 def delete_card():
     commentId = request.form['commentId']
-    db.testcomment.delete_one({'commentId': int(commentId)})
+    db.comment.delete_one({'commentId': int(commentId)})
     return jsonify({'msg': '감상평이 삭제되었습니다.'})
 
 
@@ -198,7 +207,7 @@ def bookmark_get():
             # data['type'] = 'book'
             datas.append(data)
         elif bm['type'] == 'album':
-            data = db.crawlingalbum.find_one({'id': int(bm['id'])}, {'_id': False})
+            data = db.crawlingAlbum.find_one({'id': int(bm['id'])}, {'_id': False})
             # data['type'] = 'album'
             datas.append(data)
     return jsonify({'bookmarks': datas})
@@ -245,7 +254,7 @@ def user_comment_get():
     payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
     user_info = db.users.find_one({"userid": payload['userid']})
 
-    comments = list(db.testcomment.find({'id': user_info['userid']}, {'_id': False}))
+    comments = list(db.comment.find({'id': user_info['userid']}, {'_id': False}))
     return jsonify({'comments': comments})
 
 

@@ -37,31 +37,34 @@
     margin-bottom: 100px;
     text-align: center;
     font-size: 48px;
-    color: white;
+    /*color: white;*/
     font-weight: bold;
     letter-spacing: 5px;
-    text-shadow:
-        3px 3px 10px rgb(255, 0, 88),
-        -3px 3px 10px rgb(255, 0, 88),
-        3px -3px 10px rgb(255, 0, 88),
-        -3px -3px 10px rgb(255, 0, 88),
-        3px 0px 10px rgb(255, 0, 88),
-        0px 3px 10px rgb(255, 0, 88),
-        -3px 0px 10px rgb(255, 0, 88),
-        0px -3px 10px rgb(255, 0, 88);
+    /*text-shadow:*/
+    /*    3px 3px 10px black,*/
+    /*    -3px 3px 10px black,*/
+    /*    3px -3px 10px black,*/
+    /*    -3px -3px 10px black,*/
+    /*    3px 0px 10px black,*/
+    /*    0px 3px 10px black,*/
+    /*    -3px 0px 10px black,*/
+    /*    0px -3px 10px black;*/
 }
 
 .sub_title {
-    color: aliceblue;
-    text-shadow:
-        3px 3px 10px black,
-        -3px 3px 10px black,
-        3px -3px 10px black,
-        -3px -3px 10px black,
-        3px 0px 10px black,
-        0px 3px 10px black,
-        -3px 0px 10px black,
-        0px -3px 10px black;
+    font-weight: bold;
+
+    /*color: aliceblue;*/
+
+    /*text-shadow:*/
+    /*    3px 3px 10px black,*/
+    /*    -3px 3px 10px black,*/
+    /*    3px -3px 10px black,*/
+    /*    -3px -3px 10px black,*/
+    /*    3px 0px 10px black,*/
+    /*    0px 3px 10px black,*/
+    /*    -3px 0px 10px black,*/
+    /*    0px -3px 10px black;*/
 }
 
 .delete_btn_mypage .cp_bar,
