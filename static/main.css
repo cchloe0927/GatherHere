@@ -137,7 +137,7 @@ a {
 .swiper-button-prev {
   color: rgb(255, 5, 88);
   font-weight: 700;
-  text-shadow: -4px 0 black, 0 4px black, 4px 0 black, 0 -4px black, -3px -3px black, -3px 3px black, 3px -3px black, 3px 3px black;
+  text-shadow: -2px 0 black, 0 2px black, 2px 0 black, 0 -2px black, -2px -2px black, -2px 2px black, 2px -2px black, 2px 2px black;
 }
 
 .swiper-pagination-bullet-active {
@@ -201,13 +201,4 @@ a {
   color: rgb(255, 5, 88);
   font-weight: bold;
   font-size: 20px;
-  /* text-shadow: 
-       3px  3px 3px white,
-      -3px  3px 3px white,
-       3px -3px 3px white,
-      -3px -3px 3px white,
-       3px  0px 3px white,
-       0px  3px 3px white,
-      -3px  0px 3px white,
-       0px -3px 3px white;       */
 }
