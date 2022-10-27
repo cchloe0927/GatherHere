@@ -186,6 +186,18 @@ def my_page():
     else:
         return render_template("login.html", error="로그인이 필요합니다.")  # 로그인 안되었거나 토큰이 글러먹엇을 때
 
+@app.route("/mypage/bookmark/check", methods=["GET"])
+def check_get():
+    token_receive = request.cookies.get('Authorization')
+
+    temp = check(token_receive, 'userid')
+    if temp['result'] is False:
+        print('result')
+        return jsonify({'logged': None})
+    else:
+        return jsonify({'logged':'wow!'})
+
+
 @app.route("/mypage/bookmark", methods=["GET"])
 def bookmark_get():
     token_receive = request.cookies.get('Authorization')

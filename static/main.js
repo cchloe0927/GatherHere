@@ -1,4 +1,5 @@
 $(document).ready(function () {
+  checkLogin()
   show_movie()
   show_book()
   show_album()
@@ -8,26 +9,16 @@ $(document).ready(function () {
 
 let bmkcnt = 0
 
-function removeBmkDiv(sth) {
-  $(sth).on('click', '.heart-like-button', function () {
-    let contentId = $(this).closest('.swiper-slide').attr('id')
-    contentType = this.parentNode.classList[0]
-    if ($(this).hasClass("liked")) {
-      $('#bmk').find(`#${contentId}`).remove()
-      del_bookmark(contentType, contentId)
-      bmkcnt--
-      if (bmkcnt < 1) {
-        $('#bmk').hide()
-        bmkcnt = 0
+function checkLogin() {
+  $.ajax({
+    type: 'GET',
+    url: '/mypage/bookmark/check',
+    data: {},
+    success: function (response) {
+      let status = response['logged']
+      if (status === null) {
+        localStorage.clear()
       }
-      resizeDiv()
-      for (let i = 0; i < localStorage.length; i++) {
-        let key = localStorage.key(i);
-        if ($(`#${contentId}`).attr('id') === key) {
-          $(`#${key}`).children('.heart-like-button').removeClass('liked')
-        }
-      }
-      removeLocal(contentId)
     }
   })
 }
@@ -67,7 +58,6 @@ function add_bookmark(type, id) {
       id: id,
     },
     success: function (response) {
-      // console.log(response['result'])
     }
   })
 }
@@ -81,7 +71,6 @@ function del_bookmark(type, id) {
       id: id,
     },
     success: function (response) {
-      // console.log(response['result'])
     }
   })
 }
@@ -151,6 +140,8 @@ function show_bookmark() {
           });
 
         }
+      } else if (rows[0] === null) {
+        localStorage.clear()
       }
     }
   })
