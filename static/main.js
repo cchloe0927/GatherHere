@@ -1,27 +1,63 @@
 $(document).ready(function () {
-  checkLogin()
+  let swiper = new Swiper(".mySwiper", {
+    slidesPerView: 3,
+    spaceBetween: 10,
+    // Responsive breakpoints
+    breakpoints: {
+      // when window width is >= 
+      120: {
+        slidesPerView: 1,
+        slidesPerGroup: 1,
+        spaceBetween: 10,
+      },
+      380: {
+        slidesPerView: 2,
+        slidesPerGroup: 2,
+        spaceBetween: 10,
+      },
+      760: {
+        slidesPerView: 3,
+        slidesPerGroup: 3,
+        spaceBetween: 10,
+      },
+      1024: {
+        slidesPerView: 4,
+        slidesPerGroup: 4,
+        spaceBetween: 10,
+      },
+      1280: {
+        slidesPerView: 5,
+        slidesPerGroup: 5,
+        spaceBetween: 10,
+      },
+      1600: {
+        slidesPerView: 6,
+        slidesPerGroup: 6,
+        spaceBetween: 10,
+      }
+    },
+    loop: true,
+    loopAdditionalSlides: 1,
+    loopFillGroupWithBlank: true,
+    pagination: {
+      el: ".swiper-pagination",
+      clickable: true,
+    },
+    navigation: {
+      nextEl: ".swiper-button-next",
+      prevEl: ".swiper-button-prev",
+    },
+  }
+  )
+  show_bookmark()
   show_movie()
   show_book()
   show_album()
-  show_bookmark()
   $('#bmk').hide()
 })
 
 let bmkcnt = 0
 
-function checkLogin() {
-  $.ajax({
-    type: 'GET',
-    url: '/mypage/bookmark/check',
-    data: {},
-    success: function (response) {
-      let status = response['logged']
-      if (status === null) {
-        localStorage.clear()
-      }
-    }
-  })
-}
 
 function paintHeart(id) {
   for (let i = 0; i < localStorage.length; i++) {
@@ -81,6 +117,7 @@ function show_bookmark() {
     url: '/mypage/bookmark',
     data: {},
     success: function (response) {
+      localStorage.clear()
       let rows = response['bookmarks']
       if (rows[0] != null) {
         bmkcnt = rows.length
@@ -111,7 +148,6 @@ function show_bookmark() {
           ></div>
           </div>`
           $('#swipeBookmark').append(temp_html)
-          let ttt = $(`#${id}`).children('.heart-like-button liked').attr('id')
           saveLocal(`${id}`, 'liked')
 
           // onclick 시 하트 지우고 DB에서 삭제
@@ -122,11 +158,8 @@ function show_bookmark() {
               $(this).removeClass("liked")
               $(this).closest('.swiper-slide').remove();
               del_bookmark(contentType, contentId)
-              bmkcnt--
-              if (bmkcnt < 1) {
-                $('#bmk').hide()
-                bmkcnt = 0
-              }
+              // bmkcnt--
+
               resizeDiv()
               for (let i = 0; i < localStorage.length; i++) {
                 let key = localStorage.key(i);
@@ -135,12 +168,16 @@ function show_bookmark() {
                 }
               }
               removeLocal(contentId)
+              if (localStorage.length < 1) {
+                $('#bmk').hide()
+                // bmkcnt = 0
+              }
 
             }
           });
 
         }
-      } else if (rows[0] === null) {
+      } else {
         localStorage.clear()
       }
     }
@@ -168,11 +205,12 @@ function show_movie() {
         <div class="poster" alt="${title}" style="background-image:url(${image})" onclick="location.href='detail?type=movie&id=${id}'"></div>
           <h4>${title}</h4>
           <p class="sumContent">감독: ${direction}<br>평점: ${star}</p>
-        <div class="heart-like-button"></div>
+        <div class="heart-like-button" onclick="heartClick('movie', ${id}, 'swipeMovie')"></div>
         </div>`
         $('#swipeMovie').append(temp_html)
         // 로그인 후 칠해진 거 갖고 오기
         paintHeart(id)
+
         const heart = document.querySelectorAll(".heart-like-button")
         heart.forEach((heart) => {
           heart.onclick = (e) => {
@@ -189,8 +227,8 @@ function show_movie() {
               // body에서 눌러도 삭제하기
               $(`#bmk`).find(`#${contentId}`).remove()
               bmkcnt--
-              if (bmkcnt < 1) {
-                $('#bmk').remove()
+              if (localStorage.length < 1) {
+                $('#bmk').hide()
               }
 
             } else { // 즐겨찾기 눌렀을 때
@@ -208,6 +246,25 @@ function show_movie() {
       }
     }
   })
+}
+
+function heartClick(mType, contentId, divType) {
+  resizeDiv()
+  del_bookmark(mType, contentId)
+
+  for (let i = 0; i < localStorage.length; i++) {
+    let key = localStorage.key(i);
+    if ($(`#${contentId}`).attr('id') === key) {
+      $(`#${divType}`).find(`#${key}`).children('.heart-like-button').removeClass('liked')
+    }
+  }
+  removeLocal(contentId)
+  // body에서 눌러도 삭제하기
+  $(`#bmk`).find(`#${contentId}`).remove()
+  bmkcnt--
+  if (localStorage.length < 1) {
+    $('#bmk').hide()
+  }
 }
 
 function show_book() {
@@ -232,8 +289,8 @@ function show_book() {
         <div class="poster" alt="${title}" style="background-image:url(${image})" onclick="location.href='detail?type=book&id=${id}'"></div>
           <h4>${title}</h4>
           <p class="sumContent">${author}<br>평점: ${star}</p>
-        <div class="heart-like-button">
-        </div></div>`
+          <div class="heart-like-button" onclick="heartClick('book', ${id}, 'swipeBook')"></div>
+          </div>`
         $('#swipeBook').append(temp_html)
         paintHeart(id)
         const heart = document.querySelectorAll(".heart-like-button")
@@ -252,8 +309,8 @@ function show_book() {
               removeLocal(contentId)
               $(`#bmk`).find(`#${contentId}`).remove()
               bmkcnt--
-              if (bmkcnt < 1) {
-                $('#bmk').remove()
+              if (localStorage.length < 1) {
+                $('#bmk').hide()
               }
 
             } else { // 즐겨찾기 눌렀을 때
@@ -293,8 +350,8 @@ function show_album() {
         <div class="poster" alt="${title}" style="background-image:url(${image})" onclick="location.href='detail?type=album&id=${id}'"></div>
           <h4>${title}</h4>
           <p class="sumContent">${artist}<br>평점: ${star}</p>
-        <div class="heart-like-button">
-        </div></div>`
+          <div class="heart-like-button" onclick="heartClick('album', ${id}, 'swipeAlbum')"></div>
+          </div>`
         $('#swipeAlbum').append(temp_html)
         paintHeart(id)
         const heart = document.querySelectorAll(".heart-like-button")
@@ -313,8 +370,8 @@ function show_album() {
               removeLocal(contentId)
               $(`#bmk`).find(`#${contentId}`).remove()
               bmkcnt--
-              if (bmkcnt < 1) {
-                $('#bmk').remove()
+              if (localStorage.length < 1) {
+                $('#bmk').hide()
               }
 
             } else { // 즐겨찾기 눌렀을 때
