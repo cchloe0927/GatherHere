@@ -204,7 +204,7 @@ def bookmark_get():
 
     temp = check(token_receive, 'userid')
     if temp['result'] is False:
-        return jsonify({'bookmarks': None})
+        return jsonify({'bookmarks': []})
     user_id = temp['data']
     bookmark = db.users.find_one({'userid': user_id}, {'_id': False, 'bookmark': 1})
     bookmarks = bookmark['bookmark']
