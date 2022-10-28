@@ -67,116 +67,115 @@ def search():
     return jsonify({'keyword': keyword})
 
 ######현정님 part
-@app.route('/detail')
-def detail():
-    token_receive = request.cookies.get('Authorization')
-    temp = check(token_receive, 'username')
-    if temp['result']:
-        return render_template('detail.html', username=temp['data'])
-    else:
-        return render_template('detail.html')
-
-@app.route('/detail/info', methods=["GET"])
-def show_detail():
-    type = request.args.get('type') #type으로 조건 예외처리
-    id = request.args.get('id')
-    #print(type, id)
-
-    if type == "movie":
-        detail_id = db.crawlingMovie.find_one({'id': int(id)}, {'_id': False})
-    elif type == "book":
-        detail_id = db.crawlingBook.find_one({'id': int(id)}, {'_id': False})
-    else:
-        detail_id = db.crawlingAlbum.find_one({'id': int(id)}, {'_id': False})
-
-    return jsonify({'detailID': detail_id})
-
-@app.route("/detail/comment", methods=["POST"])
-def comment_post():
-    # comment 리스트에 고유 id 넣어주기 #comment 삭제 기능 구현
-    comment_list = list(db.comment.find({}, {'_id': False}))
-    commentId = len(comment_list) + 1
-
-    type = request.form['type']
-    contentId = request.form['id']
-    myStar = request.form['myStar']
-    text = request.form['text']
-    date = request.form['date']
-    title = request.form['title']
-    # print(type, contentId, myStar, myStar, text, date, title)
-
-    token_receive = request.cookies.get('Authorization')
-    try:
-        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
-        user_info = db.users.find_one({"userid": payload['userid']})
-
-        doc = {
-            'id': user_info['userid'],  # 토큰에서 가져옴
-            'username': user_info['username'],  # 토큰에서 가져옴
-            'type': type,
-            'contentId': int(contentId),
-            'myStar': int(myStar),
-            'text': text,
-            'date': date,
-            'title': title,
-            'commentId': commentId,
-        }
-
-        if myStar == "0":
-            return jsonify({'msg': '나만의 평점을 선택해 주세요!'})
-        else:
-            db.comment.insert_one(doc)
-            return jsonify({'msg': '감상평이 등록되었습니다.'})
-
-    except jwt.ExpiredSignatureError:
-        print('만료')
-        return jsonify({'msg': '로그인이 만료되었습니다.'})
-    except jwt.exceptions.DecodeError:
-        print('오류')
-        return jsonify({'msg': '로그인이 필요한 작업입니다.'})
-
-@app.route("/detail/comment", methods=["GET"])
-def comment_get():
-    id = request.args.get('id')
-    comment_list = list(db.comment.find({'contentId': int(id)}, {'_id': False}))
-    comment_list.reverse()
-
-    token_receive = request.cookies.get('Authorization')
-    try:
-        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
-        user_info = db.users.find_one({"userid": payload['userid']}, {'_id': False})
-        return jsonify({'comments': comment_list, 'user_info': user_info['userid']})
-    except jwt.ExpiredSignatureError:
-        print('만료')
-        return jsonify({'comments': comment_list, 'user_info': None})
-    except jwt.exceptions.DecodeError:
-        print('오류')
-        return jsonify({'comments': comment_list, 'user_info': None})
-
-@app.route("/detail/comment/delete", methods=["POST"])
-def delete_card():
-    commentId = request.form['commentId']
-    db.comment.delete_one({'commentId': int(commentId)})
-    return jsonify({'msg': '감상평이 삭제되었습니다.'})
-
-
-######정훈님 part
-# @app.route('/mypage')
-# def my_page():
+# @app.route('/detail')
+# def detail():
 #     token_receive = request.cookies.get('Authorization')
-#     print(token_receive)
+#     temp = check(token_receive, 'username')
+#     if temp['result']:
+#         return render_template('detail.html', username=temp['data'])
+#     else:
+#         return render_template('detail.html')
+#
+# @app.route('/detail/info', methods=["GET"])
+# def show_detail():
+#     type = request.args.get('type') #type으로 조건 예외처리
+#     id = request.args.get('id')
+#     #print(type, id)
+#
+#     if type == "movie":
+#         detail_id = db.crawlingMovie.find_one({'id': int(id)}, {'_id': False})
+#     elif type == "book":
+#         detail_id = db.crawlingBook.find_one({'id': int(id)}, {'_id': False})
+#     else:
+#         detail_id = db.crawlingAlbum.find_one({'id': int(id)}, {'_id': False})
+#
+#     return jsonify({'detailID': detail_id})
+#
+# @app.route("/detail/comment", methods=["POST"])
+# def comment_post():
+#     # comment 리스트에 고유 id 넣어주기 #comment 삭제 기능 구현
+#     comment_list = list(db.comment.find({}, {'_id': False}))
+#     commentId = len(comment_list) + 1
+#
+#     type = request.form['type']
+#     contentId = request.form['id']
+#     myStar = request.form['myStar']
+#     text = request.form['text']
+#     date = request.form['date']
+#     title = request.form['title']
+#     # print(type, contentId, myStar, myStar, text, date, title)
+#
+#     token_receive = request.cookies.get('Authorization')
 #     try:
 #         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
 #         user_info = db.users.find_one({"userid": payload['userid']})
-#         print(user_info)
-#         print('try')
-#         return render_template('myPage.html', username=user_info["username"]) #로그인 되었을 때
+#
+#         doc = {
+#             'id': user_info['userid'],  # 토큰에서 가져옴
+#             'username': user_info['username'],  # 토큰에서 가져옴
+#             'type': type,
+#             'contentId': int(contentId),
+#             'myStar': int(myStar),
+#             'text': text,
+#             'date': date,
+#             'title': title,
+#             'commentId': commentId,
+#         }
+#
+#         if myStar == "0":
+#             return jsonify({'msg': '나만의 평점을 선택해 주세요!'})
+#         else:
+#             db.comment.insert_one(doc)
+#             return jsonify({'msg': '감상평이 등록되었습니다.'})
+#
 #     except jwt.ExpiredSignatureError:
 #         print('만료')
-#         return render_template("login.html", error="로그인 시간이 만료되었습니다.") # 로그인 만료 되었을 때
+#         return jsonify({'msg': '로그인이 만료되었습니다.'})
 #     except jwt.exceptions.DecodeError:
 #         print('오류')
-#         return render_template("login.html", error="로그인 정보가 존재하지 않습니다.") # 로그인 안되었거나 토큰이 글러먹엇을 때
+#         return jsonify({'msg': '로그인이 필요한 작업입니다.'})
+#
+# @app.route("/detail/comment", methods=["GET"])
+# def comment_get():
+#     id = request.args.get('id')
+#     comment_list = list(db.comment.find({'contentId': int(id)}, {'_id': False}))
+#     comment_list.reverse()
+#
+#     token_receive = request.cookies.get('Authorization')
+#     try:
+#         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+#         user_info = db.users.find_one({"userid": payload['userid']}, {'_id': False})
+#         return jsonify({'comments': comment_list, 'user_info': user_info['userid']})
+#     except jwt.ExpiredSignatureError:
+#         print('만료')
+#         return jsonify({'comments': comment_list, 'user_info': None})
+#     except jwt.exceptions.DecodeError:
+#         print('오류')
+#         return jsonify({'comments': comment_list, 'user_info': None})
+#
+# @app.route("/detail/comment/delete", methods=["POST"])
+# def delete_card():
+#     commentId = request.form['commentId']
+#     db.comment.delete_one({'commentId': int(commentId)})
+#     return jsonify({'msg': '감상평이 삭제되었습니다.'})
+
+#####정훈님 part
+@app.route('/mypage')
+def my_page():
+    token_receive = request.cookies.get('Authorization')
+    print(token_receive)
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        user_info = db.users.find_one({"userid": payload['userid']})
+        print(user_info)
+        print('try')
+        return render_template('myPage.html', username=user_info["username"]) #로그인 되었을 때
+    except jwt.ExpiredSignatureError:
+        print('만료')
+        return render_template("login.html", error="로그인 시간이 만료되었습니다.") # 로그인 만료 되었을 때
+    except jwt.exceptions.DecodeError:
+        print('오류')
+        return render_template("login.html", error="로그인 정보가 존재하지 않습니다.") # 로그인 안되었거나 토큰이 글러먹엇을 때
 @app.route('/mypage')
 def my_page():
     token_receive = request.cookies.get('Authorization')
