@@ -31,7 +31,12 @@ ___
 
 ## 📺 실행화면
 +  결과물 영상
+<video muted autoplay loop>
+      <source src="
 https://user-images.githubusercontent.com/103974022/198518788-b9905219-83f3-4e12-b478-6832dd97e9c6.mp4
+                   " type="video/mp4">
+      <strong>Your browser does not support the video tag.</strong>
+    </video>
 
 + 로그인 화면
 <img width="538" alt="스크린샷 2022-10-25 오전 12 15 10" src="https://user-images.githubusercontent.com/96729804/197562091-3b3633c7-421f-4c03-8d12-ea110dcd886a.png">
