@@ -6,11 +6,12 @@ mongourl = 'mongodb+srv://faulty:qwer1234@cluster0.qnaw7kn.mongodb.net/?retryWri
 mongoclient = MongoClient(mongourl)
 db = mongoclient.dbGatherHere
 
-@app.route('/')
+
+@app.route('/mypage')
 def home():
     return render_template('myPage.html')
 
-@app.route("/bookmark", methods=["GET"])
+@app.route("/mypage/bookmark", methods=["GET"])
 def bookmark_get():
     user_id = 'test1234'
     bookmark = db.testuser.find_one({'id': user_id}, {'_id': False, 'bookmark': 1})
@@ -35,7 +36,7 @@ def bookmark_get():
 
     return jsonify({'bookmarks': datas})
 
-@app.route("/comment", methods=["GET"])
+@app.route("/mypage/comment", methods=["GET"])
 def comment_get():
     user_id = '임시테스트UserID'
     comments = list(db.testcomment.find({'id': user_id}, {'_id': False}))

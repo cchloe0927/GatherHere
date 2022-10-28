@@ -17,14 +17,16 @@ def detail():
 def show_detail_get():
     type = request.args.get('type') #type으로 조건 예외처리
     id = request.args.get('id')
-    #print(type, id)
+    print(type, id)
 
     if type == "movie":
-        detail_id = db.testmovie.find_one({'id': int(id)}, {'_id': False})
+        detail_id = db.crawlingMovie.find_one({'id': int(id)}, {'_id': False})
+        print(detail_id)
     elif type == "book":
-        detail_id = db.testbook.find_one({'id': int(id)}, {'_id': False})
+        detail_id = db.crawlingBook.find_one({'id': int(id)}, {'_id': False})
+        print(detail_id)
     else:
-        detail_id = db.testalbum.find_one({'id': int(id)}, {'_id': False})
+        detail_id = db.crawlingalbum.find_one({'id': int(id)}, {'_id': False})
 
     return jsonify({'detailID': detail_id})
 
@@ -43,7 +45,8 @@ def comment_post():
     text = request.form['text']
     date = request.form['date']
     title = request.form['title']
-    print(type, contentId, myStar, myStar, text, date, title)
+    #print(type, contentId, myStar, myStar, text, date, title)
+
     doc = {
         'id': '임시테스트UserID',  #이후에 db find이후 데이터 입력
         'username': '이현정', #이후에 db find이후 데이터 입력
@@ -55,9 +58,11 @@ def comment_post():
         'title': title,
         'commentId': commentId,
     }
-
-    db.testcomment.insert_one(doc)
-    return jsonify({'msg':'감상평이 등록되었습니다.'})
+    if myStar == "0":
+        return jsonify({'msg': '나만의 평점을 선택해 주세요!'})
+    else:
+        db.testcomment.insert_one(doc)
+        return jsonify({'msg': '감상평이 등록되었습니다.'})
 
 @app.route("/detail/comment", methods=["GET"])
 def comment_get():

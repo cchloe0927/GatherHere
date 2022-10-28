@@ -1,6 +1,9 @@
 import requests
+import ssl
+from urllib.request import urlopen
 from bs4 import BeautifulSoup
 from pymongo import MongoClient
+import re
 
 mongoUrl = 'mongodb+srv://faulty:qwer1234@cluster0.qnaw7kn.mongodb.net/?retryWrites=true&w=majority'
 mongoClient = MongoClient(mongoUrl)
@@ -9,7 +12,8 @@ db = mongoClient.dbGatherHere
 headers = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36'}
 data = requests.get('https://www.aladin.co.kr/shop/common/wbest.aspx?BranchType=2', headers=headers)
-
+context = ssl._create_unverified_context()
+res = urlopen('https://www.aladin.co.kr/shop/common/wbest.aspx?BranchType=1&BestType=MonthlyBest', context=context)
 soup = BeautifulSoup(data.text, 'html.parser')
 
 datas = []
@@ -19,8 +23,10 @@ ranks = soup.select('#Myform > div > table > tr > td:nth-child(1) > table > tr:n
 artists = soup.select(
     '#Myform > div > table > tr > td:nth-child(3) > table > tr:nth-child(1) > td:nth-child(1) > div:nth-child(1) > ul > li > a:nth-child(1)')
 
-for i in range(50):
-    title = titles[i].text.split('[버')[0]
+# b = re.sub("\[.*?\]",'',a)
+for i in range(50):    
+    ex_title =titles[i].text
+    title = re.sub("\[.*?\]",'',ex_title)
     rank = int(ranks[i].text.strip('.'))
     artist = artists[i].text
     url = titles[i].get('href')
@@ -31,6 +37,7 @@ for i in range(50):
 
     image = soup_d.select_one("#CoverMainImage").get('src')
 
+    company = soup_d.select_one('li.Ere_sub2_title > a:nth-child(3)').text
     info = soup_d.select_one('li.Ere_sub2_title').text.split("-")
     release = info[0][-4:] + "." + info[1] + "." + info[2][:2]
 
@@ -43,10 +50,14 @@ for i in range(50):
          'title': title,
          'image': image,
          'artist': artist,
+         'company': company,
          'release': release,
          'star': star,
          'genre': genre,
-         'rank': rank}
+         'rank': rank,
+         'type': 'album'}
     )
-db.crawlingalbum.delete_many({})
-db.crawlingalbum.insert_many(datas)
+    print(rank, content_id, title, release, star, genre)
+
+# db.crawlingalbum.delete_many({})
+# db.crawlingalbum.insert_many(datas)

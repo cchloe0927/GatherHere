@@ -1,26 +1,8 @@
-.header {
-    margin-bottom: 50px;
-    background-color:black !important;
-    color:white !important;
-}
-.header_link {
-    margin-left: 20px;
-    color: white;
-    font-size: 25px;
-    text-decoration: none;
-}
-.header_link:hover {
-    color: white;
-}
-.header_rightBtn {
-    background-color: transparent;
-    border: 1px solid white;
-    border-radius: 5px;
-    color: white;
-    margin-right: 20px;
+/*detail_container*/
+* {
+    font-family: 'Noto Sans KR', sans-serif;
 }
 
-/*detail_container*/
 .detail_container {
     margin: auto;
     width: 1000px;
@@ -34,7 +16,7 @@
     height: 330px;
 }
 .detail_info {
-    width: 700px;
+    width: 730px;
     height: 300px;
 }
 .detail_info-special {
@@ -67,10 +49,16 @@
 .reviewUpload_btn{
     width: 150px;
     height: 40px;
-    margin: 0 0 20px 0;
+    margin: 0 0 20px 10px;
 }
 .reviewUpload_card {
     display: none;
+}
+.reviewCard_card-username {
+    font-weight: bold;
+}
+.reviewCard_card-mystar {
+    color: rgb(255, 5, 88);
 }
 .reviewUpload_card-star {
     margin-bottom: 10px;
@@ -122,10 +110,11 @@
 }
 .reviewCard_card-text {
     margin-top: 5px;
-    height: 120px;
+    height: 100px;
     border: 1px solid black;
     padding: 10px;
     scroll: auto;
+    border-radius: 5px;
 }
 
 /*test*/

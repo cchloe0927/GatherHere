@@ -1,6 +1,6 @@
 * {
+  font-family: 'Noto Sans KR', sans-serif;
   box-sizing: border-box;
-  font-family: 'Gowun Dodum', sans-serif;
 }
 
 html,
@@ -16,14 +16,27 @@ body {
 }
 
 /* 메뉴 바 */
-nav {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
 h1 {
   margin: 0;
+}
+
+h2 {
+  margin-left: 0.5em;
+  font-weight: 700;
+}
+
+/* Search */
+.search {
+  margin: 0 20px 20px 0;
+  text-align: right;
+}
+
+.searchInput {
+  width: 220px;
+  height: 28px;
+  border: none;
+  border-bottom: 2px solid black;
+  text-align: center;
 }
 
 /* 작품 제목 */
@@ -34,6 +47,8 @@ h4 {
   white-space: nowrap;
   max-width: 23ch;
   cursor: pointer;
+  font-size: 1.3em;
+  padding-top: 1em;
 }
 
 /* 대표 이미지 */
@@ -118,18 +133,16 @@ a {
   cursor: pointer;
 }
 
-.swiper-slide .album {
-  height: 100%;
+.swiper-button-next,
+.swiper-button-prev {
+  color: rgb(255, 5, 88);
+  font-weight: 700;
+  text-shadow: -2px 0 black, 0 2px black, 2px 0 black, 0 -2px black, -2px -2px black, -2px 2px black, 2px -2px black, 2px 2px black;
 }
 
-/* swiper arrow buttons (css available)*/
-/* .swiper-button-prev {
-  color: red;
+.swiper-pagination-bullet-active {
+  background: rgb(255, 5, 88);
 }
-
-.swiper-button-next {
-  color: #fff;
-} */
 
 /* 슬라이더 끝 */
 
@@ -173,4 +186,19 @@ a {
 .heart-like-button.liked::before,
 .heart-like-button.liked::after {
   background-color: #d8003d;
+}
+
+.detail_info-special--rank {
+  position: absolute;
+  left: 5px;
+  top: 5px;
+  background-color: black;
+  border: 2px solid black;
+  border-radius: 10px;
+  width: 35px;
+  height: 35px;
+  text-align: center;
+  color: rgb(255, 5, 88);
+  font-weight: bold;
+  font-size: 20px;
 }

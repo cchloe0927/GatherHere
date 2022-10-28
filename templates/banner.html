@@ -1,0 +1,24 @@
+<script>
+    function logout(){
+        document.cookie = 'Authorization' + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+        location.href = '/logout';
+    }
+</script>
+
+
+<nav class="navbar navbar-light bg-light header">
+    <a class="header_link" href="/main">
+        GatherHere
+    </a>
+    <div>
+        {% if username %}
+            {#{{ username }}#}
+            <button class="header_rightBtn" onclick="logout()">로그아웃</button>
+            <button class="header_rightBtn" onclick="location.href='/mypage'">마이페이지</button>
+        {% endif %}
+        {% if not username %}
+            <button class="header_rightBtn" onclick="location.href='/login'">로그인</button>
+        {% endif %}
+    </div>
+</nav>
+
