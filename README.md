@@ -30,6 +30,9 @@ ___
 + JWT
 
 ## 📺 실행화면
++  결과물 영상
+https://user-images.githubusercontent.com/103974022/198518788-b9905219-83f3-4e12-b478-6832dd97e9c6.mp4
+
 + 로그인 화면
 <img width="538" alt="스크린샷 2022-10-25 오전 12 15 10" src="https://user-images.githubusercontent.com/96729804/197562091-3b3633c7-421f-4c03-8d12-ea110dcd886a.png">
 
@@ -46,4 +49,4 @@ ___
 <img width="1290" alt="KakaoTalk_20221028_151743681" src="https://user-images.githubusercontent.com/103974022/198516883-61a15804-ee74-40c3-b5bb-67609c303fec.png">
 
 
-+  결과물 영상
+
