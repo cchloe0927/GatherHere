@@ -1,4 +1,5 @@
 $(document).ready(function () {
+  // 메인 슬라이드
   let swiper = new Swiper(".mySwiper", {
     slidesPerView: 3,
     spaceBetween: 10,
@@ -56,9 +57,10 @@ $(document).ready(function () {
   $('#bmk').hide()
 })
 
+// 바디에서 즐겨찾기에 추가한 항목의 갯수를 세는 임시 변수
 let bmkcnt = 0
 
-
+// 로컬 스토리지에 올라간 항목과 같은 바디 항목의 하트를 채색
 function paintHeart(id) {
   for (let i = 0; i < localStorage.length; i++) {
     let key = localStorage.key(i);
@@ -68,15 +70,99 @@ function paintHeart(id) {
   }
 }
 
-function saveLocal(id, status) {
-  localStorage.setItem(id, status)
+// 로컬 스토리지에서 지워진 항목과 같은 바디 항목의 하트를 지움
+function eraseHeart(id, divType) {
+  for (let i = 0; i < localStorage.length; i++) {
+    let key = localStorage.key(i);
+    if ($(`#${id}`).attr('id') === key) {
+      $(`#${divType}`).find(`#${key}`).children('.heart-like-button').removeClass('liked')
+    }
+  }
 }
 
-function removeLocal(id) {
-  localStorage.removeItem(id)
+function markHeart() {
+  const hearts = document.querySelectorAll(".heart-like-button")
+  hearts.forEach((heart) => {
+    heart.onclick = (e) => {
+      console.log(e.target.parentNode.id);
+      // 클릭한 개체의 div
+      const bmkDiv = e.target.parentNode
+      let type = e.target.parentNode.classList[0]
+      let contentId = e.target.parentNode.id
+
+      if (heart.classList.contains("liked")) { // 즐겨찾기 취소할 때
+        heart.classList.remove("liked")
+        resizeDiv()
+        del_bookmark(type, contentId)
+        localStorage.removeItem(contentId)
+        // body에서 눌러도 삭제하기
+        $(`#bmk`).find(`#${contentId}`).remove()
+        bmkReset()
+
+      } else { // 즐겨찾기 눌렀을 때
+        heart.classList.add("liked")
+        $('#bmk').show()
+        $('#swipeBookmark').append($(bmkDiv).clone())
+        $('#bmk').find('.detail_info-special--rank').remove()
+        resizeDiv()
+        add_bookmark(type, contentId)
+        localStorage.setItem(contentId, 'liked')
+        bmkcnt++
+      }
+    }
+  })
 }
 
-// 즐겨찾기 swiper 고친 거
+/* function markHeart2(swipeSth) {
+  $(`#swipeMovie`).on('click', '.heart-like-button', function () {
+    let contentId = $(this).closest('.swiper-slide').attr('id')
+    contentType = this.parentNode.classList[0]
+
+    // 즐겨찾기 취소
+    if ($(this).hasClass("liked")) {
+      $(this).removeClass("liked")
+      $(this).closest('.swiper-slide').remove()
+      resizeDiv()
+      del_bookmark(contentType, contentId)
+      eraseHeart(contentId, contentType)
+      localStorage.removeItem(contentId)
+      bmkReset()
+
+    } else if ($(this).attr('class').not("liked")) {
+      console.log('not is working')
+      // 즐겨찾기 추가
+      $('#bmk').show
+      $(this).addClass("liked")
+      $('#swipeBookmark').append($(bmkDiv).clone())
+      $('#bmk').find('.detail_info-special--rank').remove()
+      resizeDiv()
+      add_bookmark(contentType, contentId)
+      localStorage.setItem(contentId, 'liked')
+      bmkcnt++
+    }
+  });
+} */
+
+// 바디에서 지운 즐겨찾기와 같은 항목을 즐겨찾기에서도 삭제하기
+function heartClick(mType, contentId, divType) {
+  resizeDiv()
+  del_bookmark(mType, contentId)
+  eraseHeart(contentId, divType)
+  localStorage.removeItem(contentId)
+  $(`#bmk`).find(`#${contentId}`).remove()
+  bmkReset()
+}
+
+// 로컬 스토리지가 비워졌을 경우 bmkcnt를 0으로 돌림 (즐겨찾기 감추기 위함)
+function bmkReset() {
+  bmk--
+  if (localStorage.length < 1) {
+    $('#bmk').hide()
+    bmkcnt = 0
+  }
+}
+
+// 즐겨찾기 swiper append 시 슬라이더 화살표 안 생기는 버그 해결
 function resizeDiv() {
   if (bmkcnt % 2 === 1) {
     $('.swiper').width('96.001vw')
@@ -85,6 +171,7 @@ function resizeDiv() {
   }
 }
 
+// DB에 바디 즐겨찾기 누른 개체 추가
 function add_bookmark(type, id) {
   $.ajax({
     type: "POST",
@@ -98,6 +185,7 @@ function add_bookmark(type, id) {
   })
 }
 
+// DB에서 바디 즐겨찾기 누른 개체 삭제
 function del_bookmark(type, id) {
   $.ajax({
     type: "POST",
@@ -111,13 +199,17 @@ function del_bookmark(type, id) {
   })
 }
 
+// 즐겨찾기(#bmk) 내에서 일어나는 모든 이벤트
 function show_bookmark() {
   $.ajax({
     type: 'GET',
     url: '/mypage/bookmark',
     data: {},
     success: function (response) {
+      // 로컬 스토리지 비우기
       localStorage.clear()
+
+      // 로그인 시 DB에서 즐겨찾기 항목 불러오기
       let rows = response['bookmarks']
       if (rows[0] != null) {
         bmkcnt = rows.length
@@ -148,36 +240,28 @@ function show_bookmark() {
           ></div>
           </div>`
           $('#swipeBookmark').append(temp_html)
-          saveLocal(`${id}`, 'liked')
 
-          // onclick 시 하트 지우고 DB에서 삭제
+          // 로컬 스토리지에 하트 칠한 항목 추가
+          localStorage.setItem(`${id}`, 'liked')
+
+          // 하트 버튼 클릭 시 하트 지우고 DB에서 삭제
+          // 동적 이벤트 바인딩을 위해 jQuery .on() 사용
           $('#swipeBookmark').on('click', '.heart-like-button', function () {
             let contentId = $(this).closest('.swiper-slide').attr('id')
             contentType = this.parentNode.classList[0]
             if ($(this).hasClass("liked")) {
               $(this).removeClass("liked")
-              $(this).closest('.swiper-slide').remove();
-              del_bookmark(contentType, contentId)
-              // bmkcnt--
-
+              $(this).closest('.swiper-slide').remove()
               resizeDiv()
-              for (let i = 0; i < localStorage.length; i++) {
-                let key = localStorage.key(i);
-                if ($(`#${contentId}`).attr('id') === key) {
-                  $(`#${key}`).children('.heart-like-button').removeClass('liked')
-                }
-              }
-              removeLocal(contentId)
-              if (localStorage.length < 1) {
-                $('#bmk').hide()
-                // bmkcnt = 0
-              }
-
+              del_bookmark(contentType, contentId)
+              eraseHeart(contentId, contentType)
+              localStorage.removeItem(contentId)
+              bmkReset()
             }
           });
-
         }
       } else {
+        // 로그인 아닐 시 로컬 스토리지를 비움
         localStorage.clear()
       }
     }
@@ -188,7 +272,7 @@ function show_movie() {
   $('#swipeMovie').empty()
   $.ajax({
     type: "GET",
-    url: "/main/movie",
+    url: "/movie",
     data: {},
     success: function (response) {
       let rows = response['show_movie']
@@ -199,7 +283,8 @@ function show_movie() {
         let id = rows[i].id
         let image = rows[i].image
         let rank = rows[i].rank
-        // let mType = rows[i].type
+
+        // DB에서 가져온 항목을 swiper #swipeMovie 아래에 append
         let temp_html = `<div class="movie swiper-slide" id="${id}">
         <div class="detail_info-special--rank">${rank}</div>
         <div class="poster" alt="${title}" style="background-image:url(${image})" onclick="location.href='detail?type=movie&id=${id}'"></div>
@@ -208,11 +293,12 @@ function show_movie() {
         <div class="heart-like-button" onclick="heartClick('movie', ${id}, 'swipeMovie')"></div>
         </div>`
         $('#swipeMovie').append(temp_html)
-        // 로그인 후 칠해진 거 갖고 오기
-        paintHeart(id)
 
-        const heart = document.querySelectorAll(".heart-like-button")
-        heart.forEach((heart) => {
+        // 즐겨찾기에 하트 채색된 항목과 같은 게 로컬 스토리지에 있으면 찾아서 채색
+        paintHeart(id)
+        // markHeart2(swipeMovie)
+        const hearts = document.querySelectorAll(".heart-like-button")
+        hearts.forEach((heart) => {
           heart.onclick = (e) => {
             // 클릭한 개체의 div
             const bmkDiv = e.target.parentNode
@@ -223,13 +309,10 @@ function show_movie() {
               heart.classList.remove("liked")
               resizeDiv()
               del_bookmark(mType, contentId)
-              removeLocal(contentId)
+              localStorage.removeItem(contentId)
               // body에서 눌러도 삭제하기
               $(`#bmk`).find(`#${contentId}`).remove()
-              bmkcnt--
-              if (localStorage.length < 1) {
-                $('#bmk').hide()
-              }
+              bmkReset()
 
             } else { // 즐겨찾기 눌렀을 때
               heart.classList.add("liked")
@@ -238,7 +321,7 @@ function show_movie() {
               $('#bmk').find('.detail_info-special--rank').remove()
               resizeDiv()
               add_bookmark(mType, contentId)
-              saveLocal(contentId, 'liked')
+              localStorage.setItem(contentId, 'liked')
               bmkcnt++
             }
           }
@@ -248,30 +331,11 @@ function show_movie() {
   })
 }
 
-function heartClick(mType, contentId, divType) {
-  resizeDiv()
-  del_bookmark(mType, contentId)
-
-  for (let i = 0; i < localStorage.length; i++) {
-    let key = localStorage.key(i);
-    if ($(`#${contentId}`).attr('id') === key) {
-      $(`#${divType}`).find(`#${key}`).children('.heart-like-button').removeClass('liked')
-    }
-  }
-  removeLocal(contentId)
-  // body에서 눌러도 삭제하기
-  $(`#bmk`).find(`#${contentId}`).remove()
-  bmkcnt--
-  if (localStorage.length < 1) {
-    $('#bmk').hide()
-  }
-}
-
 function show_book() {
   $('#swipeBook').empty()
   $.ajax({
     type: "GET",
-    url: "/main/book",
+    url: "/book",
     data: {},
     success: function (response) {
       let rows = response['show_book']
@@ -306,12 +370,10 @@ function show_book() {
               heart.classList.remove("liked")
               resizeDiv()
               del_bookmark(bType, contentId)
-              removeLocal(contentId)
+              localStorage.removeItem(contentId)
               $(`#bmk`).find(`#${contentId}`).remove()
-              bmkcnt--
-              if (localStorage.length < 1) {
-                $('#bmk').hide()
-              }
+
+              bmkReset()
 
             } else { // 즐겨찾기 눌렀을 때
               heart.classList.add("liked")
@@ -320,7 +382,7 @@ function show_book() {
               $('#bmk').find('.detail_info-special--rank').remove()
               resizeDiv()
               add_bookmark(bType, contentId)
-              saveLocal(contentId, 'liked')
+              localStorage.setItem(contentId, 'liked')
               bmkcnt++
             }
           }
@@ -334,7 +396,7 @@ function show_album() {
   $('#swipeAlbum').empty()
   $.ajax({
     type: "GET",
-    url: "/main/album",
+    url: "/album",
     data: {},
     success: function (response) {
       let rows = response['show_album']
@@ -367,12 +429,10 @@ function show_album() {
               heart.classList.remove("liked")
               resizeDiv()
               del_bookmark(aType, contentId)
-              removeLocal(contentId)
+              localStorage.removeItem(contentId)
               $(`#bmk`).find(`#${contentId}`).remove()
-              bmkcnt--
-              if (localStorage.length < 1) {
-                $('#bmk').hide()
-              }
+
+              bmkReset()
 
             } else { // 즐겨찾기 눌렀을 때
               heart.classList.add("liked")
@@ -381,7 +441,7 @@ function show_album() {
               $('#bmk').find('.detail_info-special--rank').remove()
               resizeDiv()
               add_bookmark(aType, contentId)
-              saveLocal(contentId, 'liked')
+              localStorage.setItem(contentId, 'liked')
               bmkcnt++
             }
           }
