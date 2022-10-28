@@ -39,6 +39,8 @@ ___
 + 디테일 화면
 <img width="1109" alt="스크린샷 2022-10-25 오전 12 12 26" src="https://user-images.githubusercontent.com/96729804/197561951-59fd447f-0710-402a-808c-08f3984c02a2.png">
 
-+  화면
++ 마이페이지: 유저네임, 코멘트, 즐겨찾기 출력
++ <img width="1290" alt="KakaoTalk_20221028_151743681" src="https://user-images.githubusercontent.com/103974022/198516883-61a15804-ee74-40c3-b5bb-67609c303fec.png">
+
 
 +  결과물 영상
