@@ -84,10 +84,11 @@ function markHeart() {
   const hearts = document.querySelectorAll(".heart-like-button")
   hearts.forEach((heart) => {
     heart.onclick = (e) => {
+      console.log(e.target.parentNode.id);
       // 클릭한 개체의 div
       const bmkDiv = e.target.parentNode
-      let type = bmkDiv.classList[0]
-      let contentId = bmkDiv.id
+      let type = e.target.parentNode.classList[0]
+      let contentId = e.target.parentNode.id
 
       if (heart.classList.contains("liked")) { // 즐겨찾기 취소할 때
         heart.classList.remove("liked")
@@ -111,6 +112,36 @@ function markHeart() {
     }
   })
 }
+
+/* function markHeart2(swipeSth) {
+  $(`#swipeMovie`).on('click', '.heart-like-button', function () {
+    let contentId = $(this).closest('.swiper-slide').attr('id')
+    contentType = this.parentNode.classList[0]
+
+    // 즐겨찾기 취소
+    if ($(this).hasClass("liked")) {
+      $(this).removeClass("liked")
+      $(this).closest('.swiper-slide').remove()
+      resizeDiv()
+      del_bookmark(contentType, contentId)
+      eraseHeart(contentId, contentType)
+      localStorage.removeItem(contentId)
+      bmkReset()
+
+    } else if ($(this).attr('class').not("liked")) {
+      console.log('not is working')
+      // 즐겨찾기 추가
+      $('#bmk').show
+      $(this).addClass("liked")
+      $('#swipeBookmark').append($(bmkDiv).clone())
+      $('#bmk').find('.detail_info-special--rank').remove()
+      resizeDiv()
+      add_bookmark(contentType, contentId)
+      localStorage.setItem(contentId, 'liked')
+      bmkcnt++
+    }
+  });
+} */
 
 // 바디에서 지운 즐겨찾기와 같은 항목을 즐겨찾기에서도 삭제하기
 function heartClick(mType, contentId, divType) {
@@ -216,7 +247,6 @@ function show_bookmark() {
           // 하트 버튼 클릭 시 하트 지우고 DB에서 삭제
           // 동적 이벤트 바인딩을 위해 jQuery .on() 사용
           $('#swipeBookmark').on('click', '.heart-like-button', function () {
-
             let contentId = $(this).closest('.swiper-slide').attr('id')
             contentType = this.parentNode.classList[0]
             if ($(this).hasClass("liked")) {
@@ -242,7 +272,7 @@ function show_movie() {
   $('#swipeMovie').empty()
   $.ajax({
     type: "GET",
-    url: "/main/movie",
+    url: "/movie",
     data: {},
     success: function (response) {
       let rows = response['show_movie']
@@ -266,7 +296,7 @@ function show_movie() {
 
         // 즐겨찾기에 하트 채색된 항목과 같은 게 로컬 스토리지에 있으면 찾아서 채색
         paintHeart(id)
-        // markHeart()
+        // markHeart2(swipeMovie)
         const hearts = document.querySelectorAll(".heart-like-button")
         hearts.forEach((heart) => {
           heart.onclick = (e) => {
@@ -305,7 +335,7 @@ function show_book() {
   $('#swipeBook').empty()
   $.ajax({
     type: "GET",
-    url: "/main/book",
+    url: "/book",
     data: {},
     success: function (response) {
       let rows = response['show_book']
@@ -366,7 +396,7 @@ function show_album() {
   $('#swipeAlbum').empty()
   $.ajax({
     type: "GET",
-    url: "/main/album",
+    url: "/album",
     data: {},
     success: function (response) {
       let rows = response['show_album']
