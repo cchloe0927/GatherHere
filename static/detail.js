@@ -27,7 +27,7 @@ const id = paramData.get('id')
 function show_detail() {
     $.ajax({
     type: "GET",
-    url: "/detail/info?type="+type+"&id="+id,
+    url: "info?type="+type+"&id="+id,
     data: {},
     success: function(response){
         let rows = response['detailID']
@@ -113,7 +113,7 @@ function comment_post() {
 
     $.ajax({
         type: 'POST',
-        url: '/detail/comment',
+        url: 'comment',
         data: {
             'type': type,
             'id': id,
@@ -132,7 +132,7 @@ function comment_post() {
 function comment_get() {
     $.ajax({
         type: "GET",
-        url: "/detail/comment?type="+type+"&id="+id,
+        url: "comment?type="+type+"&id="+id,
         data: {},
         success: function (response) {
             let comments = response['comments']
@@ -183,7 +183,7 @@ function commentDelete(commentId) {
     if(confirm("삭제 하시겠습니까?")) {
         $.ajax({
             type: "POST",
-            url: "/detail/comment/delete",
+            url: "comment/delete",
             data: {
                 commentId: commentId
             },
