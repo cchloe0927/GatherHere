@@ -36,6 +36,9 @@ ___
 + 메인 화면
 <img width="1515" alt="스크린샷 2022-10-25 오전 12 06 53" src="https://user-images.githubusercontent.com/96729804/197561804-1a9300c0-ed8c-4d4d-bd4d-ceda124f087d.png">
 
++ 즐겨찾기 적용
+![image](https://user-images.githubusercontent.com/103974022/198517469-d19cc2c6-661c-4b41-a14a-d03f9683749b.png)
+
 + 디테일 화면
 <img width="1109" alt="스크린샷 2022-10-25 오전 12 12 26" src="https://user-images.githubusercontent.com/96729804/197561951-59fd447f-0710-402a-808c-08f3984c02a2.png">
 
