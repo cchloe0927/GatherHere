@@ -1,7 +1,7 @@
-from pymongo import MongoClient
-url = 'mongodb+srv://faulty:qwer1234@cluster0.qnaw7kn.mongodb.net/?retryWrites=true&w=majority'
-client = MongoClient(url)
-db = client.dbGatherHere
+from flask import Blueprint, render_template
 
+bp = Blueprint('test', __name__, url_prefix='/test')
 
-db.crawlingAlbum.insert_many(list(db.crawlingalbum.find({},{"_id":False})))
+@bp.route('/')
+def testview():
+    return render_template('test.html')
