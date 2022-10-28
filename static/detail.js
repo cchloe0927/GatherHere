@@ -6,7 +6,12 @@ $(document).ready(function () {
 });
 
 function open_box() {
-    $('#reviewUpload_card').show()
+    if($('#loginCheck').text() != ''){
+        $('#reviewUpload_card').show()
+    }else{
+        alert("로그인이 필요한 작업입니다.")
+    }
+
 }
 function close_box() {
     $('#reviewUpload_card').hide()
@@ -175,16 +180,18 @@ function comment_get() {
 }
 
 function commentDelete(commentId) {
-    $.ajax({
-        type: "POST",
-        url: "/detail/comment/delete",
-        data: {
-            commentId: commentId
-        },
-        success: function (response) {
-            alert(response["msg"])
-            window.location.reload()
-        }
-    });
+    if(confirm("삭제 하시겠습니까?")) {
+        $.ajax({
+            type: "POST",
+            url: "/detail/comment/delete",
+            data: {
+                commentId: commentId
+            },
+            success: function (response) {
+                // alert(response["msg"])
+                window.location.reload()
+            }
+        });
+    }
 }
 

@@ -143,19 +143,22 @@ function delete_bookmark(type, id) {
 
 
 function commentDelete(commentId) {
-    alert('button active')
-    c_cnt--;
-    if(c_cnt <1){
-        $('#cmt').hide()
-    }
-    $.ajax({
-        type: "POST",
-        url: "/detail/comment/delete",
-        data: {
-            commentId: commentId
-        },
-        success: function (response) {
-            $('#cmt_card').remove()
+     if (confirm("정말 삭제하시겠습니까??")){    //확인
+        c_cnt--;
+        if(c_cnt <1){
+            $('#cmt').hide()
         }
-    });
+        $.ajax({
+            type: "POST",
+            url: "/detail/comment/delete",
+            data: {
+                commentId: commentId
+            },
+            success: function (response) {
+                $('#cmt_card').remove()
+            }
+        });
+    }else{   //취소
+         return false;
+    }
 }
