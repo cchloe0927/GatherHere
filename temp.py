@@ -179,14 +179,14 @@ def delete_card():
 #         return render_template("login.html", error="로그인 정보가 존재하지 않습니다.") # 로그인 안되었거나 토큰이 글러먹엇을 때
 @app.route('/mypage')
 def my_page():
-    token_receive = request.cookies.get('Authorization')
+    token_receive = request.cookies.get('Authorization') 
     temp = check(token_receive, 'username')
     if temp['result']:
         return render_template('myPage.html', username=temp['data']) #로그인 되었을 때
     else:
         return render_template("login.html", error="로그인이 필요합니다.")  # 로그인 안되었거나 토큰이 글러먹엇을 때
 
-@app.route("/mypage/bookmark/check", methods=["GET"])
+@app.route("/mypage/bookmark/check", methods=["GET"]) # mypage 테스트
 def check_get():
     token_receive = request.cookies.get('Authorization')
 
@@ -198,17 +198,17 @@ def check_get():
         return jsonify({'logged':'wow!'})
 
 
-@app.route("/mypage/bookmark", methods=["GET"])
+@app.route("/mypage/bookmark", methods=["GET"])     
 def bookmark_get():
     token_receive = request.cookies.get('Authorization')
 
     temp = check(token_receive, 'userid')
     if temp['result'] is False:
-        return jsonify({'bookmarks': []})
+        return jsonify({'bookmarks': []}) # 북마크 없는 경우 공백으로 보내기
     user_id = temp['data']
     bookmark = db.users.find_one({'userid': user_id}, {'_id': False, 'bookmark': 1})
     bookmarks = bookmark['bookmark']
-    datas = []
+    datas = [] # 보내는 즐겨찾기 리스트 만들기
     for bm in bookmarks:
         if bm['type'] == 'movie':
             data = db.crawlingMovie.find_one({'id': int(bm['id'])}, {'_id': False})
@@ -260,13 +260,14 @@ def del_bookmark():
         return jsonify({'result':'fail'})
     except jwt.exceptions.DecodeError:
         return jsonify({'result':'fail'})
-@app.route("/mypage/comment", methods=["GET"])
+
+@app.route("/mypage/comment", methods=["GET"]) # 마이페이지 유저 커멘트 
 def user_comment_get():
     token_receive = request.cookies.get('Authorization')
     payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
     user_info = db.users.find_one({"userid": payload['userid']})
 
-    comments = list(db.comment.find({'id': user_info['userid']}, {'_id': False}))
+    comments = list(db.comment.find({'id': user_info['userid']}, {'_id': False})) 
     return jsonify({'comments': comments})
 
 
