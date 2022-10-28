@@ -16,9 +16,7 @@ function search(event) {
                     console.log(keyword)
                     window.location.href = 'detail?type='+keyword['type']+'&id='+keyword['id']
                 }
-
             }
         })
-
     }
 }
