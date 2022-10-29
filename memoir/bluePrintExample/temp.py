@@ -24,47 +24,47 @@ def index():
     return redirect(('/main'))
 
 ######령빈님 part
-@app.route('/main')
-def main():
-    token_receive = request.cookies.get('Authorization')  # 프론트에서 쿠키 전달 받는 곳
-    try:
-        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])  # 쿠키에 있는 jwt 인코딩(쿠키에 있는 데이터 추출하는 곳)
-        user_info = db.users.find_one({"userid": payload['userid']})  # 추출한 데이터가 DB에 존재하는지 확인하고 해당 데이터를 user_info에 넣기
+# @app.route('/main')
+# def main():
+#     token_receive = request.cookies.get('Authorization')  # 프론트에서 쿠키 전달 받는 곳
+#     try:
+#         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])  # 쿠키에 있는 jwt 인코딩(쿠키에 있는 데이터 추출하는 곳)
+#         user_info = db.users.find_one({"userid": payload['userid']})  # 추출한 데이터가 DB에 존재하는지 확인하고 해당 데이터를 user_info에 넣기
 
-        return render_template('main.html', username=user_info['username']) # 로그인이 되었을 때 작동하는곳
-    except jwt.ExpiredSignatureError:
-        print('만료')
-        return render_template("main.html")  # 로그인 만료 되었을때 (밑에 시간 다되었을 때랑 거의 비슷)
-    except jwt.exceptions.DecodeError:
-        print('오류')
-        return render_template("main.html")  # 로그인 오류 났을 때(로그인이 안되었을 때)
+#         return render_template('main.html', username=user_info['username']) # 로그인이 되었을 때 작동하는곳
+#     except jwt.ExpiredSignatureError:
+#         print('만료')
+#         return render_template("main.html")  # 로그인 만료 되었을때 (밑에 시간 다되었을 때랑 거의 비슷)
+#     except jwt.exceptions.DecodeError:
+#         print('오류')
+#         return render_template("main.html")  # 로그인 오류 났을 때(로그인이 안되었을 때)
 
-@app.route('/main/movie', methods=['GET'])
-def show_movie():
-    show_movie = list(db.crawlingMovie.find({}, {'_id': False}))
-    return jsonify({'result':'success', 'show_movie': show_movie})
+# @app.route('/main/movie', methods=['GET'])
+# def show_movie():
+#     show_movie = list(db.crawlingMovie.find({}, {'_id': False}))
+#     return jsonify({'result':'success', 'show_movie': show_movie})
 
-@app.route('/main/book', methods=['GET'])
-def show_book():
-    show_book = list(db.crawlingBook.find({}, {'_id': False}))
-    return jsonify({'result':'success', 'show_book': show_book})
+# @app.route('/main/book', methods=['GET'])
+# def show_book():
+#     show_book = list(db.crawlingBook.find({}, {'_id': False}))
+#     return jsonify({'result':'success', 'show_book': show_book})
 
-@app.route('/main/album', methods=['GET'])
-def show_album():
-    show_album = list(db.crawlingAlbum.find({}, {'_id': False}))
-    return jsonify({'result':'success', 'show_album': show_album})
+# @app.route('/main/album', methods=['GET'])
+# def show_album():
+#     show_album = list(db.crawlingAlbum.find({}, {'_id': False}))
+#     return jsonify({'result':'success', 'show_album': show_album})
 
-@app.route("/search", methods=["GET"])
-def search():
-    keyword_receive = request.args.get('keyword')
-    # print(keyword_receive)
-    keyword = db.crawlingMovie.find_one({'title': {"$regex":keyword_receive+".*"}}, {'_id': False}) # movie check
-    if keyword is None:
-        keyword = db.crawlingBook.find_one({'title': {"$regex":keyword_receive+".*"}}, {'_id': False}) # book check
-        if keyword is None:
-            keyword = db.crawlingAlbum.find_one({'title': {"$regex": keyword_receive + ".*"}}, {'_id': False}) # album check
-    # print(keyword)
-    return jsonify({'keyword': keyword})
+# @app.route("/search", methods=["GET"])
+# def search():
+#     keyword_receive = request.args.get('keyword')
+#     # print(keyword_receive)
+#     keyword = db.crawlingMovie.find_one({'title': {"$regex":keyword_receive+".*"}}, {'_id': False}) # movie check
+#     if keyword is None:
+#         keyword = db.crawlingBook.find_one({'title': {"$regex":keyword_receive+".*"}}, {'_id': False}) # book check
+#         if keyword is None:
+#             keyword = db.crawlingAlbum.find_one({'title': {"$regex": keyword_receive + ".*"}}, {'_id': False}) # album check
+#     # print(keyword)
+#     return jsonify({'keyword': keyword})
 
 ######현정님 part
 # @app.route('/detail')
@@ -243,22 +243,22 @@ def check_get():
 #         return jsonify({'result':'fail'})
 
 
-@app.route('/del_bookmark', methods=['POST'])
-def del_bookmark():
-    token_receive = request.cookies.get('Authorization')
-    type = request.form.get('type')
-    id = int(request.form.get('id'))
-    try:
-        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
-        user_info = db.users.find_one({"userid": payload['userid']})
-        bookmark = user_info['bookmark']
-        del bookmark[bookmark.index({'type':type, 'id':int(id)})]
-        db.users.update_one({'userid':user_info['userid']}, {'$set':{'bookmark':bookmark}})
-        return jsonify({'result':'success'})
-    except jwt.ExpiredSignatureError:
-        return jsonify({'result':'fail'})
-    except jwt.exceptions.DecodeError:
-        return jsonify({'result':'fail'})
+# @app.route('/del_bookmark', methods=['POST'])
+# def del_bookmark():
+#     token_receive = request.cookies.get('Authorization')
+#     type = request.form.get('type')
+#     id = int(request.form.get('id'))
+#     try:
+#         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+#         user_info = db.users.find_one({"userid": payload['userid']})
+#         bookmark = user_info['bookmark']
+#         del bookmark[bookmark.index({'type':type, 'id':int(id)})]
+#         db.users.update_one({'userid':user_info['userid']}, {'$set':{'bookmark':bookmark}})
+#         return jsonify({'result':'success'})
+#     except jwt.ExpiredSignatureError:
+#         return jsonify({'result':'fail'})
+#     except jwt.exceptions.DecodeError:
+#         return jsonify({'result':'fail'})
 @app.route("/mypage/comment", methods=["GET"])
 def user_comment_get():
     token_receive = request.cookies.get('Authorization')

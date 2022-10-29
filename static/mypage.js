@@ -39,7 +39,7 @@ function listing_bookmark() {
                         <div class="${type} swiper-slide" id="${id}">
                             <div class="poster" alt="${title}" 
                                 style="background-image:url(${image})" 
-                                onclick="location.href='detail?type=${type}&id=${id}'">
+                                onclick="location.href='/detail?type=${type}&id=${id}'">
                             </div>
                             <h4>${title}</h4>
                             <p class="sumContent">${creator}<br>평점: ${star}</p>
@@ -130,7 +130,7 @@ function delete_bookmark(type, id) {
     }
     $.ajax({
         type: "POST",
-        url: "/del_bookmark",
+        url: "/bookmark/del",
         data: {
             id: id,
             type: type

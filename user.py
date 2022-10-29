@@ -17,7 +17,7 @@ db = client.dbGatherHere
 
 
 bp = Blueprint('user', __name__, url_prefix='/user')
-bp.secret_key = SECRET_KEY
+
 
 # @bp.route('/logintest')
 # def loginpage():
@@ -143,6 +143,7 @@ def signup():
 
 @bp.route('/login', methods=['GET', 'POST'])
 def login():
+    print('??')
     if request.method == 'POST':
         userid = request.form['userid']
         password = hashlib.sha256(request.form['password'].encode('utf-8')).hexdigest()
@@ -154,6 +155,8 @@ def login():
 
             token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
             response = make_response(redirect('/'))
+            print('??')
+            print(redirect('/'))
             response.set_cookie('Authorization', token)
             session['isKakao'] = False
             return response

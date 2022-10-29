@@ -175,7 +175,7 @@ function resizeDiv() {
 function add_bookmark(type, id) {
   $.ajax({
     type: "POST",
-    url: "/add_bookmark",
+    url: "/bookmark/add",
     data: {
       type: type,
       id: id,
@@ -189,7 +189,7 @@ function add_bookmark(type, id) {
 function del_bookmark(type, id) {
   $.ajax({
     type: "POST",
-    url: "/del_bookmark",
+    url: "/bookmark/del",
     data: {
       type: type,
       id: id,
@@ -203,7 +203,7 @@ function del_bookmark(type, id) {
 function show_bookmark() {
   $.ajax({
     type: 'GET',
-    url: '/mypage/bookmark',
+    url: '/bookmark',
     data: {},
     success: function (response) {
       // 로컬 스토리지 비우기
