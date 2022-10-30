@@ -10,12 +10,12 @@ from models.User import User
 import test, bookmark, detail, user, main, myPage
 
 app = Flask(__name__)
-app.register_blueprint(test.bp) #이런식으로 등록
-app.register_blueprint(bookmark.bp) #즐겨찾기
+#app.register_blueprint(test.bp) #예시
 app.register_blueprint(user.bp)
-app.register_blueprint(detail.bp)
 app.register_blueprint(main.bp)
+app.register_blueprint(detail.bp)
 app.register_blueprint(myPage.bp)
+app.register_blueprint(bookmark.bp) #즐겨찾기
 
 app.secret_key = SECRET_KEY
 if __name__ == '__main__':

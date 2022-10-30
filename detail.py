@@ -1,11 +1,6 @@
-import hashlib
-import datetime
-
 from flask import Flask, Blueprint, render_template, jsonify, request, redirect, make_response, flash, session
 import jwt
-from config import SECRET_KEY, CLIENT_ID, REDIRECT_URI, LOGOUT_REDIRECT_URI
-from Oauth import Oauth
-from models.User import User
+from config import SECRET_KEY
 
 from pymongo import MongoClient
 import certifi
@@ -15,7 +10,7 @@ url = 'mongodb+srv://faulty:qwer1234@cluster0.qnaw7kn.mongodb.net/?retryWrites=t
 client = MongoClient(url, tlsCAFile=ca)
 db = client.dbGatherHere
 
-bp = Blueprint('detial', __name__, url_prefix='/detail')
+bp = Blueprint('detail', __name__, url_prefix='/detail')
 bp.secret_key = SECRET_KEY
 
 def check(token_receive, key):
