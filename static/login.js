@@ -2,7 +2,7 @@ function login() {
     var before = document.referrer
     $.ajax({
         type: "POST",
-        url: "/login",
+        url: "user/login",
         data: {userid: $('#userid').val(), password: $('#password').val()},
 
         success: function (response) {

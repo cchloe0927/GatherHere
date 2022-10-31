@@ -1,17 +1,26 @@
+import hashlib
+import datetime
+
+from flask import Flask, render_template, jsonify, request, Blueprint
+import jwt
+from config import SECRET_KEY, CLIENT_ID, REDIRECT_URI, LOGOUT_REDIRECT_URI
+from Oauth import Oauth
+from models.User import User
 from pymongo import MongoClient
-from flask import Flask, render_template, request, jsonify
-app = Flask(__name__)
+
+
+bp = Blueprint('mypage', __name__, url_prefix='/mypage')
 
 mongourl = 'mongodb+srv://faulty:qwer1234@cluster0.qnaw7kn.mongodb.net/?retryWrites=true&w=majority'
 mongoclient = MongoClient(mongourl)
 db = mongoclient.dbGatherHere
 
 
-@app.route('/mypage')
+@bp.route('/')
 def home():
     return render_template('myPage.html')
 
-@app.route("/mypage/bookmark", methods=["GET"])
+@bp.route("/bookmark", methods=["GET"])
 def bookmark_get():
     user_id = 'test1234'
     bookmark = db.testuser.find_one({'id': user_id}, {'_id': False, 'bookmark': 1})
@@ -36,11 +45,11 @@ def bookmark_get():
 
     return jsonify({'bookmarks': datas})
 
-@app.route("/mypage/comment", methods=["GET"])
-def comment_get():
-    user_id = '임시테스트UserID'
-    comments = list(db.testcomment.find({'id': user_id}, {'_id': False}))
-    return jsonify({'comments':comments})
+@bp.route("/comment", methods=["GET"])
+def user_comment_get():
+    token_receive = request.cookies.get('Authorization')
+    payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+    user_info = db.users.find_one({"userid": payload['userid']})
 
-if __name__ == '__main__':
-    app.run('0.0.0.0', port=5000, debug=True)
+    comments = list(db.comment.find({'id': user_info['userid']}, {'_id': False}))
+    return jsonify({'comments': comments})

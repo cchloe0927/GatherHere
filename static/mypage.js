@@ -11,15 +11,15 @@ function resizeDiv() {
     }
 }
 let comment_count = 0;
-let b_cnt =0;
+let b_cnt = 0;
 function listing_bookmark() {
     $.ajax({
         type: 'GET',
-        url: '/mypage/bookmark',
+        url: '/bookmark',
         data: {},
         success: function (response) {
             let rows = response['bookmarks']
-            if(rows[0] != null){
+            if (rows[0] != null) {
                 for (let i = 0; i < rows.length; i++) {
                     b_cnt++
                     let id = rows[i]['id']
@@ -39,7 +39,7 @@ function listing_bookmark() {
                         <div class="${type} swiper-slide" id="${id}">
                             <div class="poster" alt="${title}" 
                                 style="background-image:url(${image})" 
-                                onclick="location.href='detail?type=${type}&id=${id}'">
+                                onclick="location.href='/detail?type=${type}&id=${id}'">
                             </div>
                             <h4>${title}</h4>
                             <p class="sumContent">${creator}<br>평점: ${star}</p>
@@ -71,7 +71,7 @@ function listing_bookmark() {
                         }
                     })
                 } console.log(b_cnt)
-                if(b_cnt < 1) $('#bmk').hide()
+                if (b_cnt < 1) $('#bmk').hide()
             } else {
                 $('#bmk').hide()
             }
@@ -116,8 +116,8 @@ function listing_comment() {
                     </div>`
                 $('#comment-list').append(temp_html)
             }
-            if(c_cnt < 1) $('#cmt').hide()
-        },error: function () {
+            if (c_cnt < 1) $('#cmt').hide()
+        }, error: function () {
             $('#cmt').hide()
         }
     })
@@ -125,12 +125,12 @@ function listing_comment() {
 
 function delete_bookmark(type, id) {
     console.log(id, type)
-    if(b_cnt <= 0){
+    if (b_cnt <= 0) {
         $('#bmk').hide();
     }
     $.ajax({
         type: "POST",
-        url: "/del_bookmark",
+        url: "/bookmark/del",
         data: {
             id: id,
             type: type
@@ -143,9 +143,9 @@ function delete_bookmark(type, id) {
 
 
 function commentDelete(commentId) {
-     if (confirm("정말 삭제하시겠습니까??")){    //확인
+    if (confirm("정말 삭제하시겠습니까??")) {    //확인
         c_cnt--;
-        if(c_cnt <1){
+        if (c_cnt < 1) {
             $('#cmt').hide()
         }
         $.ajax({
@@ -158,7 +158,7 @@ function commentDelete(commentId) {
                 $('#cmt_card').remove()
             }
         });
-    }else{   //취소
-         return false;
+    } else {   //취소
+        return false;
     }
 }

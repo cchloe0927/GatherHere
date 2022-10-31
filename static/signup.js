@@ -13,27 +13,27 @@ window.addEventListener('load', () => {
 
 const forms = document.getElementsByClassName('validation-form');
 
-function signup(){
-    let userid = $('#userid').val()
-    let username = $('#username').val()
-    let password = $('#password').val()
-    let rePassword = $('#re_password').val()
-    console.log(userid, username, password, rePassword)
-    $.ajax({
-        type : "POST",
-        url : "/signup",
-        data: {
-            userid : userid,
-            username : username,
-            password : password,
-            repassword : rePassword
-        },
-        success:function (response){
-            if(response['result'] == 'fail'){
-                alert(response['msg'])
-            }else{
-                location.href = '/login'
-            }
-        }
-    })
-}
+// function signup(){
+//     let userid = $('#userid').val()
+//     let username = $('#username').val()
+//     let password = $('#password').val()
+//     let rePassword = $('#re_password').val()
+//     console.log(userid, username, password, rePassword)
+//     $.ajax({
+//         type : "POST",
+//         url : "user/signup",
+//         data: {
+//             userid : userid,
+//             username : username,
+//             password : password,
+//             repassword : rePassword
+//         },
+//         success:function (response){
+//             if(response['result'] == 'fail'){
+//                 alert(response['msg'])
+//             }else{
+//                 location.href = '/login'
+//             }
+//         }
+//     })
+// }

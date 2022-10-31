@@ -3,7 +3,7 @@ function search(event) {
     if (event.key == 'Enter') {
         console.log('we click this key', event.key);
         let keyword = $('#input').val()
-
+        
         $.ajax({
             type: "GET",
             url: "/search?keyword="+keyword,
@@ -16,9 +16,7 @@ function search(event) {
                     console.log(keyword)
                     window.location.href = 'detail?type='+keyword['type']+'&id='+keyword['id']
                 }
-
             }
         })
-
     }
 }
